@@ -12,6 +12,7 @@ function Homepage() {
         <Link to="/missions">Fiches missions</Link>
         <Link to="/reports">Rapports d'interventions</Link>
         <Link to="/incidents">Fiches incidents</Link>
+        <Link to="/tech">Techniciens</Link>
       </div>
     </div>
   );
