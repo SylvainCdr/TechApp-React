@@ -1,0 +1,39 @@
+.homepageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  img {
+    width:20rem;
+    margin-bottom: 35px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom:80px;
+    text-transform: uppercase;
+    color : white;
+    font-weight: 600;
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+
+    a {
+      text-decoration: none;
+      color: white;
+      background-color: rgb(29, 138, 240);
+      padding: 30px 40px;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
+}
+  }
+}
