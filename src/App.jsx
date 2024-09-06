@@ -6,6 +6,7 @@ import Reports from "./Pages/Reports/reports";
 import Incidents from "./Pages/Incidents/incidents";
 import CreateMission from "./Pages/CreateMission/createMission";
 import Technicians from "./Pages/Technicians/technicians";
+import EditReport from "./Pages/EditReport/editReport";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/incidents" element={<Incidents />} />
           <Route path="/missions/créer" element={<CreateMission />} />
           <Route path="/tech" element={<Technicians />} />
+          <Route path="/reports/edit" element={<EditReport />} />
       {/* EX : <Route path="/logement/:logementId" element={<Rental />} /> */}
         </Route>
       </Routes>

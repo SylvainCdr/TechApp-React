@@ -1,11 +1,10 @@
 .missionFormContainer {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   
   h2 {
     text-align: center;
@@ -25,13 +24,13 @@
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-  
+    
     label {
       margin-bottom: 5px;
       font-weight: bold;
       color: #333;
     }
-  
+    
     input,
     select,
     textarea {
@@ -42,19 +41,12 @@
       color: #555;
       outline: none;
       transition: border 0.3s ease;
+      
+      &:focus {
+        border-color: #007bff;
+      }
     }
-  
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #007bff;
-    }
-  
-    input[type="checkbox"] {
-      width: auto;
-      margin-right: 10px;
-    }
-  
+
     textarea {
       min-height: 100px;
     }
@@ -70,28 +62,9 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  
+    
     &:hover {
       background-color: #0056b3;
-    }
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .missionFormContainer {
-      padding: 15px;
-    }
-  
-    h2 {
-      font-size: 1.5em;
-    }
-  
-    h3 {
-      font-size: 1.1em;
-    }
-  
-    button {
-      font-size: 1em;
     }
   }
 }

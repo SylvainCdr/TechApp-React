@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import styles from "./style.module.scss";
+import { createInterventionReport } from "../../automation/reportAutomation";
 
 export default function MissionForm() {
   const [client, setClient] = useState({
@@ -38,34 +39,42 @@ export default function MissionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     try {
-      console.log("Tentative d'ajout d'une mission dans Firestore...");
-      const docRef = await addDoc(collection(db, "missions"), {
+      const missionData = {
         client,
         site,
         intervenant: nouvelIntervenant || intervenant,
         missions,
         risqueEPI,
         createdAt: new Date(),
-      });
+      };
+      
+      console.log("Tentative d'ajout d'une mission dans Firestore...");
+      const docRef = await addDoc(collection(db, "missions"), missionData);
       console.log("Mission ajoutée avec succès avec l'ID : ", docRef.id);
       alert("Mission ajoutée avec succès !");
-      // Reset le formulaire après la soumission
+  
+      // Automatisation de la création du rapport d'intervention
+      await createInterventionReport(missionData);  // Envoi des données de mission
+      
+      // Reset du formulaire après la soumission
       setClient({ nomEntreprise: "", email: "", tel: "" });
       setSite({ adresse: "", nomContact: "", fonctionContact: "", telContact: "" });
       setIntervenant("");
       setNouvelIntervenant("");
       setMissions("");
       setRisqueEPI("");
+      
     } catch (error) {
       console.error("Erreur lors de l'ajout de la mission : ", error);
       alert("Une erreur est survenue lors de l'ajout de la mission.");
     }
-
-    // redirection vers la page des missions
+  
+    // Redirection vers la page des missions (optionnel)
     window.location.href = "/missions";
   };
+  
 
   return (
     <div className={styles.missionFormContainer}>
