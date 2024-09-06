@@ -1,0 +1,68 @@
+.missionsContainer {
+  padding: 20px;
+  background-color: #f9f9f918;
+  min-height: 100vh;
+  max-width: 1280px;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.createMission {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+
+  i {
+    margin-right: 5px;
+  }
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.missionsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.missionItem {
+  background-color: white;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.missionItem h2 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0 0 10px;
+}
+
+.missionItem p {
+  font-size: 1rem;
+  color: #666;
+  margin: 5px 0;
+}
+
+.technicianPhoto {
+  display: block;
+  margin-top: 10px;
+  max-width: 100px;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

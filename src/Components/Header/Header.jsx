@@ -24,13 +24,16 @@ function Header() {
               <NavLink to="/">Accueil</NavLink>
             </li>
             <li>
-              <NavLink to="/page2">Page2</NavLink>
+              <NavLink to="/missions">Fiches missions</NavLink>
             </li>
             <li>
-              <NavLink to="/page3">Page3</NavLink>
+              <NavLink to="/reports">Rapports d'intervention</NavLink>
             </li>
             <li>
-              <NavLink to="/page4">Page4</NavLink>
+              <NavLink to="/incidents">Fiches incidents</NavLink>
+            </li>
+            <li>
+              <NavLink to="/tech">Techniciens</NavLink>
             </li>
       
           </ul>

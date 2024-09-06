@@ -9,9 +9,9 @@ function Homepage() {
       <h1>Tech-App</h1>
 
       <div className={styles.categories}>
-        <Link to="/page2">Fiches missions</Link>
-        <Link to="/page3">Rapports d'interventions</Link>
-        <Link to="/page4">Fiches incidents</Link>
+        <Link to="/missions">Fiches missions</Link>
+        <Link to="/reports">Rapports d'interventions</Link>
+        <Link to="/incidents">Fiches incidents</Link>
       </div>
     </div>
   );

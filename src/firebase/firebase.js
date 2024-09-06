@@ -1,6 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
+import { getStorage } from "firebase/storage";
+
+
 
 // Your web app's Firebase configuration using environment variables
 const firebaseConfig = {
@@ -13,11 +16,18 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
+console.log(process.env.REACT_APP_FIREBASE_PROJECT_ID);
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+// Initialize Firebase Storage
+const storage = getStorage(app);
 
 // Initialize Firestore
 const db = getFirestore(app);
 
 export { db };
+
+export { storage };
