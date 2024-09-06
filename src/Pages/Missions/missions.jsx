@@ -52,7 +52,7 @@ console.log("Missions: ", missions);
   return (
     <div className={styles.missionsContainer}>
       <h1>Fiches Missions</h1>
-      <Link to="/missions/créer" className={styles.createMission}>
+      <Link to="/missions/create" className={styles.createMission}>
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche mission
       </Link>
 
