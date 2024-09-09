@@ -8,6 +8,8 @@ import CreateMission from "./Pages/CreateMission/createMission";
 import Technicians from "./Pages/Technicians/technicians";
 import EditReport from "./Pages/EditReport/editReport";
 import CreateReport from "./Pages/CreateReport/createReport";
+import InterventionReport from "./Pages/Report/Report";
+
 
 function App() {
   return (
@@ -21,7 +23,11 @@ function App() {
           <Route path="/missions/create" element={<CreateMission />} />
           <Route path="/tech" element={<Technicians />} />
           <Route path="/reports/create" element={<CreateReport />} />
-          <Route path="/reports/edit" element={<EditReport />} />
+          <Route path= "reports/view/:reportId" element={<InterventionReport />} />
+          <Route path="/reports/edit/:reportId" element={<EditReport />} />
+          
+
+
       {/* EX : <Route path="/logement/:logementId" element={<Rental />} /> */}
         </Route>
       </Routes>

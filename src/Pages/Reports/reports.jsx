@@ -26,7 +26,7 @@ export default function Reports() {
       const techniciansList = querySnapshot.docs.map(doc => ({
         id: doc.id,
         name: doc.data().firstName + " " + doc.data().lastName,
-        urlPhoto: doc.data().urlPhoto // Assurez-vous que le champ photoURL existe
+        urlPhoto: doc.data().urlPhoto
       }));
       setTechnicians(techniciansList);
     } catch (error) {
@@ -53,25 +53,50 @@ export default function Reports() {
       </Link>
 
       <ul className={styles.reportsList}>
-        {reports.map(report => (
-          <li key={report.id} className={styles.reportItem}>
-            <h2>Date : {report.createdAt.toDate().toLocaleDateString()}</h2>
-            <h2>Client : {report.client.nomEntreprise}</h2>
-            <p>Site : {report.site.adresse}</p>
-            <p>Intervenant : {report.intervenant}</p>
-            {getTechnicianPhotoURL(report.intervenant) && (
-              <img
-                src={getTechnicianPhotoURL(report.intervenant)}
-                alt={`Photo de ${report.intervenant}`}
-                className={styles.technicianPhoto}
-              />
-            )}
-            <p>Actions menées : {report.actionsMenees}</p>
-            <p>Remarques : {report.remarques}</p>
-            <p>Risques/EPI : {report.risqueEPI}</p>
-          </li>
+  {reports.map(report => (
+    <li key={report.id} className={styles.reportItem}>
+      <h2>Date : {report.createdAt?.toDate().toLocaleDateString()}</h2>
+      <h2>Client : {report.client.nomEntreprise}</h2>
+      <p>Site : {report.site.adresse}</p>
+      <p>Intervenant : {report.intervenant}</p>
+      
+      {getTechnicianPhotoURL(report.intervenant) && (
+        <img
+          src={getTechnicianPhotoURL(report.intervenant)}
+          alt={`Photo de ${report.intervenant}`}
+          className={styles.technicianPhoto}
+        />
+      )}
+
+      {/* Affichage des actions menées */}
+      <p>Actions menées :</p>
+      <ul>
+        {report.actionsMenées.map((action, index) => (
+          <li key={index}>{action.description}</li>
         ))}
       </ul>
+
+      {/* Affichage des remarques */}
+      <p>Remarques :</p>
+      <ul>
+        {report.remarques.map((remarque, index) => (
+          <li key={index}>{remarque.remarque}</li>
+        ))}
+      </ul>
+
+      <p>Risques/EPI : {report.risques ? "Oui" : "Non"}</p>
+
+      <Link to={`/reports/view/${report.id}`} className={styles.viewButton}>
+        Voir
+      </Link>
+
+      <Link to={`/reports/edit/${report.id}`} className={styles.editButton}>
+        Remplir/Modifier
+      </Link>
+    </li>
+  ))}
+</ul>
+
     </div>
   );
 }

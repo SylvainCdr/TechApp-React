@@ -12,7 +12,10 @@ export default function Missions() {
   const fetchMissions = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "missions"));
-      const missionsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const missionsList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setMissions(missionsList);
     } catch (error) {
       console.error("Erreur lors de la récupération des missions : ", error);
@@ -23,10 +26,10 @@ export default function Missions() {
   const fetchTechnicians = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "technicians"));
-      const techniciansList = querySnapshot.docs.map(doc => ({
+      const techniciansList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().firstName + " " + doc.data().lastName,
-        urlPhoto: doc.data().urlPhoto // Assurez-vous que le champ photoURL existe
+        urlPhoto: doc.data().urlPhoto, // Assurez-vous que le champ photoURL existe
       }));
       setTechnicians(techniciansList);
     } catch (error) {
@@ -41,13 +44,12 @@ export default function Missions() {
 
   // Fonction pour obtenir l'URL de la photo du technicien
   const getTechnicianPhotoURL = (name) => {
-    const technician = technicians.find(tech => tech.name === name);
+    const technician = technicians.find((tech) => tech.name === name);
     return technician ? technician.urlPhoto : null;
   };
 
-
   console.log("Technicians: ", technicians);
-console.log("Missions: ", missions);
+  console.log("Missions: ", missions);
 
   return (
     <div className={styles.missionsContainer}>
@@ -57,7 +59,7 @@ console.log("Missions: ", missions);
       </Link>
 
       <ul className={styles.missionsList}>
-        {missions.map(mission => (
+        {missions.map((mission) => (
           <li key={mission.id} className={styles.missionItem}>
             <h2>Date : {mission.createdAt.toDate().toLocaleDateString()}</h2>
             <h2>Client : {mission.client.nomEntreprise}</h2>
@@ -70,8 +72,20 @@ console.log("Missions: ", missions);
                 className={styles.technicianPhoto}
               />
             )}
-            <p>Mission : {mission.missions}</p>
-            <p>Risques/EPI : {mission.risqueEPI}</p>
+
+            <p>Mission(s) :</p>
+            <ul>
+              {mission.missions.map((mission, index) => (
+                <li key={index}>{mission}</li>
+              ))}
+            </ul>
+
+            <p> Risques / EPI :</p>
+            <ul>
+              {mission.risqueEPI.map((risque, index) => (
+                <li key={index}>{risque}</li>
+              ))}
+            </ul>
           </li>
         ))}
       </ul>
