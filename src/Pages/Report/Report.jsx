@@ -5,6 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import styles from "./style.module.scss";
 
 export default function InterventionReport() {
+  
   const { reportId } = useParams(); // Récupérer l'ID du rapport depuis l'URL
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,12 +44,14 @@ export default function InterventionReport() {
 
   return (
     <div className={styles.reportContainer}>
+
+      <h1> Rapport d'intervention N° {report.id} </h1>
       {report ? (
         <div className={styles.reportItem}>
-          <h2>Date : {report.createdAt?.toDate().toLocaleDateString()}</h2>
-          <h3>Client : {report.client.nomEntreprise}</h3>
-          <p>Site : {report.site.adresse}</p>
-          <p>Intervenant : {report.intervenant}</p>
+          <h2> {report.createdAt?.toDate().toLocaleDateString()} - {report.client.nomEntreprise}</h2>
+       
+          <h3>Site : {report.site.adresse}</h3>
+          <h3>Intervenant : {report.intervenant}</h3>
           <p>Actions menées :   {report.actionsMenées.map((action, index) => (
           <li key={index}>{action.description}</li>
         ))}</p>

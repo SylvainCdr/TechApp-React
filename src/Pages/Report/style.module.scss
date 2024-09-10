@@ -9,15 +9,38 @@
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
-}
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  
+
 
 .reportItem {
   background-color: #fff;
   border: 1px solid #ddd;
-  padding: 20px;
+  // padding: 20px;
   margin-bottom: 20px;
   border-radius: 5px;
   color: black;
+
+h2 {
+  background-color: var(--col2);
+  font-size: 1.4em;
+  color: white;
+  padding: 10px;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 5px;
+
+}
 }
 
 .photosContainer {
@@ -32,4 +55,5 @@
   height: 150px;
   object-fit: cover;
   border-radius: 5px;
+}
 }

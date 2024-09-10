@@ -8,9 +8,12 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
   h1 {
-    text-align: center;
+    font-size: 2rem;
     margin-bottom: 20px;
-    color: #333;
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
   .createReport {
@@ -38,40 +41,149 @@
 
     .reportItem {
       margin-bottom: 20px;
-      padding: 15px;
+      padding: 0rem 0rem;
       background-color: #fff;
       border: 1px solid #ddd;
       border-radius: 4px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
 
       h2 {
-        margin-top: 0;
-        color: #333;
+        background-color: var(--col2);
+        font-size: 1.4em;
+        color: white;
+        padding: 10px;
+        margin-bottom: 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
       }
 
-      p {
-        margin: 5px 0;
-        color: #555;
+      h4 {
+        border-top: 1px solid #ddd;
+        font-size: 1.1em;
+        font-weight: bold;
+        padding: 10px 0px;
+        background-color: var(--col3);
+        color: black;
+        width: 100%;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
       }
 
-      ul {
-        list-style: none;
-        padding: 0;
+      i {
+        margin-right: 8px;
+      }
 
-        li {
-         
-          margin-right: 10px;
-          color: #555;
+      .section1 {
+        width: 100%;
+        display: flex;
+        padding: 10px;
+        // align-items: center;
+        color: black;
+
+        p {
+          padding: 5px;
+          border-radius: 5px;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          -o-border-radius: 5px;
+        }
+
+        .section1Left {
+          width: 50%;
+display: flex;
+flex-direction: column;
+
+ul { 
+  align-self: center;
+  li {
+    margin-bottom: 0.3rem;
+  }
+}
+        }
+
+        .section1Right {
+          width: 50%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .technicianPhoto {
+            margin-top: 0.3rem;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+          }
         }
       }
 
-      .technicianPhoto {
-        display: block;
-        margin-top: 10px;
-        max-width: 100px;
-        height: auto;
-        border-radius: 50%;
-        border: 1px solid #ddd;
+      .section2 {
+        width: 100%;
+        display: flex;
+
+        li {
+          margin-left: 10px;
+          color: black;
+          padding: 5px;
+        }
+        p {
+          margin-left: 10px;
+          transition: color 0.3s ease;
+          color: black;
+          padding: 10px;
+        }
+
+      
+        .section2Left {
+          width: 50%;
+          display: flex;
+          flex-direction: column;
+          ul { 
+            align-self: center;
+        }}
+
+        .section2Right {
+          width: 50%;
+        }
+      }
+    }
+    .section3 {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0px;
+      background-color: var(--col3);
+      border-radius: 0 0 4px 4px;
+      -webkit-border-radius: 0 0 4px 4px;
+      -moz-border-radius: 0 0 4px 4px;
+      -ms-border-radius: 0 0 4px 4px;
+      -o-border-radius: 0 0 4px 4px;
+
+      a {
+        padding: 10px 0px;
+        width: 20%;
+        text-align: center;
+        background-color: #007bff;
+        color: white;
+        font-size: 1em;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #0056b3;
+        }
       }
     }
   }

@@ -107,6 +107,8 @@ li:hover:before, li:hover:after
 
 
 @media screen and (max-width: 768px) {
+
+  header { 
   span {
     display: none;
 }
@@ -147,5 +149,5 @@ ul {
 .active ul{
     left: 0;
 }
-}
+}}
 // FIN MENU BURGER

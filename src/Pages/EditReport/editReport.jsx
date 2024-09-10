@@ -53,7 +53,7 @@ export default function EditReport() {
 
   return (
     <div className={styles.editReportContainer}>
-      <h2>Remplir / Modifier un rapport d'intervention</h2>
+      <h1>Remplir / Modifier un rapport d'intervention</h1>
       {reportData && (
         <ReportForm
           initialData={reportData} // Pré-remplir le formulaire avec les données du rapport

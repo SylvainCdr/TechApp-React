@@ -1,0 +1,165 @@
+.missionContainer {
+  padding: 20px;
+  max-width: 1280px;
+  background-color: #f9f9f91f;
+  min-height: 90vh;
+  margin: 0 auto;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .missionItem {
+    padding: 20px;
+    background-color: #fffffffa;
+    color: black;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    min-height: 60vh;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      background-color: var(--col2);
+      text-transform: uppercase;
+      font-weight: 600;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 600;
+      background-color: var(--col3);
+      padding: 10px;
+    }
+    .section1 {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      .section1Left {
+        width: 50%;
+      }
+      .section1Right {
+        width: 50%;
+        text-align: center;
+
+        img {
+          width: 100px;
+          height: 100px;
+          object-fit: cover;
+          border-radius: 50%;
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          -ms-border-radius: 50%;
+          -o-border-radius: 50%;
+        }
+      }
+    }
+    .section2 {
+      display: flex;
+      justify-content: space-between;
+      .section2Left {
+        width: 50%;
+      }
+      .section2Right {
+        width: 50%;
+        // justify-content: center;
+        display: flex;
+        flex-direction: column;
+
+        ul {
+          align-self: center;
+        }
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      background-color: var(--col2);
+      text-transform: uppercase;
+      font-weight: 600;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      margin-left: 6rem;
+      font-weight: 600;
+      padding: 10px;
+    }
+
+    .securityRules {
+      display: flex;
+      margin: 0 auto;
+      width: 60%;
+      
+
+
+      .icons {
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        img {
+          width: 4rem;
+          height: 4rem;
+        }
+      }
+
+      .text {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        align-self: center;
+
+        p {
+          font-size: 1rem;
+          padding-bottom: 50px;
+        }
+      }
+
+    }
+    .numUrgence {
+      width: 30rem;
+      height: auto;
+      display: flex;
+      margin : 0 auto;
+    }
+  }
+}

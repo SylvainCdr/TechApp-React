@@ -192,7 +192,7 @@ export default function MissionForm() {
           </select>
         </div>
 
-        <h3>Mission</h3>
+        <h3>Mission(s)</h3>
         {missions.map((mission, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Description de la mission {index + 1} :</label>

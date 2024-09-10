@@ -58,37 +58,73 @@ export default function Missions() {
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche mission
       </Link>
 
-      <ul className={styles.missionsList}>
+      <div className={styles.missionsList}>
         {missions.map((mission) => (
-          <li key={mission.id} className={styles.missionItem}>
-            <h2>Date : {mission.createdAt.toDate().toLocaleDateString()}</h2>
-            <h2>Client : {mission.client.nomEntreprise}</h2>
-            <p>Site : {mission.site.adresse}</p>
-            <p>Intervenant : {mission.intervenant}</p>
-            {getTechnicianPhotoURL(mission.intervenant) && (
-              <img
-                src={getTechnicianPhotoURL(mission.intervenant)}
-                alt={`Photo de ${mission.intervenant}`}
-                className={styles.technicianPhoto}
-              />
-            )}
+          <div className={styles.missionItem}>
+            <h2>
+              {mission.createdAt.toDate().toLocaleDateString()} -{" "}
+              {mission.client.nomEntreprise}
+            </h2>
+            <div className={styles.section1}>
+              <div className={styles.section1Left}>
+                <h3>Entreprise / Site</h3>
+                <ul> 
+                <li>Email : {mission.client.email}</li>
+                <li>Téléphone : {mission.client.tel}</li>
+                <li>Site : {mission.site.adresse}</li>
+                <li>Nom contact : {mission.site.nomContact}</li>
+                <li>Fonction : {mission.site.fonctionContact}</li>
+                <li>Téléphone : {mission.site.telContact}</li>
+                </ul>
+              </div>
+              <div className={styles.section1Right}>
+                <h3>Intervenant </h3>
+                <p>{mission.intervenant}</p>
+                {getTechnicianPhotoURL(mission.intervenant) && (
+                  <img
+                    src={getTechnicianPhotoURL(mission.intervenant)}
+                    alt={`Photo de ${mission.intervenant}`}
+                  />
+                )}
+              </div>
+            </div>
+            <div className={styles.section2}>
+              <div className={styles.section2Left}>
+                <h3>Mission(s) :</h3>
+                <ul>
+                  {mission.missions.map((mission, index) => (
+                    <li key={index}><i class="fa-solid fa-chevron-right"></i>{mission}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className={styles.section2Right}>
+                <h3> Risques / EPI :</h3>
+                <ul>
+                  {mission.risqueEPI.map((risque, index) => (
+                    <li key={index}><i class="fa-solid fa-minus"></i>{risque}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
 
-            <p>Mission(s) :</p>
-            <ul>
-              {mission.missions.map((mission, index) => (
-                <li key={index}>{mission}</li>
-              ))}
-            </ul>
 
-            <p> Risques / EPI :</p>
-            <ul>
-              {mission.risqueEPI.map((risque, index) => (
-                <li key={index}>{risque}</li>
-              ))}
-            </ul>
-          </li>
+
+            <div className={styles.section3}>
+              <Link to={`/mission/${mission.id}`} className={styles.viewMission}>
+                Voir la fiche mission
+              </Link>
+
+              <Link
+                to={`/missions/edit/${mission.id}`}
+                className={styles.editMission}
+              >
+                Modifier 
+              </Link>
+</div>
+
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

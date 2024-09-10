@@ -241,13 +241,13 @@ export default function ReportForm({ initialData, onSubmit }) {
                 Supprimer
               </button>
             )}
-          </div>
+        </div>
         ))}
         <button
           type="button"
           onClick={addActionField}
           className={styles.addActionButton}
-        >
+          >
           Ajouter une action
         </button>
 
@@ -304,14 +304,14 @@ export default function ReportForm({ initialData, onSubmit }) {
           <label>
             <input
               type="checkbox"
-              
+              checked={risques}
               onChange={() => setRisques(!risques)}
             />
             Intervention comportant des risques
           </label>
         </div>
 
-        <button type="submit">Créer le rapport</button>
+        <button className={styles.submitButton} type="submit">Créer le rapport</button>
       </form>
     </div>
   );
