@@ -69,6 +69,7 @@ export default function Missions() {
               <div className={styles.section1Left}>
                 <h3>Entreprise / Site</h3>
                 <ul> 
+                  <li>Client : {mission.client.nomEntreprise}</li>
                 <li>Email : {mission.client.email}</li>
                 <li>Téléphone : {mission.client.tel}</li>
                 <li>Site : {mission.site.adresse}</li>

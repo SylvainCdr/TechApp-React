@@ -2,6 +2,7 @@ import React from "react";
 import "./style.scss";
 import { NavLink } from "react-router-dom";
 
+
 function Header() {
 
 
@@ -20,8 +21,10 @@ function Header() {
       <div className="header">
         <nav className="header__nav">
           <ul onClick={burgerToggle}>
+
+
             <li>
-              <NavLink to="/">Accueil</NavLink>
+              <NavLink to="/"><img src="assets/logo-pix-dark.png" alt=""  className="logo" /> </NavLink>
             </li>
             <li>
               <NavLink to="/missions">Fiches missions</NavLink>

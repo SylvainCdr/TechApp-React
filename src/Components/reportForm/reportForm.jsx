@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import styles from "./style.module.scss";
+import { createIncidentReport } from "../../automation/incidentAutomation";
 
 export default function ReportForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
@@ -23,6 +24,8 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [remarques, setRemarques] = useState([{ remarque: "" }]);
   const [photos, setPhotos] = useState([]);
   const [risques, setRisques] = useState(false);
+  const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
+  const [actions, setActions] = useState([""]);
 
   useEffect(() => {
     // Remplir les champs avec les données initiales si elles existent
@@ -92,12 +95,42 @@ export default function ReportForm({ initialData, onSubmit }) {
       };
 
       // Appel de la fonction onSubmit (mise à jour ou création du rapport)
-      onSubmit(reportData);
+      await onSubmit(reportData);
+
+      // Si un risque est identifié, créer une fiche d'incident
+      if (risques) {
+        const incidentData = {
+          client,
+          site,
+          intervenant,
+         missionsDangereuses, 
+        actions, 
+          remarques,
+          photos: uploadedPhotoUrls,
+          risques: "OUI", // Indiquer que des risques ont été identifiés
+        };
+        await createIncidentReport(incidentData);
+      }
+
+      // Réinitialiser le formulaire ou rediriger l'utilisateur après la soumission
+      setClient({ nomEntreprise: "", email: "", tel: "" });
+      setSite({ adresse: "", nomContact: "", fonctionContact: "", telContact: "" });
+      setIntervenant("");
+      setActionsMenées([{ description: "" }]);
+      setRemarques([{ remarque: "" }]);
+      setPhotos([]);
+      setRisques(false);
+      
+      // Redirection ou confirmation
+      alert("Rapport soumis avec succès.");
+      window.location.href = "/reports";
+      
     } catch (error) {
       console.error("Erreur lors de la soumission du rapport : ", error);
       alert("Une erreur est survenue lors de la soumission du rapport.");
     }
   };
+
 
   const handleRemovePhoto = (index) => {
     setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));

@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { doc, getDocs, getDoc, updateDoc, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
-import { createInterventionReport } from "../../automation/reportAutomation";
+import { useParams } from "react-router-dom";
+
 
 export default function MissionForm() {
+  const { missionId } = useParams(); // Récupération de l'ID de la mission
   const [client, setClient] = useState({
     nomEntreprise: "",
     email: "",
@@ -17,9 +19,8 @@ export default function MissionForm() {
     telContact: "",
   });
   const [intervenant, setIntervenant] = useState("");
-  const [nouvelIntervenant, setNouvelIntervenant] = useState("");
-  const [missions, setMissions] = useState([""]); // Initialisé avec un champ vide
-  const [risqueEPI, setRisqueEPI] = useState([""]); // Initialisé avec un champ vide
+  const [missions, setMissions] = useState([""]);
+  const [risqueEPI, setRisqueEPI] = useState([""]);
   const [intervenantsExistants, setIntervenantsExistants] = useState([]);
 
   // Fonction pour récupérer les techniciens depuis Firestore
@@ -35,9 +36,32 @@ export default function MissionForm() {
     }
   };
 
+  // Fonction pour récupérer les données de la mission existante
+  const fetchMission = async () => {
+    if (!missionId) return;
+    try {
+      const missionRef = doc(db, "missions", missionId);
+      const missionSnap = await getDoc(missionRef);
+
+      if (missionSnap.exists()) {
+        const missionData = missionSnap.data();
+        setClient(missionData.client);
+        setSite(missionData.site);
+        setIntervenant(missionData.intervenant);
+        setMissions(missionData.missions || [""]);
+        setRisqueEPI(missionData.risqueEPI || [""]);
+      } else {
+        console.log("Mission non trouvée");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération de la mission : ", error);
+    }
+  };
+
   useEffect(() => {
     fetchIntervenants();
-  }, []);
+    fetchMission();
+  }, [missionId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,35 +70,20 @@ export default function MissionForm() {
       const missionData = {
         client,
         site,
-        intervenant: nouvelIntervenant || intervenant,
+        intervenant,
         missions,
         risqueEPI,
-        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
-      console.log("Tentative d'ajout d'une mission dans Firestore...");
-      const docRef = await addDoc(collection(db, "missions"), missionData);
-      console.log("Mission ajoutée avec succès avec l'ID : ", docRef.id);
-      alert("Mission ajoutée avec succès !");
+      // Mise à jour de la mission existante
+      const missionRef = doc(db, "missions", missionId);
+      await updateDoc(missionRef, missionData);
 
-      // Automatisation de la création du rapport d'intervention
-      await createInterventionReport(missionData); // Envoi des données de mission
-
-      // Reset du formulaire après la soumission
-      setClient({ nomEntreprise: "", email: "", tel: "" });
-      setSite({
-        adresse: "",
-        nomContact: "",
-        fonctionContact: "",
-        telContact: "",
-      });
-      setIntervenant("");
-      setNouvelIntervenant("");
-      setMissions([""]); // Réinitialiser le tableau de missions
-      setRisqueEPI([""]); // Réinitialiser le tableau de risques/EPI
+      alert("Mission mise à jour avec succès !");
     } catch (error) {
-      console.error("Erreur lors de l'ajout de la mission : ", error);
-      alert("Une erreur est survenue lors de l'ajout de la mission.");
+      console.error("Erreur lors de la mise à jour de la mission : ", error);
+      alert("Une erreur est survenue lors de la mise à jour de la mission.");
     }
 
     // Redirection vers la page des missions (optionnel)
@@ -207,7 +216,11 @@ export default function MissionForm() {
               required
             />
             {missions.length > 1 && (
-              <button className={styles.removeMission} type="button" onClick={() => removeMissionField(index)}>
+              <button
+                className={styles.removeMission}
+                type="button"
+                onClick={() => removeMissionField(index)}
+              >
                 Supprimer ce champ
               </button>
             )}
@@ -232,17 +245,23 @@ export default function MissionForm() {
               required
             />
             {risqueEPI.length > 1 && (
-              <button className={styles.removeRisk} type="button" onClick={() => removeRisqueField(index)}>
+              <button
+                className={styles.removeRisk}
+                type="button"
+                onClick={() => removeRisqueField(index)}
+              >
                 Supprimer ce champ
               </button>
             )}
           </div>
         ))}
         <button className={styles.addRisk} type="button" onClick={addRisqueField}>
-          Ajouter un champ pour les risques/EPI
+          Ajouter un champ pour les risques / EPI
         </button>
 
-        <button className={styles.submitButton} type="submit">Ajouter la mission</button>
+        <button className={styles.submitButton} type="submit">
+          Mettre à jour la mission
+        </button>
       </form>
     </div>
   );
