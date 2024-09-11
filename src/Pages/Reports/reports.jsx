@@ -7,6 +7,11 @@ import { Link } from "react-router-dom";
 export default function Reports() {
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
+  const [missionId, setMissionId] = useState(null);
+
+  
+
+
 
   // Fonction pour récupérer les rapports d'intervention depuis Firestore
   const fetchReports = async () => {
@@ -65,8 +70,12 @@ export default function Reports() {
             <h2>
               {" "}
               {report.createdAt?.toDate().toLocaleDateString()} -{" "}
-              {report.client.nomEntreprise}
+              {report.client.nomEntreprise} 
             </h2>
+            {/* Lien vers la fiche missions associée  */}
+            <p> {report.missionId} </p>
+            <p> {report.missionId ? <Link to={`/mission/${report.missionId}`}>Voir la fiche mission associée</Link> : "Aucune fiche mission associée"} </p>
+            
             <div className={styles.section1}>
               <div className={styles.section1Left}>
                 <h4>Entreprise / Site</h4>
@@ -98,8 +107,8 @@ export default function Reports() {
                 {/* Affichage des actions menées */}
                 <h4>Actions menées :</h4>
                 <ul>
-                  {report.actionsMenées.map((action, index) => (
-                    <li key={index}><i class="fa-regular fa-circle-check"></i>{action.description}</li>
+                  {report.actionsDone.map((action, index) => (
+                    <li key={index}><i class="fa-solid fa-check"></i>{action.description}</li>
                   ))}
                 </ul>
               </div>

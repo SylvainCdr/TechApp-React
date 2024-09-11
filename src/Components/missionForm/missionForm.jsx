@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { doc, getDocs, getDoc, updateDoc, collection } from "firebase/firestore";
+import { doc, getDocs, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
-
 
 export default function MissionForm() {
   const { missionId } = useParams(); // Récupération de l'ID de la mission
@@ -65,25 +64,43 @@ export default function MissionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
+      // Créer la fiche mission
       const missionData = {
         client,
         site,
         intervenant,
         missions,
         risqueEPI,
+        createdAt: new Date(),
         updatedAt: new Date(),
       };
-
-      // Mise à jour de la mission existante
-      const missionRef = doc(db, "missions", missionId);
-      await updateDoc(missionRef, missionData);
-
-      alert("Mission mise à jour avec succès !");
+  
+      const missionRef = await addDoc(collection(db, "missions"), missionData);
+      const missionId = missionRef.id; // Récupération de l'ID de la mission
+  
+      // Automatiser la création du rapport d'intervention associé
+      const interventionReportData = {
+        missionId, // Associer le rapport à la mission par son ID
+        client,
+        site,
+        intervenant,
+        actionsDone: [], // Vide au départ, sera rempli plus tard
+        remarques: [], // Vide au départ, sera rempli plus tard
+        photos: [], // Vide au départ, sera rempli plus tard
+        risques: false, // Initialement à "false"
+        createdAt: new Date(),
+      };
+  
+      await addDoc(collection(db, "interventionReports"), interventionReportData);
+  
+      alert("Fiche mission et rapport d'intervention créés avec succès !");
+      // Redirection vers la page des missions (optionnel)
+      window.location.href = "/missions";
     } catch (error) {
-      console.error("Erreur lors de la mise à jour de la mission : ", error);
-      alert("Une erreur est survenue lors de la mise à jour de la mission.");
+      console.error("Erreur lors de la création de la mission ou du rapport d'intervention : ", error);
+      alert("Une erreur est survenue lors de la création de la mission.");
     }
 
     // Redirection vers la page des missions (optionnel)
@@ -260,7 +277,7 @@ export default function MissionForm() {
         </button>
 
         <button className={styles.submitButton} type="submit">
-          Mettre à jour la mission
+          {missionId ? "Mettre à jour la mission" : "Créer la mission"}
         </button>
       </form>
     </div>

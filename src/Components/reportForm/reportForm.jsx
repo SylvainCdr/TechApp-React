@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import styles from "./style.module.scss";
-import { createIncidentReport } from "../../automation/incidentAutomation";
+import { createOrUpdateIncidentReport } from "../../automation/incidentAutomation";
 
 export default function ReportForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
@@ -20,7 +20,7 @@ export default function ReportForm({ initialData, onSubmit }) {
   });
   const [intervenant, setIntervenant] = useState("");
   const [intervenantsList, setIntervenantsList] = useState([]);
-  const [actionsMenées, setActionsMenées] = useState([{ description: "" }]);
+  const [actionsDone, setActionsDone] = useState([{ description: "" }]);
   const [remarques, setRemarques] = useState([{ remarque: "" }]);
   const [photos, setPhotos] = useState([]);
   const [risques, setRisques] = useState(false);
@@ -33,7 +33,7 @@ export default function ReportForm({ initialData, onSubmit }) {
       setClient(initialData.client || {});
       setSite(initialData.site || {});
       setIntervenant(initialData.intervenant || "");
-      setActionsMenées(initialData.actionsMenées || [{ description: "" }]);
+      setActionsDone(initialData.actionsDone || [{ description: "" }]);
             setRemarques(initialData.remarques || [{ remarque: "" }]);
       setPhotos(initialData.photos || []);
       setRisques(initialData.risques || false);
@@ -66,10 +66,10 @@ export default function ReportForm({ initialData, onSubmit }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const uploadedPhotoUrls = [];
-
+  
       // Gérer les nouvelles photos uniquement
       for (const file of photos) {
         if (file instanceof File) {
@@ -81,42 +81,43 @@ export default function ReportForm({ initialData, onSubmit }) {
           uploadedPhotoUrls.push(file); // Garde les URLs existantes
         }
       }
-
+  
       // Données du rapport à envoyer
       const reportData = {
         client,
         site,
         intervenant,
-        actionsMenées,
+        actionsDone,
         remarques,
         photos: uploadedPhotoUrls,
         risques,
         createdAt: initialData?.createdAt || new Date(),
       };
-
+  
       // Appel de la fonction onSubmit (mise à jour ou création du rapport)
       await onSubmit(reportData);
-
+  
       // Si un risque est identifié, créer une fiche d'incident
       if (risques) {
         const incidentData = {
           client,
           site,
           intervenant,
-         missionsDangereuses, 
-        actions, 
-          remarques,
+          missionsDangereuses, 
+          actions: actionsDone.map(a => a.description), // Utiliser actionsDone pour les actions
+          remarques: remarques.map(r => r.remarque), // Utiliser remarques pour les remarques
           photos: uploadedPhotoUrls,
           risques: "OUI", // Indiquer que des risques ont été identifiés
+          interventionReportId: initialData?.id || "", // Passer l'ID du rapport d'intervention
         };
-        await createIncidentReport(incidentData);
+        await createOrUpdateIncidentReport(incidentData);
       }
-
+  
       // Réinitialiser le formulaire ou rediriger l'utilisateur après la soumission
       setClient({ nomEntreprise: "", email: "", tel: "" });
       setSite({ adresse: "", nomContact: "", fonctionContact: "", telContact: "" });
       setIntervenant("");
-      setActionsMenées([{ description: "" }]);
+      setActionsDone([{ description: "" }]);
       setRemarques([{ remarque: "" }]);
       setPhotos([]);
       setRisques(false);
@@ -130,6 +131,7 @@ export default function ReportForm({ initialData, onSubmit }) {
       alert("Une erreur est survenue lors de la soumission du rapport.");
     }
   };
+  
 
 
   const handleRemovePhoto = (index) => {
@@ -137,17 +139,17 @@ export default function ReportForm({ initialData, onSubmit }) {
   };
 
   const addActionField = () => {
-    setActionsMenées([...actionsMenées, { description: "" }]);
+    setActionsDone([...actionsDone, { description: "" }]);
   };
 
   const removeActionField = (index) => {
-    setActionsMenées(actionsMenées.filter((_, i) => i !== index));
+    setActionsDone(actionsDone.filter((_, i) => i !== index));
   };
 
   const handleActionChange = (index, value) => {
-    const newActionsMenées = [...actionsMenées];
-    newActionsMenées[index].description = value;
-    setActionsMenées(newActionsMenées);
+    const newActionsDone = [...actionsDone];
+    newActionsDone[index].description = value;
+    setActionsDone(newActionsDone);
   };
 
   const addRemarqueField = () => {
@@ -256,7 +258,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         </div>
 
         <h3>Actions menées</h3>
-        {actionsMenées.map((action, index) => (
+        {actionsDone.map((action, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Description des actions menées :</label>
             <input
@@ -265,7 +267,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               onChange={(e) => handleActionChange(index, e.target.value)} // Permettre l'édition
               required
             />
-            {actionsMenées.length > 1 && (
+            {actionsDone.length > 1 && (
               <button
                 type="button"
                 onClick={() => removeActionField(index)} // Supprimer l'action si nécessaire

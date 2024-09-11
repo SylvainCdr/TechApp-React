@@ -3,7 +3,7 @@ import Template from "./Components/Template/Template";
 import Home from "./Pages/Home/Home";
 import Missions from "./Pages/Missions/missions";
 import Reports from "./Pages/Reports/reports";
-import Incidents from "./Pages/Incidents/incidents";
+import IncidentReports from "./Pages/Incidents/incidents";
 import CreateMission from "./Pages/CreateMission/createMission";
 import Technicians from "./Pages/Technicians/technicians";
 import EditReport from "./Pages/EditReport/editReport";
@@ -20,7 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/missions" element={<Missions />} />
           <Route path="/reports" element={<Reports />} />
-          <Route path="/incidents" element={<Incidents />} />
+          <Route path="/incidents" element={<IncidentReports />} />
           <Route path="/missions/create" element={<CreateMission />} />
           <Route path="/missions/edit/:missionId" element={<EditMission />} />
           <Route path="/mission/:missionId" element={<Mission />} />

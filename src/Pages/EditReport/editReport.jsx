@@ -4,12 +4,12 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import styles from "./style.module.scss";
 import ReportForm from "../../Components/reportForm/reportForm";
+import { createOrUpdateIncidentReport } from "../../automation/incidentAutomation";
 
 export default function EditReport() {
   const { reportId } = useParams();
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(true);
-  
 
   // Fonction pour récupérer les données du rapport depuis Firestore
   const fetchReportData = async () => {
@@ -33,19 +33,41 @@ export default function EditReport() {
   }, [reportId]);
 
   // Fonction pour gérer la soumission du formulaire de modification
-  const handleUpdate = async (updatedReport) => {
-    try {
-      const reportRef = doc(db, "interventionReports", reportId);
-      await updateDoc(reportRef, updatedReport);
-      alert("Rapport mis à jour avec succès !");
+const handleUpdate = async (updatedReport) => {
+  try {
+    const reportRef = doc(db, "interventionReports", reportId);
 
-      // Rediriger l'utilisateur vers la page de détails du rapport
-      window.location.href = `/reports/view/${reportId}`;
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour du rapport :", error);
-      alert("Une erreur est survenue lors de la mise à jour du rapport.");
+    // Récupérer les anciennes données avant la mise à jour
+    const oldReportSnap = await getDoc(reportRef);
+    const oldReportData = oldReportSnap.data();
+
+    // Mettre à jour le rapport d'intervention
+    await updateDoc(reportRef, updatedReport);
+
+    // Log pour vérifier les anciennes et nouvelles valeurs de "risques"
+    console.log("Ancien rapport:", oldReportData);
+    console.log("Nouveau rapport:", updatedReport);
+
+    // Comparer l'ancien et le nouveau statut de la case "risques"
+    if (!oldReportData.risques && updatedReport.risques) {
+      console.log("La case 'risques' est maintenant cochée. Création ou mise à jour de la fiche d'incident...");
+      // Créer ou mettre à jour la fiche d'incident si la case "risques" a été cochée
+      await createOrUpdateIncidentReport({
+        ...updatedReport,
+        interventionReportId: reportId, // Passer l'ID du rapport d'intervention
+      });
     }
-  };
+
+    alert("Rapport mis à jour avec succès !");
+    
+    // Rediriger l'utilisateur vers la page de détails du rapport
+    window.location.href = `/reports/view/${reportId}`;
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du rapport :", error);
+    alert("Une erreur est survenue lors de la mise à jour du rapport.");
+  }
+};
+
 
   if (loading) {
     return <p>Chargement...</p>;

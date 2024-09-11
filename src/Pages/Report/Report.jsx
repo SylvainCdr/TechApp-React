@@ -52,7 +52,7 @@ export default function InterventionReport() {
        
           <h3>Site : {report.site.adresse}</h3>
           <h3>Intervenant : {report.intervenant}</h3>
-          <p>Actions menées :   {report.actionsMenées.map((action, index) => (
+          <p>Actions menées :   {report.actionsDone.map((action, index) => (
           <li key={index}>{action.description}</li>
         ))}</p>
           <p>Remarques : {report.remarques.map((remarque, index) => (

@@ -12,7 +12,7 @@ export const createInterventionReport = async (missionData) => {
       client,
       site,
       intervenant,
-      actionsMenées: [],
+      actionsDone: [],
       remarques: [],
       photos: [], 
       risques: risqueEPI.length > 0, // Détermine s'il y a des risques selon la présence de données
