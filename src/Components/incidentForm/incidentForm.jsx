@@ -1,42 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 
 export default function IncidentForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
-    email: '',
-    nomEntreprise: '',
-    tel: '',
+    email: "",
+    nomEntreprise: "",
+    tel: "",
   });
   const [site, setSite] = useState({
-    adresse: '',
-    fonctionContact: '',
-    nomContact: '',
-    telContact: '',
+    adresse: "",
+    fonctionContact: "",
+    nomContact: "",
+    telContact: "",
   });
-  const [intervenant, setIntervenant] = useState('');
+  const [intervenant, setIntervenant] = useState("");
   const [photos, setPhotos] = useState([]);
-  const [remarques, setRemarques] = useState([{ remarque: '' }]);
+  const [remarques, setRemarques] = useState([{ remarque: "" }]);
   const [risques, setRisques] = useState(false);
-  const [actions, setActions] = useState(['']);
+  const [actions, setActions] = useState([""]);
   const [createdAt, setCreatedAt] = useState(new Date().toISOString());
+  const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
 
   useEffect(() => {
     if (initialData) {
       setClient(initialData.client || {});
       setSite(initialData.site || {});
-      setIntervenant(initialData.intervenant || '');
+      setIntervenant(initialData.intervenant || "");
       setPhotos(initialData.photos || []);
-      setRemarques(initialData.remarques || [{ remarque: '' }]);
+      setRemarques(initialData.remarques || [{ remarque: "" }]);
       setRisques(initialData.risques || false);
-      setActions(initialData.actions || ['']);
+      setActions(initialData.actions || [""]);
       setCreatedAt(initialData.createdAt || new Date().toISOString());
+      setMissionsDangereuses(initialData.missionsDangereuses || [""]);
     }
   }, [initialData]);
 
-  const handlePhotoChange = (e) => {
-    const files = Array.from(e.target.files);
-    setPhotos((prevPhotos) => [...prevPhotos, ...files]);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,13 +47,13 @@ export default function IncidentForm({ initialData, onSubmit }) {
       risques,
       actions,
       createdAt,
+      missionsDangereuses,
     };
-
     onSubmit(incidentData);
   };
 
   const addRemarqueField = () => {
-    setRemarques([...remarques, { remarque: '' }]);
+    setRemarques([...remarques, { remarque: "" }]);
   };
 
   const removeRemarqueField = (index) => {
@@ -69,7 +67,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
   };
 
   const addActionField = () => {
-    setActions([...actions, '']);
+    setActions([...actions, ""]);
   };
 
   const removeActionField = (index) => {
@@ -80,6 +78,20 @@ export default function IncidentForm({ initialData, onSubmit }) {
     const newActions = [...actions];
     newActions[index] = value;
     setActions(newActions);
+  };
+
+  const addMissionDangereuseField = () => {
+    setMissionsDangereuses([...missionsDangereuses, ""]);
+  };
+
+  const removeMissionDangereuseField = (index) => {
+    setMissionsDangereuses(missionsDangereuses.filter((_, i) => i !== index));
+  };
+
+  const handleMissionDangereuseChange = (index, value) => {
+    const newMissionsDangereuses = [...missionsDangereuses];
+    newMissionsDangereuses[index] = value;
+    setMissionsDangereuses(newMissionsDangereuses);
   };
 
   return (
@@ -100,7 +112,9 @@ export default function IncidentForm({ initialData, onSubmit }) {
           <input
             type="text"
             value={client.nomEntreprise}
-            onChange={(e) => setClient({ ...client, nomEntreprise: e.target.value })}
+            onChange={(e) =>
+              setClient({ ...client, nomEntreprise: e.target.value })
+            }
             required
           />
         </div>
@@ -138,7 +152,9 @@ export default function IncidentForm({ initialData, onSubmit }) {
           <input
             type="text"
             value={site.fonctionContact}
-            onChange={(e) => setSite({ ...site, fonctionContact: e.target.value })}
+            onChange={(e) =>
+              setSite({ ...site, fonctionContact: e.target.value })
+            }
             required
           />
         </div>
@@ -163,35 +179,19 @@ export default function IncidentForm({ initialData, onSubmit }) {
           />
         </div>
 
-        <h3>Actions</h3>
-        {actions.map((action, index) => (
-          <div key={index} className={styles.formGroup}>
-            <label>Action :</label>
+        <h3>Risques</h3>
+        <div className={styles.formGroup}>
+          <label>
             <input
-              type="text"
-              value={action}
-              onChange={(e) => handleActionChange(index, e.target.value)}
+              type="checkbox"
+              checked={risques}
+              onChange={() => setRisques(!risques)}
             />
-            {actions.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeActionField(index)}
-                className={styles.removeActionButton}
-              >
-                Supprimer
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addActionField}
-          className={styles.addActionButton}
-        >
-          Ajouter une action
-        </button>
+            Risque identifié
+          </label>
+        </div>
 
-        <h3>Remarques</h3>
+        <h3>Remarque(s) de l'intervenant :</h3>
         {remarques.map((remarque, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Remarque :</label>
@@ -219,33 +219,79 @@ export default function IncidentForm({ initialData, onSubmit }) {
           Ajouter une remarque
         </button>
 
+
         <h3>Photos</h3>
-        <div className={styles.formGroup}>
-          <label>Ajouter des photos :</label>
-          <input type="file" multiple onChange={handlePhotoChange} />
-          <div className={styles.photoPreview}>
-            {photos.map((photo, index) => (
-              <div key={index} className={styles.photoItem}>
-                <span>{photo.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
 
-        <h3>Risques</h3>
-        <div className={styles.formGroup}>
-          <label>
+{photos.map((photo, index) => (
+  <div key={index} className={styles.photoItem}>
+    <img src={photo} alt={`Photo ${index}`} />
+  </div>
+))}
+
+
+        <h3>Actions menées par l'intervenant :</h3>
+        {actions.map((action, index) => (
+          <div key={index} className={styles.formGroup}>
+            <label>Action :</label>
             <input
-              type="checkbox"
-              checked={risques}
-              onChange={() => setRisques(!risques)}
+              type="text"
+              value={action}
+              onChange={(e) => handleActionChange(index, e.target.value)}
             />
-            Risque identifié
-          </label>
-        </div>
+            {actions.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeActionField(index)}
+                className={styles.removeActionButton}
+              >
+                Supprimer
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={addActionField}
+          className={styles.addActionButton}
+        >
+          Ajouter une action
+        </button>
 
-        <button className={styles.submitButton} type="submit">Soumettre</button>
+        <h3>Mission(s) dangereuse(s) :</h3>
+        {missionsDangereuses.map((mission, index) => (
+          <div key={index} className={styles.formGroup}>
+            <label>Mission dangereuse :</label>
+            <input
+              type="text"
+              value={mission}
+              onChange={(e) => handleMissionDangereuseChange(index, e.target.value)}
+            />
+            {missionsDangereuses.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeMissionDangereuseField(index)}
+                className={styles.removeMissionButton}
+              >
+                Supprimer
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={addMissionDangereuseField}
+          className={styles.addMissionButton}
+        >
+          Ajouter une mission dangereuse
+        </button>
+
+        <button type="submit" className={styles.submitButton}>
+          Soumettre
+        </button>
       </form>
     </div>
   );
 }
+
+
+

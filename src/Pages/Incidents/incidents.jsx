@@ -32,10 +32,6 @@ export default function IncidentReports() {
     <div className={styles.incidentsContainer}>
       <h1>Fiches d'incident</h1>
 
-      <Link to="/incidents/create" className={styles.createIncident}>
-        <i className="fa-solid fa-plus"></i> Créer un nouveau rapport d'incident
-      </Link>
-
       {loading && <p>Chargement...</p>}
       {error && <p>Une erreur est survenue : {error.message}</p>}
 
@@ -63,13 +59,12 @@ export default function IncidentReports() {
               <div className={styles.section1Right}>
                 <h4>Intervenant</h4>
                 <h3> {incident.intervenant}</h3>
-               
               </div>
             </div>
 
             <div className={styles.section2}>
               <div className={styles.section2Left}>
-              <h4>Remarques de l'intervenant :</h4>
+                <h4>Remarques de l'intervenant :</h4>
                 <ul>
                   {incident.remarques.map((remarque, index) => (
                     <li key={index}>
@@ -91,26 +86,33 @@ export default function IncidentReports() {
               <div className={styles.section2Right}>
                 <h4>Photos :</h4>
                 <ul>
-                    {incident.photos.map((photo, index) => (
-                        <li key={index}>
-                        <img src={photo} alt={`Photo ${index}`} />
-                        </li>
-                    ))}
+                  {incident.photos.map((photo, index) => (
+                    <li key={index}>
+                      <img src={photo} alt={`Photo ${index}`} />
+                    </li>
+                  ))}
                 </ul>
-
-                
               </div>
             </div>
             <div className={styles.section3}>
-            <div className={styles.section3Left}>
-            <h4>Actions menées par l'intervenant :</h4>
+              <div className={styles.section3Left}>
+                <h4>Actions menées par l'intervenant :</h4>
+              </div>
+              <div className={styles.section3Right}>
+                <h4>Mission(s) dangereuse(s) :</h4>
+                {incident.missionsDangereuses.map((mission, index) => (
+                  <p key={index}>
+                    <i className="fa-solid fa-minus"></i>
+                    {mission}
+                  </p>
+                ))}
+                
 
-                </div>
-                <div className={styles.section3Right}>
-            <h4>Mission(s) dangereuse(s) :</h4>
-                </div>
-
-
+              </div>
+            </div>
+            <div className={styles.section4}>
+              <Link to={`/incident/${incident.id}`}>Voir la fiche incident </Link>
+              <Link to={`/incidents/edit/${incident.id}`}>Remplir / Modifier</Link>
             </div>
           </li>
         ))}

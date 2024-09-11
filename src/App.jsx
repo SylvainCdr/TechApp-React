@@ -11,6 +11,7 @@ import CreateReport from "./Pages/CreateReport/createReport";
 import InterventionReport from "./Pages/Report/Report";
 import EditMission from "./Pages/EditMission/editMission";
 import Mission from "./Pages/Mission/mission";
+import EditIncident from "./Pages/EditIncident/editIncident";
 
 function App() {
   return (
@@ -24,7 +25,6 @@ function App() {
           <Route path="/missions/create" element={<CreateMission />} />
           <Route path="/missions/edit/:missionId" element={<EditMission />} />
           <Route path="/mission/:missionId" element={<Mission />} />
-
           <Route path="/tech" element={<Technicians />} />
           <Route path="/reports/create" element={<CreateReport />} />
           <Route
@@ -32,6 +32,7 @@ function App() {
             element={<InterventionReport />}
           />
           <Route path="/reports/edit/:reportId" element={<EditReport />} />
+          <Route path="/incidents/edit/:incidentId" element={<EditIncident />} />
 
           {/* EX : <Route path="/logement/:logementId" element={<Rental />} /> */}
         </Route>

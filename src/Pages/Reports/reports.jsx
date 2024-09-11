@@ -73,13 +73,13 @@ export default function Reports() {
               {report.client.nomEntreprise} 
             </h2>
             {/* Lien vers la fiche missions associée  */}
-            <p> {report.missionId} </p>
             <p> {report.missionId ? <Link to={`/mission/${report.missionId}`}>Voir la fiche mission associée</Link> : "Aucune fiche mission associée"} </p>
             
             <div className={styles.section1}>
               <div className={styles.section1Left}>
                 <h4>Entreprise / Site</h4>
                 <ul>
+                <li>Client : {report.client.nomEntreprise}</li>
                 <li>Email : {report.client.email}</li>
                 <li>Téléphone : {report.client.tel}</li>
                 <li>Adresse du site : {report.site.adresse}</li>

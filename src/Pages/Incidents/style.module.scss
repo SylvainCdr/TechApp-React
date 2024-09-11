@@ -1,4 +1,3 @@
-
 // <div className={styles.incidentsContainer}>
 //       <h1>Rapports d'incident</h1>
 
@@ -82,198 +81,220 @@
 //       </ul>
 //     </div>
 
-
 .incidentsContainer {
-    max-width: 1280px;
-    min-height: 90vh;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #dddddd17;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      text-align: center;
-      color: white;
-      text-transform: uppercase;
-      font-weight: 600;
+  max-width: 1280px;
+  min-height: 90vh;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #dddddd17;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .createIncident {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1em;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    i {
+      margin-right: 8px;
     }
 
-    .createIncident {
-        display: inline-block;
-        margin-bottom: 20px;
-        padding: 10px 20px;
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
+  .incidentsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .incidentItem {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    color: black;
+
+    h2 {
+      background-color: var(--col2);
+      font-size: 1.4em;
+      color: white;
+      padding: 10px;
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
+    }
+
+    h4 {
+      border-top: 1px solid #ddd;
+      font-size: 1.1em;
+      font-weight: bold;
+      padding: 10px 0px;
+      background-color: var(--col3);
+      color: black;
+      width: 100%;
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section1 {
+      display: flex;
+      justify-content: space-between;
+
+      .section1Left {
+        width: 50%;
+      }
+
+      .section1Right {
+        width: 50%;
+
+        h4 {
+          font-size: 1.2rem;
+          margin-bottom: 10px;
+        }
+
+        img {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .section2 {
+      display: flex;
+      justify-content: space-between;
+
+      .section2Left {
+        width: 50%;
+
+        h4 {
+          font-size: 1.2rem;
+          margin-bottom: 10px;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+
+            i {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+
+      .section2Right {
+        width: 50%;
+
+        h4 {
+          font-size: 1.2rem;
+          margin-bottom: 10px;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+
+            img {
+              width: 120px;
+              height: 100px;
+              object-fit: cover;
+              margin-top: 10px;
+            }
+
+            i {
+              margin-right: 10px;
+            }
+          }
+        }
+
+        p {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+
+          i {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+    .section3 {
+      display: flex;
+      width: 100%;
+
+      .section3Left {
+        width: 50%;
+      }
+
+      .section3Right {
+        width: 50%;
+      }
+    }
+    .section4 {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0px;
+      background-color: var(--col3);
+      border-radius: 0 0 4px 4px;
+      -webkit-border-radius: 0 0 4px 4px;
+      -moz-border-radius: 0 0 4px 4px;
+      -ms-border-radius: 0 0 4px 4px;
+      -o-border-radius: 0 0 4px 4px;
+
+      a {
+        padding: 10px 0px;
+        width: 20%;
+        text-align: center;
         background-color: #007bff;
         color: white;
         font-size: 1em;
         border-radius: 4px;
         text-decoration: none;
         transition: background-color 0.3s ease;
-        i {
-          margin-right: 8px;
-        }
-    
+
         &:hover {
           background-color: #0056b3;
         }
       }
-
-    .incidentsList {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .incidentItem {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin-bottom: 20px;
-        color : black;
-    
-        h2 {
-          background-color: var(--col2);
-          font-size: 1.4em;
-          color: white;
-          padding: 10px;
-          margin-bottom: 1rem;
-          text-align: center;
-          text-transform: uppercase;
-          border-radius: 5px;
-          -webkit-border-radius: 5px;
-          -moz-border-radius: 5px;
-          -ms-border-radius: 5px;
-          -o-border-radius: 5px;
-        }
-  
-        h4 {
-          border-top: 1px solid #ddd;
-          font-size: 1.1em;
-          font-weight: bold;
-          padding: 10px 0px;
-          background-color: var(--col3);
-          color: black;
-          width: 100%;
-          text-align: center;
-          text-transform: uppercase;
-          margin-bottom: 1rem;
-        }
-    
-        .section1 {
-          display: flex;
-          justify-content: space-between;
-    
-          .section1Left {
-            width: 50%;
-            
-          }
-    
-          .section1Right {
-            width: 50%;
-          
-    
-            h4 {
-              font-size: 1.2rem;
-              margin-bottom: 10px;
-            }
-    
-            img {
-              width: 100px;
-              height: 100px;
-              border-radius: 50%;
-              margin-top: 10px;
-            }
-          }
-        }
-    
-        .section2 {
-          display: flex;
-          justify-content: space-between;
-    
-          .section2Left {
-            width: 50%;
-    
-            h4 {
-              font-size: 1.2rem;
-              margin-bottom: 10px;
-            }
-    
-            ul {
-              list-style: none;
-              padding: 0;
-              margin: 0;
-    
-              li {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-    
-                i {
-                  margin-right: 10px;
-                }
-              }
-            }
-          }
-    
-          .section2Right {
-            width: 50%;
-    
-            h4 {
-              font-size: 1.2rem;
-              margin-bottom: 10px;
-            }
-    
-            ul {
-              list-style: none;
-              padding: 0;
-              margin: 0;
-    
-              li {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-
-                img {
-                  width: 120px;
-                  height: 100px;
-            object-fit: cover;
-                  margin-top: 10px;
-                }
-    
-                i {
-                  margin-right: 10px;
-                }
-              }
-            }
-    
-            p {
-              display: flex;
-              align-items: center;
-              margin-bottom: 10px;
-    
-              i {
-                margin-right: 10px;
-              }
-            }
-          }
-        }
-        .section3 {
-          display: flex;
-          width: 100%;
-    
-          .section3Left {
-            width: 50%;
-      }
-    
-      .section3Right {
-        width: 50%;
-      }
-    
     }
-      }
-      
-      
-    }
+  }
+}

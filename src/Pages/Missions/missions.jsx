@@ -65,7 +65,9 @@ export default function Missions() {
               {mission.createdAt.toDate().toLocaleDateString()} -{" "}
               {mission.client.nomEntreprise}
             </h2>
+
             <div className={styles.section1}>
+
               <div className={styles.section1Left}>
                 <h3>Entreprise / Site</h3>
                 <ul> 
