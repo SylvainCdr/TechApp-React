@@ -69,7 +69,7 @@ export default function Reports() {
           <li key={report.id} className={styles.reportItem}>
             <h2>
               {" "}
-              {report.createdAt?.toDate().toLocaleDateString()} -{" "}
+              {report.interventionDate} -{" "}
               {report.client.nomEntreprise} 
             </h2>
             {/* Lien vers la fiche missions associée  */}
@@ -130,7 +130,7 @@ export default function Reports() {
 
             <div className={styles.section3}>
               <Link
-                to={`/reports/view/${report.id}`}
+                to={`/report/${report.id}`}
                 className={styles.viewButton}
               >
                 Voir le rapport 

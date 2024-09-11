@@ -21,6 +21,7 @@ export default function MissionForm() {
   const [missions, setMissions] = useState([""]);
   const [risqueEPI, setRisqueEPI] = useState([""]);
   const [intervenantsExistants, setIntervenantsExistants] = useState([]);
+  const [dateIntervention, setDateIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchIntervenants = async () => {
@@ -49,6 +50,7 @@ export default function MissionForm() {
         setIntervenant(missionData.intervenant);
         setMissions(missionData.missions || [""]);
         setRisqueEPI(missionData.risqueEPI || [""]);
+        setDateIntervention(missionData.interventionDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
       } else {
         console.log("Mission non trouvée");
       }
@@ -73,38 +75,46 @@ export default function MissionForm() {
         intervenant,
         missions,
         risqueEPI,
+        interventionDate: dateIntervention, // Utiliser dateIntervention
         createdAt: new Date(),
         updatedAt: new Date(),
       };
   
-      const missionRef = await addDoc(collection(db, "missions"), missionData);
-      const missionId = missionRef.id; // Récupération de l'ID de la mission
+      if (missionId) {
+        // Mettre à jour la mission existante
+        const missionRef = doc(db, "missions", missionId);
+        await updateDoc(missionRef, missionData);
+        alert("Mission mise à jour avec succès !");
+      } else {
+        // Créer une nouvelle mission
+        const missionRef = await addDoc(collection(db, "missions"), missionData);
+        const missionId = missionRef.id; // Récupération de l'ID de la mission
   
-      // Automatiser la création du rapport d'intervention associé
-      const interventionReportData = {
-        missionId, // Associer le rapport à la mission par son ID
-        client,
-        site,
-        intervenant,
-        actionsDone: [], // Vide au départ, sera rempli plus tard
-        remarques: [], // Vide au départ, sera rempli plus tard
-        photos: [], // Vide au départ, sera rempli plus tard
-        risques: false, // Initialement à "false"
-        createdAt: new Date(),
-      };
+        // Automatiser la création du rapport d'intervention associé
+        const interventionReportData = {
+          missionId, // Associer le rapport à la mission par son ID
+          client,
+          site,
+          intervenant,
+          actionsDone: [], // Vide au départ, sera rempli plus tard
+          remarques: [], // Vide au départ, sera rempli plus tard
+          photos: [], // Vide au départ, sera rempli plus tard
+          risques: false, // Initialement à "false"
+          createdAt: new Date(),
+          interventionDate: dateIntervention,
+        };
   
-      await addDoc(collection(db, "interventionReports"), interventionReportData);
+        await addDoc(collection(db, "interventionReports"), interventionReportData);
   
-      alert("Fiche mission et rapport d'intervention créés avec succès !");
+        alert("Fiche mission et rapport d'intervention créés avec succès !");
+      }
+
       // Redirection vers la page des missions (optionnel)
       window.location.href = "/missions";
     } catch (error) {
-      console.error("Erreur lors de la création de la mission ou du rapport d'intervention : ", error);
-      alert("Une erreur est survenue lors de la création de la mission.");
+      console.error("Erreur lors de la création ou mise à jour de la mission ou du rapport d'intervention : ", error);
+      alert("Une erreur est survenue lors de la création ou mise à jour de la mission.");
     }
-
-    // Redirection vers la page des missions (optionnel)
-    window.location.href = "/missions";
   };
 
   // Ajouter un nouveau champ pour les missions
@@ -201,6 +211,17 @@ export default function MissionForm() {
           />
         </div>
 
+        <h3>Date d'intervention</h3>
+        <div className={styles.formGroup}>
+          <label>Date d'intervention :</label>
+          <input
+            type="date"
+            value={dateIntervention}
+            onChange={(e) => setDateIntervention(e.target.value)}
+            required
+          />
+        </div>
+
         <h3>Intervenant</h3>
         <div className={styles.formGroup}>
           <label>Sélectionnez un intervenant :</label>
@@ -218,6 +239,8 @@ export default function MissionForm() {
           </select>
         </div>
 
+    
+
         <h3>Mission(s)</h3>
         {missions.map((mission, index) => (
           <div key={index} className={styles.formGroup}>
@@ -226,59 +249,51 @@ export default function MissionForm() {
               type="text"
               value={mission}
               onChange={(e) => {
-                const updatedMissions = [...missions];
-                updatedMissions[index] = e.target.value;
-                setMissions(updatedMissions);
+                const newMissions = [...missions];
+                newMissions[index] = e.target.value;
+                setMissions(newMissions);
               }}
               required
             />
-            {missions.length > 1 && (
-              <button
-                className={styles.removeMission}
-                type="button"
-                onClick={() => removeMissionField(index)}
-              >
-                Supprimer ce champ
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => removeMissionField(index)}
+            >
+              Supprimer
+            </button>
           </div>
         ))}
-        <button className={styles.addMission} type="button" onClick={addMissionField}>
-          Ajouter un champ pour la mission
+        <button type="button" onClick={addMissionField}>
+          Ajouter une mission
         </button>
 
-        <h3>Risques / EPI</h3>
+        <h3>Risques/EPI</h3>
         {risqueEPI.map((risque, index) => (
           <div key={index} className={styles.formGroup}>
-            <label>Risques et Équipements de Protection Individuelle {index + 1} :</label>
+            <label>Risque/EPI {index + 1} :</label>
             <input
               type="text"
               value={risque}
               onChange={(e) => {
-                const updatedRisques = [...risqueEPI];
-                updatedRisques[index] = e.target.value;
-                setRisqueEPI(updatedRisques);
+                const newRisqueEPI = [...risqueEPI];
+                newRisqueEPI[index] = e.target.value;
+                setRisqueEPI(newRisqueEPI);
               }}
               required
             />
-            {risqueEPI.length > 1 && (
-              <button
-                className={styles.removeRisk}
-                type="button"
-                onClick={() => removeRisqueField(index)}
-              >
-                Supprimer ce champ
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => removeRisqueField(index)}
+            >
+              Supprimer
+            </button>
           </div>
         ))}
-        <button className={styles.addRisk} type="button" onClick={addRisqueField}>
-          Ajouter un champ pour les risques / EPI
+        <button type="button" onClick={addRisqueField}>
+          Ajouter un risque/EPI
         </button>
 
-        <button className={styles.submitButton} type="submit">
-          {missionId ? "Mettre à jour la mission" : "Créer la mission"}
-        </button>
+        <button type="submit">Enregistrer</button>
       </form>
     </div>
   );

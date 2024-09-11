@@ -26,6 +26,7 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [risques, setRisques] = useState(false);
   const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
   const [actions, setActions] = useState([""]);
+  const [dateIntervention, setDateIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
 
   useEffect(() => {
     // Remplir les champs avec les données initiales si elles existent
@@ -34,11 +35,16 @@ export default function ReportForm({ initialData, onSubmit }) {
       setSite(initialData.site || {});
       setIntervenant(initialData.intervenant || "");
       setActionsDone(initialData.actionsDone || [{ description: "" }]);
-            setRemarques(initialData.remarques || [{ remarque: "" }]);
+      setRemarques(initialData.remarques || [{ remarque: "" }]);
       setPhotos(initialData.photos || []);
       setRisques(initialData.risques || false);
+      setMissionsDangereuses(initialData.missionsDangereuses || [""]);
+      setActions(initialData.actions || [""]);
+      // Vérifier que createdAt est bien une chaîne avant d'utiliser substring
+      setDateIntervention(initialData.interventionDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
     }
   }, [initialData]);
+  
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
@@ -92,6 +98,8 @@ export default function ReportForm({ initialData, onSubmit }) {
         photos: uploadedPhotoUrls,
         risques,
         createdAt: initialData?.createdAt || new Date(),
+        updatedAt: new Date(),
+        interventionDate : dateIntervention,
       };
   
       // Appel de la fonction onSubmit (mise à jour ou création du rapport)
@@ -121,6 +129,7 @@ export default function ReportForm({ initialData, onSubmit }) {
       setRemarques([{ remarque: "" }]);
       setPhotos([]);
       setRisques(false);
+
       
       // Redirection ou confirmation
       alert("Rapport soumis avec succès.");
@@ -239,6 +248,18 @@ export default function ReportForm({ initialData, onSubmit }) {
             required
           />
         </div>
+
+        <h3>Date d'intervention</h3>
+        <div className={styles.formGroup}>
+          <label>Date d'intervention :</label>
+          <input
+            type="date"
+            value={dateIntervention}
+            onChange={(e) => setDateIntervention(e.target.value)}
+            required
+          />
+        </div>
+
 
         <h3>Intervenant</h3>
         <div className={styles.formGroup}>

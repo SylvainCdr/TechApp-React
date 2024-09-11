@@ -43,6 +43,8 @@ export default function IncidentReports() {
               {incident.createdAt?.toDate().toLocaleDateString()} -{" "}
               {incident.client.nomEntreprise}
             </h2>
+            <p> {incident.interventionReportId ? <Link to={`/report/${incident.interventionReportId}`}>Voir le rapport d'intervention associée</Link> : "Aucune fiche mission associée"} </p>
+
             <div className={styles.section1}>
               <div className={styles.section1Left}>
                 <h4>Entreprise / Site</h4>
@@ -97,6 +99,14 @@ export default function IncidentReports() {
             <div className={styles.section3}>
               <div className={styles.section3Left}>
                 <h4>Actions menées par l'intervenant :</h4>
+                <ul>
+                  {incident.actions.map((action, index) => (
+                    <li key={index}>
+                      <i className="fa-solid fa-check"></i>
+                      {action}
+                    </li>
+                  ))}
+                </ul>
               </div>
               <div className={styles.section3Right}>
                 <h4>Mission(s) dangereuse(s) :</h4>

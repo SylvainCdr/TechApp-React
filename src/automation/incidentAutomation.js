@@ -3,7 +3,7 @@ import { collection, addDoc, query, where, getDocs, doc, updateDoc } from "fireb
 
 export  const createOrUpdateIncidentReport = async (incidentData) => {
   try {
-    const { client, site, intervenant, missionsDangereuses = [], actions = [], remarques, photos, risques } = incidentData;
+    const { client, site, intervenant, missionsDangereuses = [], actions = [], remarques, photos, risques, interventionReportId } = incidentData;
 
     // Validation des données
     if (!client || !site || !intervenant || !Array.isArray(missionsDangereuses) || !Array.isArray(actions) || !Array.isArray(remarques)) {
@@ -32,6 +32,8 @@ export  const createOrUpdateIncidentReport = async (incidentData) => {
         photos,
         risques,
         createdAt: new Date(),
+        interventionReportId,
+        
       });
     } else {
       console.log("Fiche d'incident déjà existante.");

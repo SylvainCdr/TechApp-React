@@ -28,7 +28,7 @@ function App() {
           <Route path="/tech" element={<Technicians />} />
           <Route path="/reports/create" element={<CreateReport />} />
           <Route
-            path="reports/view/:reportId"
+            path="report/:reportId"
             element={<InterventionReport />}
           />
           <Route path="/reports/edit/:reportId" element={<EditReport />} />

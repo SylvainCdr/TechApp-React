@@ -20,6 +20,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
   const [actions, setActions] = useState([""]);
   const [createdAt, setCreatedAt] = useState(new Date().toISOString());
   const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
+  const [interventionReportId, setInterventionReportId] = useState("");
 
   useEffect(() => {
     if (initialData) {
@@ -32,6 +33,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
       setActions(initialData.actions || [""]);
       setCreatedAt(initialData.createdAt || new Date().toISOString());
       setMissionsDangereuses(initialData.missionsDangereuses || [""]);
+      setInterventionReportId(initialData.interventionReportId || "");
     }
   }, [initialData]);
 
@@ -48,6 +50,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
       actions,
       createdAt,
       missionsDangereuses,
+      interventionReportId,
     };
     onSubmit(incidentData);
   };

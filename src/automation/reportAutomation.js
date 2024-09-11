@@ -5,7 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 export const createInterventionReport = async (missionData) => {
   try {
     // Récupération des informations à partir de la fiche de mission
-    const { client, site, intervenant, missions, risqueEPI } = missionData;
+    const { client, site, intervenant, risqueEPI, interventionDate } = missionData;
 
     // Création du rapport d'intervention dans une nouvelle collection "interventionReports"
     const reportData = {
@@ -17,6 +17,7 @@ export const createInterventionReport = async (missionData) => {
       photos: [], 
       risques: risqueEPI.length > 0, // Détermine s'il y a des risques selon la présence de données
       createdAt: new Date(),
+      interventionDate,
     };
 
     await addDoc(collection(db, "interventionReports"), reportData);
