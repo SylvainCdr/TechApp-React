@@ -1,7 +1,7 @@
 import styles from "./style.module.scss";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc  } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 export default function IncidentReports() {
@@ -27,6 +27,22 @@ export default function IncidentReports() {
   useEffect(() => {
     fetchIncidents();
   }, []);
+
+  const deleteIncident = async (id) => {
+    try {
+      await deleteDoc(doc(db, "incidentReports", id));
+      fetchIncidents();
+    } catch (error) {
+      console.error("Erreur lors de la suppression du rapport : ", error);
+    }
+
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Voulez-vous vraiment supprimer ce rapport ?")) {
+      deleteIncident(id);
+    }
+  };
 
   return (
     <div className={styles.incidentsContainer}>
@@ -128,6 +144,7 @@ export default function IncidentReports() {
             <div className={styles.section4}>
               <Link to={`/incident/${incident.id}`}>Voir la fiche incident </Link>
               <Link to={`/incidents/edit/${incident.id}`}>Remplir / Modifier</Link>
+              <Link onClick={() => handleDelete(incident.id)}>Supprimer</Link>
             </div>
           </li>
         ))}

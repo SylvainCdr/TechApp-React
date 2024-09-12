@@ -26,7 +26,8 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [risques, setRisques] = useState(false);
   const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
   const [actions, setActions] = useState([""]);
-  const [dateIntervention, setDateIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
+  const [dateStartIntervention, setDateStartIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
+  const [dateEndIntervention, setDateEndIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
 
   useEffect(() => {
     // Remplir les champs avec les données initiales si elles existent
@@ -41,7 +42,8 @@ export default function ReportForm({ initialData, onSubmit }) {
       setMissionsDangereuses(initialData.missionsDangereuses || [""]);
       setActions(initialData.actions || [""]);
       // Vérifier que createdAt est bien une chaîne avant d'utiliser substring
-      setDateIntervention(initialData.interventionDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
+      setDateStartIntervention(initialData.interventionStartDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
+      setDateEndIntervention(initialData.interventionEndDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
     }
   }, [initialData]);
   
@@ -99,7 +101,8 @@ export default function ReportForm({ initialData, onSubmit }) {
         risques,
         createdAt: initialData?.createdAt || new Date(),
         updatedAt: new Date(),
-        interventionDate : dateIntervention,
+        interventionStartDate : dateStartIntervention,
+        interventionEndDate : dateEndIntervention,
       };
   
       // Appel de la fonction onSubmit (mise à jour ou création du rapport)
@@ -249,13 +252,20 @@ export default function ReportForm({ initialData, onSubmit }) {
           />
         </div>
 
-        <h3>Date d'intervention</h3>
+        <h3>Date(s) d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Date d'intervention :</label>
+          <label>Date de début :</label>
           <input
             type="date"
-            value={dateIntervention}
-            onChange={(e) => setDateIntervention(e.target.value)}
+            value={dateStartIntervention}
+            onChange={(e) => setDateStartIntervention(e.target.value)}
+            required
+          />
+          <label>Date de fin :</label>
+          <input
+            type="date"
+            value={dateEndIntervention}
+            onChange={(e) => setDateEndIntervention(e.target.value)}
             required
           />
         </div>

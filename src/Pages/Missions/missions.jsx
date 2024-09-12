@@ -73,6 +73,10 @@ export default function Missions() {
               {mission.createdAt.toDate().toLocaleDateString()} -{" "}
               {mission.client.nomEntreprise}
             </h2>
+            <p>
+              Date(s) d'intervention :{mission.interventionStartDate} -{" "}
+              {mission.interventionEndDate}
+            </p>
 
             <div className={styles.section1}>
               <div className={styles.section1Left}>
@@ -124,26 +128,28 @@ export default function Missions() {
             </div>
 
             <div className={styles.section3}>
-  <Link to={`/mission/${mission.id}`} className={styles.viewMission}>
-    Voir la fiche mission
-  </Link>
+              <Link
+                to={`/mission/${mission.id}`}
+                className={styles.viewMission}
+              >
+                Voir la fiche mission
+              </Link>
 
-  <Link
-    to={`/missions/edit/${mission.id}`}
-    className={styles.editMission}
-  >
-    Modifier
-  </Link>
+              <Link
+                to={`/missions/edit/${mission.id}`}
+                className={styles.editMission}
+              >
+                Modifier
+              </Link>
 
-  {/* Bouton Supprimer */}
-  <Link
-    className={styles.deleteMission}
-    onClick={() => deleteMission(mission.id)}
-  >
-    Supprimer
-  </Link>
-</div>
-
+              {/* Bouton Supprimer */}
+              <Link
+                className={styles.deleteMission}
+                onClick={() => deleteMission(mission.id)}
+              >
+                Supprimer
+              </Link>
+            </div>
           </div>
         ))}
       </div>

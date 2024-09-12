@@ -21,7 +21,8 @@ export default function MissionForm() {
   const [missions, setMissions] = useState([""]);
   const [risqueEPI, setRisqueEPI] = useState([""]);
   const [intervenantsExistants, setIntervenantsExistants] = useState([]);
-  const [dateIntervention, setDateIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
+  const [dateStartIntervention, setDateStartIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
+  const [dateEndIntervention, setDateEndIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchIntervenants = async () => {
@@ -50,7 +51,8 @@ export default function MissionForm() {
         setIntervenant(missionData.intervenant);
         setMissions(missionData.missions || [""]);
         setRisqueEPI(missionData.risqueEPI || [""]);
-        setDateIntervention(missionData.interventionDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
+        setDateStartIntervention(missionData.interventionStartDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
+        setDateEndIntervention(missionData.interventionEndDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
       } else {
         console.log("Mission non trouvée");
       }
@@ -75,7 +77,8 @@ export default function MissionForm() {
         intervenant,
         missions,
         risqueEPI,
-        interventionDate: dateIntervention, // Utiliser dateIntervention
+        interventionStartDate: dateStartIntervention,
+        interventionEndDate: dateEndIntervention, 
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -101,7 +104,8 @@ export default function MissionForm() {
           photos: [], // Vide au départ, sera rempli plus tard
           risques: false, // Initialement à "false"
           createdAt: new Date(),
-          interventionDate: dateIntervention,
+          interventionStartDate: dateStartIntervention,
+          interventionEndDate: dateEndIntervention,
         };
   
         await addDoc(collection(db, "interventionReports"), interventionReportData);
@@ -211,13 +215,20 @@ export default function MissionForm() {
           />
         </div>
 
-        <h3>Date d'intervention</h3>
+        <h3>Date(s) d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Date d'intervention :</label>
+          <label>Date de début :</label>
           <input
             type="date"
-            value={dateIntervention}
-            onChange={(e) => setDateIntervention(e.target.value)}
+            value={dateStartIntervention}
+            onChange={(e) => setDateStartIntervention(e.target.value)}
+            required
+          />
+          <label>Date de fin :</label>
+          <input
+            type="date"
+            value={dateEndIntervention}
+            onChange={(e) => setDateEndIntervention(e.target.value)}
             required
           />
         </div>

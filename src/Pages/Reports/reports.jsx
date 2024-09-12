@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export default function Reports() {
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
-  const [missionId, setMissionId] = useState(null);
+ 
 
   
 
@@ -88,7 +88,8 @@ export default function Reports() {
           <li key={report.id} className={styles.reportItem}>
             <h2>
               {" "}
-              {report.interventionDate} -{" "}
+              {report.interventionStartDate} /{" "}
+  {report.interventionEndDate} - {""}
               {report.client.nomEntreprise} 
             </h2>
                 {/* Vérification de la présence des actions et affichage du badge */}
