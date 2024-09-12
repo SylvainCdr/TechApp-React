@@ -265,18 +265,26 @@ li {
 
       .section2Right {
         width: 50%;
+        
 
-        img {
-          width: 120px;
-          height: 100px;
-          object-fit: cover;
-          border-radius: 8px;
-          display: flex;
-          margin: 1rem auto;
-          -webkit-border-radius: 8px;
-          -moz-border-radius: 8px;
-          -ms-border-radius: 8px;
-          -o-border-radius: 8px;
+        ul {
+          display : flex;
+          justify-content: center;
+          li {
+           
+            img {
+              width: 120px;
+              height: 100px;
+              object-fit: cover;
+              border-radius: 8px;
+              display: flex;
+              margin: 1rem auto;
+              -webkit-border-radius: 8px;
+              -moz-border-radius: 8px;
+              -ms-border-radius: 8px;
+              -o-border-radius: 8px;
+            }
+          }
         }
       }
     }

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
 import { collection, getDocs, doc, deleteDoc  } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function IncidentReports() {
   const [loading, setLoading] = useState(false);
@@ -28,21 +29,43 @@ export default function IncidentReports() {
     fetchIncidents();
   }, []);
 
-  const deleteIncident = async (id) => {
-    try {
-      await deleteDoc(doc(db, "incidentReports", id));
-      fetchIncidents();
-    } catch (error) {
-      console.error("Erreur lors de la suppression du rapport : ", error);
-    }
+ // Fonction pour supprimer un incident avec alerte de confirmation
+const deleteIncident = async (id) => {
+  const result = await Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: "Cette action est irréversible !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer !',
+      cancelButtonText: 'Annuler'
+  });
 
-  };
+  if (result.isConfirmed) {
+      try {
+          await deleteDoc(doc(db, "incidentReports", id));
+          fetchIncidents(); // Met à jour la liste des incidents après suppression
+          Swal.fire(
+              'Supprimé !',
+              'L\'incident a été supprimé.',
+              'success'
+          );
+      } catch (error) {
+          console.error("Erreur lors de la suppression de l'incident : ", error);
+          Swal.fire(
+              'Erreur',
+              'Une erreur est survenue lors de la suppression de l\'incident.',
+              'error'
+          );
+      }
+  }
+};
 
-  const handleDelete = (id) => {
-    if (window.confirm("Voulez-vous vraiment supprimer ce rapport ?")) {
-      deleteIncident(id);
-    }
-  };
+// Fonction de gestionnaire d'événement pour la suppression de l'incident
+const handleDelete = (id) => {
+  deleteIncident(id); // Utilise SweetAlert2 pour la confirmation
+};
 
   return (
     <div className={styles.incidentsContainer}>

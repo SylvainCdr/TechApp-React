@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Swal from 'sweetalert2';
 import { db, storage } from "../../firebase/firebase";
 import {
   collection,
@@ -15,8 +16,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import styles from "./style.module.scss";
-
-
 
 export default function TechniciansPage() {
   const [technicians, setTechnicians] = useState([]);
@@ -70,11 +69,23 @@ export default function TechniciansPage() {
         // Mise à jour d'un technicien existant
         const technicianRef = doc(db, "technicians", editId);
         await updateDoc(technicianRef, data);
-        alert("Technicien mis à jour avec succès !");
+
+        Swal.fire({
+          title: 'Succès',
+          text: 'Technicien mis à jour avec succès !',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
       } else {
         // Création d'un nouveau technicien
         await addDoc(collection(db, "technicians"), data);
-        alert("Technicien ajouté avec succès !");
+
+        Swal.fire({
+          title: 'Succès',
+          text: 'Technicien ajouté avec succès !',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
       }
 
       // Réinitialisation du formulaire et des états
@@ -95,6 +106,12 @@ export default function TechniciansPage() {
         "Erreur lors de l'ajout ou de la mise à jour du technicien : ",
         error
       );
+      Swal.fire({
+        title: 'Erreur',
+        text: 'Une erreur est survenue lors de la soumission du formulaire.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
     }
   };
 
@@ -119,26 +136,49 @@ export default function TechniciansPage() {
     }
   };
 
-  // Fonction pour gérer la suppression d'un technicien
+  // Fonction pour gérer la suppression d'un technicien avec SweetAlert2
   const handleDelete = async (technician) => {
-    try {
-      // Supprimer la photo associée
-      if (technician.urlPhoto) {
-        const fileName = decodeURIComponent(
-          technician.urlPhoto.split("/").pop().split("?")[0]
+    const result = await Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: "Cette action est irréversible !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer !',
+      cancelButtonText: 'Annuler'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        // Supprimer la photo associée
+        if (technician.urlPhoto) {
+          const fileName = decodeURIComponent(
+            technician.urlPhoto.split("/").pop().split("?")[0]
+          );
+          const photoRef = ref(storage, `${fileName}`);
+          await deleteObject(photoRef);
+        }
+
+        // Supprimer le technicien de Firestore
+        const technicianRef = doc(db, "technicians", technician.id);
+        await deleteDoc(technicianRef);
+
+        Swal.fire(
+          'Supprimé !',
+          'Le technicien a été supprimé.',
+          'success'
         );
-        const photoRef = ref(storage, `${fileName}`);
-        await deleteObject(photoRef);
+        fetchTechnicians();
+      } catch (error) {
+        console.error("Erreur lors de la suppression du technicien : ", error);
+        Swal.fire({
+          title: 'Erreur',
+          text: 'Une erreur est survenue lors de la suppression.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       }
-
-      // Supprimer le technicien de Firestore
-      const technicianRef = doc(db, "technicians", technician.id);
-      await deleteDoc(technicianRef);
-
-      alert("Technicien supprimé avec succès !");
-      fetchTechnicians();
-    } catch (error) {
-      console.error("Erreur lors de la suppression du technicien : ", error);
     }
   };
 
@@ -245,7 +285,7 @@ export default function TechniciansPage() {
               >
                 Supprimer
               </button>
-            </div>{" "}
+            </div>
           </div>
         ))}
       </div>

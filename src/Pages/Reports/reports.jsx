@@ -3,6 +3,7 @@ import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
@@ -55,21 +56,44 @@ export default function Reports() {
     return technician ? technician.urlPhoto : null;
   };
 
-  const deleteReport = async (id) => {
-    try {
-      await deleteDoc(doc(db, "interventionReports", id));
-      fetchReports();
-    } catch (error) {
-      console.error("Erreur lors de la suppression du rapport : ", error);
-    }
-  };
 
-  const deleteReportHandler = (id) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce rapport ?")) {
-      deleteReport(id);
-    }
-  };
+// Fonction pour supprimer un rapport avec alerte de confirmation
+const deleteReport = async (id) => {
+  const result = await Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: "Cette action est irréversible !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer !',
+      cancelButtonText: 'Annuler'
+  });
 
+  if (result.isConfirmed) {
+      try {
+          await deleteDoc(doc(db, "interventionReports", id));
+          fetchReports(); // Met à jour la liste des rapports après suppression
+          Swal.fire(
+              'Supprimé !',
+              'Le rapport a été supprimé.',
+              'success'
+          );
+      } catch (error) {
+          console.error("Erreur lors de la suppression du rapport : ", error);
+          Swal.fire(
+              'Erreur',
+              'Une erreur est survenue lors de la suppression du rapport.',
+              'error'
+          );
+      }
+  }
+};
+
+// Fonction de gestionnaire d'événement pour la suppression du rapport
+const deleteReportHandler = (id) => {
+  deleteReport(id); // Utilise SweetAlert2 pour la confirmation
+};
 
 
 

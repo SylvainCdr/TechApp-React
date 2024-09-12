@@ -3,6 +3,7 @@ import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Missions() {
   const [missions, setMissions] = useState([]);
@@ -49,15 +50,39 @@ export default function Missions() {
   };
 
   // Fonction pour supprimer une mission
-  const deleteMission = async (missionId) => {
-    try {
-      await deleteDoc(doc(db, "missions", missionId));
-      // Après suppression, mettre à jour la liste des missions
-      fetchMissions();
-    } catch (error) {
-      console.error("Erreur lors de la suppression de la mission :", error);
-    }
-  };
+const deleteMission = async (missionId) => {
+  // Confirmation avant suppression
+  const result = await Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: "Cette action est irréversible !",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer !',
+      cancelButtonText: 'Annuler'
+  });
+
+  if (result.isConfirmed) {
+      try {
+          await deleteDoc(doc(db, "missions", missionId));
+          // Après suppression, mettre à jour la liste des missions
+          fetchMissions();
+          Swal.fire(
+              'Supprimé !',
+              'La mission a été supprimée.',
+              'success'
+          );
+      } catch (error) {
+          console.error("Erreur lors de la suppression de la mission :", error);
+          Swal.fire(
+              'Erreur',
+              'Une erreur est survenue lors de la suppression de la mission.',
+              'error'
+          );
+      }
+  }
+};
 
   return (
     <div className={styles.missionsContainer}>
