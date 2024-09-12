@@ -93,7 +93,7 @@ export default function Mission() {
             {mission.client.nomEntreprise}
           </h2>
           <div className={styles.section1}>
-            <div className={styles.section1Left}>
+            <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
               <p>Email : {mission.client.email}</p>
               <p>Téléphone : {mission.client.tel}</p>
@@ -101,7 +101,7 @@ export default function Mission() {
               <p>Nom contact : {mission.site.nomContact}</p>
               <p>Fonction : {mission.site.fonctionContact}</p>
               <p>Téléphone : {mission.site.telContact}</p>
-            </div>
+            </ul>
             <div className={styles.section1Right}>
               <h3>Intervenant</h3>
               <p>{mission.intervenant}</p>
