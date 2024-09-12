@@ -43,6 +43,11 @@ export default function IncidentReports() {
               {incident.createdAt?.toDate().toLocaleDateString()} -{" "}
               {incident.client.nomEntreprise}
             </h2>
+            {incident.missionsDangereuses && incident.missionsDangereuses.length > 0 ? (
+                  <div className={styles.badgeGreen}>Complété</div>
+                ) : (
+                  <div className={styles.badgeRed}>À compléter</div>
+                )}
             <p> {incident.interventionReportId ? <Link to={`/report/${incident.interventionReportId}`}>Voir le rapport d'intervention associée</Link> : "Aucune fiche mission associée"} </p>
 
             <div className={styles.section1}>
@@ -70,7 +75,7 @@ export default function IncidentReports() {
                 <ul>
                   {incident.remarques.map((remarque, index) => (
                     <li key={index}>
-                      <i className="fa-solid fa-minus"></i>
+                      <i class="fa-solid fa-chevron-right"></i>
                       {remarque.remarque}
                     </li>
                   ))}
@@ -112,7 +117,7 @@ export default function IncidentReports() {
                 <h4>Mission(s) dangereuse(s) :</h4>
                 {incident.missionsDangereuses.map((mission, index) => (
                   <p key={index}>
-                    <i className="fa-solid fa-minus"></i>
+                     <i className="fa-solid fa-triangle-exclamation"></i>
                     {mission}
                   </p>
                 ))}

@@ -16,6 +16,8 @@ import {
 } from "firebase/storage";
 import styles from "./style.module.scss";
 
+
+
 export default function TechniciansPage() {
   const [technicians, setTechnicians] = useState([]);
   const [formData, setFormData] = useState({
@@ -215,9 +217,9 @@ export default function TechniciansPage() {
         </form>
       )}
 
-      <ul className={styles.techniciansList}>
+      <div className={styles.techniciansList}>
         {technicians.map((technician) => (
-          <li key={technician.id} className={styles.technicianItem}>
+          <div key={technician.id} className={styles.technicianItem}>
             <h2>
               {technician.firstName} {technician.lastName}
             </h2>
@@ -244,9 +246,9 @@ export default function TechniciansPage() {
                 Supprimer
               </button>
             </div>{" "}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

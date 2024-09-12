@@ -72,64 +72,74 @@
     font-weight: 600;
   }
 
-  .technicianItem {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: var(--col3);
-    color: black;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    width: 60%;
-  }
+  .techniciansList {
+    display: grid ;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
 
-  .technicianItem img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    display: flex;
-    margin: 1rem auto;
-  }
+    .technicianItem {
 
-  p {
-    margin-top: 0.5rem;
-  }
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: var(--col3);
+      color: black;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
 
-  .buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 1.5rem;
-  }
+      img {
+        width: 120px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: flex;
+        margin: 1rem auto;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+}
 
-  .editButton {
-    background-color: #28a745;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
-    color: #fff;
-    font-size: 14px;
-  }
+      p {
+        margin-top: 0.5rem;
+      }
 
-  .editButton:hover {
-    background-color: #218838;
-  }
+      .buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 1.5rem;
 
-  .deleteButton {
-    background-color: #dc3545;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
-    color: #fff;
-    font-size: 14px;
-  }
+        .editButton {
+          background-color: #28a745;
+          border: none;
+          padding: 5px 10px;
+          cursor: pointer;
+          border-radius: 3px;
+          color: #fff;
+          font-size: 14px;
+        }
 
-  .deleteButton:hover {
-    background-color: #c82333;
+        .editButton:hover {
+          background-color: #218838;
+        }
+
+        .deleteButton {
+          background-color: #dc3545;
+          border: none;
+          padding: 5px 10px;
+          cursor: pointer;
+          border-radius: 3px;
+          color: #fff;
+          font-size: 14px;
+        }
+
+        .deleteButton:hover {
+          background-color: #c82333;
+        }
+      }
+    }
   }
 }

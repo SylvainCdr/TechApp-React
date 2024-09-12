@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 export default function Reports() {
@@ -55,6 +55,25 @@ export default function Reports() {
     return technician ? technician.urlPhoto : null;
   };
 
+  const deleteReport = async (id) => {
+    try {
+      await deleteDoc(doc(db, "interventionReports", id));
+      fetchReports();
+    } catch (error) {
+      console.error("Erreur lors de la suppression du rapport : ", error);
+    }
+  };
+
+  const deleteReportHandler = (id) => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce rapport ?")) {
+      deleteReport(id);
+    }
+  };
+
+
+
+
+
   return (
     <div className={styles.reportsContainer}>
       <h1>Rapports d'intervention</h1>
@@ -72,6 +91,12 @@ export default function Reports() {
               {report.interventionDate} -{" "}
               {report.client.nomEntreprise} 
             </h2>
+                {/* Vérification de la présence des actions et affichage du badge */}
+    {report.actionsDone && report.actionsDone.length > 0 ? (
+      <span className={styles.badgeGreen}>Complété</span>
+    ) : (
+      <span className={styles.badgeRed}>À compléter</span>
+    )}
             {/* Lien vers la fiche missions associée  */}
             <p> {report.missionId ? <Link to={`/mission/${report.missionId}`}>Voir la fiche mission associée</Link> : "Aucune fiche mission associée"} </p>
             
@@ -103,30 +128,32 @@ export default function Reports() {
             </div>
 
             <div className={styles.section2}>
-              <div className={styles.section2Left}>
-                {/* Affichage des actions menées */}
-                <h4>Actions menées :</h4>
-                <ul>
-                  {report.actionsDone.map((action, index) => (
-                    <li key={index}><i class="fa-solid fa-check"></i>{action.description}</li>
-                  ))}
-                </ul>
-              </div>
+  <div className={styles.section2Left}>
 
-              <div className={styles.section2Right}>
-                {/* Affichage des remarques */}
-                <h4>Remarques :</h4>
-                <ul>
-                  {report.remarques.map((remarque, index) => (
-                    <li key={index}><i class="fa-solid fa-minus"></i>{remarque.remarque}</li>
-                  ))}
-                </ul>
 
-                <p> <i class="fa-solid fa-triangle-exclamation"></i>Intervention à risque :  {report.risques ? "Oui" : "Non"}</p>
+    {/* Affichage des actions menées */}
+    <h4>Actions menées :</h4>
+    <ul>
+      {report.actionsDone.map((action, index) => (
+        <li key={index}><i class="fa-solid fa-check"></i>{action.description}</li>
+      ))}
+    </ul>
+  </div>
 
-                <p> <i class="fa-solid fa-paperclip"></i>Nombre de photos jointes : {report.photos.length}</p>
-              </div>
-            </div>
+  <div className={styles.section2Right}>
+    {/* Affichage des remarques */}
+    <h4>Remarques :</h4>
+    <ul>
+      {report.remarques.map((remarque, index) => (
+        <li key={index}><i class="fa-solid fa-chevron-right"></i>{remarque.remarque}</li>
+      ))}
+    </ul>
+
+    <p> <i class="fa-solid fa-triangle-exclamation"></i>Intervention à risque :  {report.risques ? "Oui" : "Non"}</p>
+
+    <p> <i class="fa-solid fa-paperclip"></i>Nombre de photos jointes : {report.photos.length}</p>
+  </div>
+</div>
 
             <div className={styles.section3}>
               <Link
@@ -142,6 +169,15 @@ export default function Reports() {
               >
                 Remplir / Modifier
               </Link>
+
+              <Link
+                className={styles.deleteButton}
+                onClick={() => deleteReportHandler(report.id)}
+              >
+                Supprimer
+              </Link>
+
+
             </div>
           </li>
         ))}

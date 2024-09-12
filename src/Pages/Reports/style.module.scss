@@ -61,12 +61,38 @@
         -ms-border-radius: 5px;
         -o-border-radius: 5px;
       }
+      .badgeGreen {
+        background-color: #52c41a;
+        color: white;
+        padding: 10px 0px;
+        width : 10rem;
+        text-align: center;
+        border-radius: 4px;
+        font-weight: bold;
+       float : right;
+       
+
+      }
+      
+      .badgeRed {
+        background-color: #ff4d4f;
+        color: white;
+        padding: 10px 0px;
+        padding: 10px 0px;
+        width : 10rem;
+        text-align: center;
+        border-radius: 4px;
+    
+        font-weight: bold;
+        float : right;
+        
+      }
 
       h4 {
         border-top: 1px solid #ddd;
         font-size: 1.1em;
         font-weight: bold;
-        padding: 10px 0px;
+        padding: 10px 00px;
         background-color: var(--col3);
         color: black;
         width: 100%;
@@ -129,12 +155,16 @@ ul {
         width: 100%;
         display: flex;
 
+    
+        
+
         li {
           margin-left: 10px;
           color: black;
-          padding: 5px;
+          padding: 10px;
         }
         p {
+          border-top : 1px solid #ddd;
           margin-left: 10px;
           transition: color 0.3s ease;
           color: black;
