@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { doc, getDocs, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
+import {
+  doc,
+  getDocs,
+  getDoc,
+  updateDoc,
+  addDoc,
+  collection,
+} from "firebase/firestore";
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function MissionForm() {
   const { missionId } = useParams(); // Récupération de l'ID de la mission
@@ -21,8 +29,12 @@ export default function MissionForm() {
   const [missions, setMissions] = useState([""]);
   const [risqueEPI, setRisqueEPI] = useState([""]);
   const [intervenantsExistants, setIntervenantsExistants] = useState([]);
-  const [dateStartIntervention, setDateStartIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
-  const [dateEndIntervention, setDateEndIntervention] = useState(new Date().toISOString().substring(0, 10)); // Format YYYY-MM-DD
+  const [dateStartIntervention, setDateStartIntervention] = useState(
+    new Date().toISOString().substring(0, 10)
+  ); // Format YYYY-MM-DD
+  const [dateEndIntervention, setDateEndIntervention] = useState(
+    new Date().toISOString().substring(0, 10)
+  ); // Format YYYY-MM-DD
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchIntervenants = async () => {
@@ -51,8 +63,14 @@ export default function MissionForm() {
         setIntervenant(missionData.intervenant);
         setMissions(missionData.missions || [""]);
         setRisqueEPI(missionData.risqueEPI || [""]);
-        setDateStartIntervention(missionData.interventionStartDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
-        setDateEndIntervention(missionData.interventionEndDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
+        setDateStartIntervention(
+          missionData.interventionStartDate?.substring(0, 10) ||
+            new Date().toISOString().substring(0, 10)
+        );
+        setDateEndIntervention(
+          missionData.interventionEndDate?.substring(0, 10) ||
+            new Date().toISOString().substring(0, 10)
+        );
       } else {
         console.log("Mission non trouvée");
       }
@@ -68,7 +86,7 @@ export default function MissionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       // Créer la fiche mission
       const missionData = {
@@ -78,21 +96,42 @@ export default function MissionForm() {
         missions,
         risqueEPI,
         interventionStartDate: dateStartIntervention,
-        interventionEndDate: dateEndIntervention, 
+        interventionEndDate: dateEndIntervention,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-  
+
+      //alert sweet alert
+      Swal.fire({
+        title: "Mission enregistrée",
+        text: "La mission a bien été enregistrée",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        window.location.href = "/missions";
+      });
+
       if (missionId) {
         // Mettre à jour la mission existante
         const missionRef = doc(db, "missions", missionId);
         await updateDoc(missionRef, missionData);
-        alert("Mission mise à jour avec succès !");
+
+        Swal.fire({
+          title: "Mission mise à jour",
+          text: "La mission a bien été mise à jour",
+          icon: "success",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.location.href = "/missions";
+        });
       } else {
         // Créer une nouvelle mission
-        const missionRef = await addDoc(collection(db, "missions"), missionData);
+        const missionRef = await addDoc(
+          collection(db, "missions"),
+          missionData
+        );
         const missionId = missionRef.id; // Récupération de l'ID de la mission
-  
+
         // Automatiser la création du rapport d'intervention associé
         const interventionReportData = {
           missionId, // Associer le rapport à la mission par son ID
@@ -107,17 +146,24 @@ export default function MissionForm() {
           interventionStartDate: dateStartIntervention,
           interventionEndDate: dateEndIntervention,
         };
-  
-        await addDoc(collection(db, "interventionReports"), interventionReportData);
-  
-        alert("Fiche mission et rapport d'intervention créés avec succès !");
+
+        await addDoc(
+          collection(db, "interventionReports"),
+          interventionReportData
+        );
       }
 
-      // Redirection vers la page des missions (optionnel)
-      window.location.href = "/missions";
     } catch (error) {
-      console.error("Erreur lors de la création ou mise à jour de la mission ou du rapport d'intervention : ", error);
-      alert("Une erreur est survenue lors de la création ou mise à jour de la mission.");
+      console.error(
+        "Erreur lors de la création ou mise à jour de la mission ou du rapport d'intervention : ",
+        error
+      );
+      Swal.fire({
+        title: "Erreur",
+        text: "Une erreur est survenue lors de la création ou mise à jour de la mission",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
     }
   };
 
@@ -250,8 +296,6 @@ export default function MissionForm() {
           </select>
         </div>
 
-    
-
         <h3>Mission(s)</h3>
         {missions.map((mission, index) => (
           <div key={index} className={styles.formGroup}>
@@ -266,10 +310,7 @@ export default function MissionForm() {
               }}
               required
             />
-            <button
-              type="button"
-              onClick={() => removeMissionField(index)}
-            >
+            <button type="button" onClick={() => removeMissionField(index)}>
               Supprimer
             </button>
           </div>
@@ -292,10 +333,7 @@ export default function MissionForm() {
               }}
               required
             />
-            <button
-              type="button"
-              onClick={() => removeRisqueField(index)}
-            >
+            <button type="button" onClick={() => removeRisqueField(index)}>
               Supprimer
             </button>
           </div>
