@@ -3,10 +3,10 @@ import { collection, addDoc, query, where, getDocs, doc, updateDoc } from "fireb
 
 export  const createOrUpdateIncidentReport = async (incidentData) => {
   try {
-    const { client, site, intervenant, missionsDangereuses = [], actions = [], remarques, photos, risques, interventionReportId } = incidentData;
+    const { client, site, intervenants = [], missionsDangereuses = [], actions = [], remarques, photos, risques, interventionReportId } = incidentData;
 
     // Validation des données
-    if (!client || !site || !intervenant || !Array.isArray(missionsDangereuses) || !Array.isArray(actions) || !Array.isArray(remarques)) {
+    if (!client || !site || !Array.isArray(intervenants) || !Array.isArray(missionsDangereuses) || !Array.isArray(actions) || !Array.isArray(remarques)) {
       throw new Error("Données invalides pour la création du rapport d'incident.");
     }
 
@@ -15,7 +15,7 @@ export  const createOrUpdateIncidentReport = async (incidentData) => {
       collection(db, "incidentReports"),
       where("client", "==", client),
       where("site", "==", site),
-      where("intervenant", "==", intervenant),
+      where("intervenants", "==", intervenants),
       where("createdAt", "==", incidentData.createdAt)
     );
     const querySnapshot = await getDocs(incidentQuery);
@@ -25,7 +25,7 @@ export  const createOrUpdateIncidentReport = async (incidentData) => {
       await addDoc(collection(db, "incidentReports"), {
         client,
         site,
-        intervenant,
+        intervenants,
         missionsDangereuses,
         actions,
         remarques,

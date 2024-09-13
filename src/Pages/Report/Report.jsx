@@ -30,8 +30,8 @@ export default function InterventionReport() {
     }
   };
 
-   // Fonction pour récupérer les techniciens depuis Firestore
-   const fetchTechnicians = async () => {
+  // Fonction pour récupérer les techniciens depuis Firestore
+  const fetchTechnicians = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "technicians"));
       const techniciansList = querySnapshot.docs.map((doc) => ({
@@ -64,7 +64,8 @@ export default function InterventionReport() {
         <div className={styles.reportItem}>
           <h2>
             {" "}
-            {report.interventionDate} - {report.client.nomEntreprise}
+            {report.interventionStartDate} / {report.interventionEndDate} -{" "}
+            {report.client.nomEntreprise}
           </h2>
 
           <div className={styles.section1}>
@@ -84,43 +85,77 @@ export default function InterventionReport() {
             <div className={styles.section1Right}>
               <h4>Intervenant</h4>
               <h3> {report.intervenant}</h3>
-             
-              <img src={technicians.find((tech) => tech.name === report.intervenant)?.urlPhoto} alt="Photo de l'intervenant" />
 
+              <img
+                src={
+                  technicians.find((tech) => tech.name === report.intervenant)
+                    ?.urlPhoto
+                }
+                alt="Photo de l'intervenant"
+              />
             </div>
-            </div>
+          </div>
 
           <div className={styles.section2}>
             <div className={styles.section2Left}>
               <h4>Actions menées </h4>
-              {report.actionsDone.map((action, index) => (
-                <li key={index}> <i class="fa-solid fa-check"></i> {action.description}</li>
-              ))}
+              <div>
+                {report.actionsDone?.map((action, index) => (
+                  <div key={index}>
+                    <li>
+                      <i className="fa-solid fa-check"></i> {action.description}
+                    </li>
+                    {/* Boucle sur les photos de chaque action */}
+                    <div>
+                      {action.photos?.map((photo, i) => (
+                        <img
+                          key={i}
+                          src={photo}
+                          alt={`Photo ${i + 1} de l'action ${index + 1}`}
+                          style={{ width: "100px", height: "auto" }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className={styles.section2Right}>
-              <h4> Remarques</h4>
-            {report.remarques.map((remarque, index) => (
-              <li key={index}> <i class="fa-solid fa-minus"></i>{remarque.remarque}</li>
-            ))}
-
-            <p>  <i class="fa-solid fa-triangle-exclamation"></i> Intervention à risque : {report.risques ? "Oui" : "Non"}</p>
+              <h4> Remarques / Risques</h4>
+              {report.remarques?.map((remarque, index) => (
+                  <div key={index}>
+                    <li>
+                      <i className="fa-solid fa-check"></i> {remarque.remarque}
+                    </li>
+                    {/* Boucle sur les photos de chaque action */}
+                    <div>
+                      {remarque.photos?.map((photo, i) => (
+                        <img
+                          key={i}
+                          src={photo}
+                          alt={`Photo ${i + 1} de l'action ${index + 1}`}
+                          style={{ width: "100px", height: "auto" }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              <p>
+                {" "}
+                <i class="fa-solid fa-triangle-exclamation"></i> Intervention à
+                risque : {report.risques ? "Oui" : "Non"}
+              </p>
             </div>
           </div>
-         
 
           <div>
             <h4>Photos :</h4>
-            <div className={styles.photosContainer}>
-              {report.photos?.map((photoUrl, index) => (
-                <img
-                  key={index}
-                  src={photoUrl}
-                  alt={`Photo ${index + 1}`}
-                  className={styles.photo}
-                />
-              ))}
-            </div>
+            {/* <div>
+  {report.remarques && report.remarques[0].photos && report.remarques[0].photos.map((photo, i) => (
+    <img key={i} src={photo} alt={`Photo ${i + 1}`}  />
+  ))}
+</div> */}
           </div>
         </div>
       ) : (

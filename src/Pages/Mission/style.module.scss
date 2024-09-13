@@ -65,20 +65,39 @@
           margin-left: 25%;
           margin-bottom: 0.5rem;
         }
+
+       
+
       }
       .section1Right {
         width: 50%;
         text-align: center;
 
-        img {
-          width: 100px;
-          height: 100px;
-          object-fit: cover;
-          border-radius: 50%;
-          -webkit-border-radius: 50%;
-          -moz-border-radius: 50%;
-          -ms-border-radius: 50%;
-          -o-border-radius: 50%;
+        .technicians {
+          
+          width: 100%;
+          display: flex;
+          
+          .technicianItem {
+  
+            width: 33%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+           
+           img {
+              margin-top: 0.3rem;
+              width: 100px;
+              height: 100px;
+              object-fit: cover;
+              border-radius: 50%;
+              -webkit-border-radius: 50%;
+              -moz-border-radius: 50%;
+              -ms-border-radius: 50%;
+              -o-border-radius: 50%;
+            }
+          }
         }
       }
     }

@@ -1,11 +1,13 @@
 .missionsContainer {
+  max-width: 1280px;
+  min-height: 90vh;
+  margin: 0 auto;
   padding: 20px;
   background-color: #dddddd17;
   border-radius: 8px;
-  min-height: 90vh;
-  max-width: 1280px;
-  margin: 0 auto;
-  color: black;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color : black;
+
 
   h1 {
     font-size: 2rem;
@@ -15,20 +17,18 @@
     text-transform: uppercase;
     font-weight: 600;
   }
-
   .createMission {
     display: inline-block;
-    padding: 10px 20px;
     margin-bottom: 20px;
+    padding: 10px 20px;
     background-color: #007bff;
     color: white;
+    font-size: 1em;
+    border-radius: 4px;
     text-decoration: none;
-    border-radius: 5px;
-    font-size: 1rem;
     transition: background-color 0.3s ease;
-
     i {
-      margin-right: 5px;
+      margin-right: 8px;
     }
 
     &:hover {
@@ -37,20 +37,16 @@
   }
 
   .missionsList {
-    display: flex;
-    flex-direction: column;
+    list-style: none;
     padding: 0;
-    margin: 0;
-    width: 100%;
-  }
 
-  .missionItem {
-    background-color: white;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 90%;
+    .missionItem {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      color: black;
 
     h2 {
       background-color: var(--col2);
@@ -83,6 +79,7 @@
 
     i {
       margin-right: 8px;
+      font-size: 1.2rem;
     }
     .section1 {
       width: 100%;
@@ -92,30 +89,47 @@
         width: 50%;
         display: flex;
         flex-direction: column;
-        
+
         ul {
-          
-          align-self : center;
-       li { 
+          align-self: center;
+          li {
             margin-bottom: 0.3rem;
           }
-          }
         }
+      }
       .section1Right {
         width: 50%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        img {
-          margin-top: 0.3rem;
-          max-width: 100px;
-          height: 100px;
-          object-fit: cover;
-          border-radius: 50%;
-          -webkit-border-radius: 50%;
-          -moz-border-radius: 50%;
-          -ms-border-radius: 50%;
-          -o-border-radius: 50%;
+
+        .technicians {
+          
+          width: 100%;
+          display: flex;
+   
+          
+          
+          .technicianItem {
+            width: 33%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 1rem;
+            
+           
+           img {
+              margin-top: 0.3rem;
+              width: 100px;
+              height: 100px;
+              object-fit: cover;
+              border-radius: 50%;
+              -webkit-border-radius: 50%;
+              -moz-border-radius: 50%;
+              -ms-border-radius: 50%;
+              -o-border-radius: 50%;
+            }
+          }
         }
       }
     }
@@ -156,7 +170,7 @@
       display: flex;
       justify-content: space-around;
       padding: 10px 0px;
-      background-color: var(--col3) ;
+      background-color: var(--col3);
       border-radius: 0 0 4px 4px;
       -webkit-border-radius: 0 0 4px 4px;
       -moz-border-radius: 0 0 4px 4px;
@@ -179,5 +193,27 @@
         }
       }
     }
+  }  }
+}
+
+@media (max-width: 768px) {
+  .missionsContainer {
+    .section1 { 
+
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .section1Left {
+      width: 100%;
+
+     
   }
+
+  .section1Right {
+    width: 100%;
+  }
+}
+}
+
 }

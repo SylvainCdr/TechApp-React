@@ -65,27 +65,24 @@
         background-color: #52c41a;
         color: white;
         padding: 10px 0px;
-        width : 10rem;
+        width: 10rem;
         text-align: center;
         border-radius: 4px;
         font-weight: bold;
-       float : right;
-       
-
+        float: right;
       }
-      
+
       .badgeRed {
         background-color: #ff4d4f;
         color: white;
         padding: 10px 0px;
         padding: 10px 0px;
-        width : 10rem;
+        width: 10rem;
         text-align: center;
         border-radius: 4px;
-    
+
         font-weight: bold;
-        float : right;
-        
+        float: right;
       }
 
       h4 {
@@ -123,15 +120,15 @@
 
         .section1Left {
           width: 50%;
-display: flex;
-flex-direction: column;
+          display: flex;
+          flex-direction: column;
 
-ul { 
-  align-self: center;
-  li {
-    margin-bottom: 0.3rem;
-  }
-}
+          ul {
+            align-self: center;
+            li {
+              margin-bottom: 0.3rem;
+            }
+          }
         }
 
         .section1Right {
@@ -140,13 +137,31 @@ ul {
           flex-direction: column;
           align-items: center;
 
-          .technicianPhoto {
-            margin-top: 0.3rem;
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 1px solid #ddd;
+          .technicians {
+          
+            width: 100%;
+            display: flex;
+            
+            .technicianItem {
+    
+              width: 33%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+  
+             
+             img {
+                margin-top: 0.3rem;
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+              }
+            }
           }
         }
       }
@@ -155,30 +170,27 @@ ul {
         width: 100%;
         display: flex;
 
-    
-        
-
         li {
           margin-left: 10px;
           color: black;
           padding: 10px;
         }
         p {
-          border-top : 1px solid #ddd;
+          border-top: 1px solid #ddd;
           margin-left: 10px;
           transition: color 0.3s ease;
           color: black;
           padding: 10px;
         }
 
-      
         .section2Left {
           width: 50%;
           display: flex;
           flex-direction: column;
-          ul { 
+          ul {
             align-self: center;
-        }}
+          }
+        }
 
         .section2Right {
           width: 50%;

@@ -103,8 +103,15 @@ const handleDelete = (id) => {
               </div>
 
               <div className={styles.section1Right}>
-                <h4>Intervenant</h4>
-                <h3> {incident.intervenant}</h3>
+                <h4>Intervenant(s)</h4>
+                <ul>
+                  {incident.intervenants.map((intervenant, index) => (
+                    <li key={index}>
+                      <i class="fa-solid fa-user"></i>
+                      {intervenant}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 

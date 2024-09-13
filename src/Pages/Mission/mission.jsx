@@ -31,7 +31,6 @@ export default function Mission() {
       setLoading(false);
     }
   };
-  // on va chercher la photo de l'intervenant urlPhoto
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
@@ -48,29 +47,35 @@ export default function Mission() {
     }
   };
 
+  // Fonction pour récupérer l'URL de la photo de l'intervenant
+  const getTechnicianPhotoURL = (intervenant) => {
+    const technician = technicians.find((tech) => tech.name === intervenant);
+    return technician ? technician.urlPhoto : "/assets/default-avatar.jpg"; // Avatar par défaut si pas de photo
+  };
+
   useEffect(() => {
     fetchMission();
     fetchTechnicians();
   }, [missionId]);
 
   const generatePdf = () => {
-    const input = document.getElementById('mission-content');
+    const input = document.getElementById("mission-content");
     html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
       const imgWidth = 210;
       const pageHeight = 295;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
       pdf.save(`Mission_${missionId}.pdf`);
@@ -83,9 +88,7 @@ export default function Mission() {
       {loading && <p>Chargement en cours...</p>}
       {error && <p>{error}</p>}
       <button onClick={generatePdf}>Télécharger en PDF</button>
-      {loading && <p>Chargement en cours...</p>}
-      {error && <p>{error}</p>}
-
+      
       {mission && (
         <div className={styles.missionItem}>
           <h2>
@@ -103,17 +106,23 @@ export default function Mission() {
               <p>Téléphone : {mission.site.telContact}</p>
             </ul>
             <div className={styles.section1Right}>
-              <h3>Intervenant</h3>
-              <p>{mission.intervenant}</p>
-              <img
-                src={
-                  technicians.find(
-                    (technician) => technician.name === mission.intervenant
-                  )?.urlPhoto
-                }
-                alt={`Photo de ${mission.intervenant}`}
-                className={styles.technicianPhoto}
-              />
+              <h3>Intervenant(s)</h3>
+              <div className={styles.technicians}>
+                {mission.intervenants && mission.intervenants.length > 0 ? (
+                  mission.intervenants.map((intervenant, index) => (
+                    <div key={index} className={styles.technicianItem}>
+                      <p>{intervenant}</p>
+                      <img
+                        src={getTechnicianPhotoURL(intervenant)}
+                        alt={`Photo de ${intervenant}`}
+                        className={styles.technicianPhoto}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p>Aucun intervenant</p>
+                )}
+              </div>
             </div>
           </div>
           <div className={styles.section2}>
@@ -148,17 +157,14 @@ export default function Mission() {
             <img src="/assets/pharmacy.png" alt="" />{" "}
             <img src="/assets/panic.png" alt="" />{" "}
             <img src="/assets/help.png" alt="" />{" "}
-            
             <img src="/assets/call.png" alt="" />
           </div>
           <div className={styles.text}>
-           
             <p>
               En cas de blessure bénigne faites appel à la personne désignée
               pour dispenser les premiers soins, s’il en existe une, et prévenez
               votre responsable.
             </p>
-        
             <p>Ne paniquez pas ! Pensez à supprimer le risque s’il persiste</p>
             <p>
               Contacter le sauveteur secouriste du travail présent dans votre
@@ -170,14 +176,16 @@ export default function Mission() {
               SAMU, le 18 pour les pompiers, le 112 pour le numéro d’urgence
               européen
             </p>
-          
           </div>
         </div>
 
         <h3>Numéros d’urgences :</h3>
 
-        <img src="/assets/numerosUrgence.jpg" className={styles.numUrgence} alt="" />
-
+        <img
+          src="/assets/numerosUrgence.jpg"
+          className={styles.numUrgence}
+          alt=""
+        />
       </div>
     </div>
   );

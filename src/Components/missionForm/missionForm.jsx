@@ -25,7 +25,7 @@ export default function MissionForm() {
     fonctionContact: "",
     telContact: "",
   });
-  const [intervenant, setIntervenant] = useState("");
+  const [intervenants, setIntervenants] = useState([]); // Tableau pour stocker plusieurs intervenants
   const [missions, setMissions] = useState([""]);
   const [risqueEPI, setRisqueEPI] = useState([""]);
   const [intervenantsExistants, setIntervenantsExistants] = useState([]);
@@ -60,7 +60,7 @@ export default function MissionForm() {
         const missionData = missionSnap.data();
         setClient(missionData.client);
         setSite(missionData.site);
-        setIntervenant(missionData.intervenant);
+        setIntervenants(missionData.intervenants || []); // Plusieurs intervenants
         setMissions(missionData.missions || [""]);
         setRisqueEPI(missionData.risqueEPI || [""]);
         setDateStartIntervention(
@@ -92,7 +92,7 @@ export default function MissionForm() {
       const missionData = {
         client,
         site,
-        intervenant,
+        intervenants, // Utilisation du tableau d'intervenants
         missions,
         risqueEPI,
         interventionStartDate: dateStartIntervention,
@@ -101,10 +101,9 @@ export default function MissionForm() {
         updatedAt: new Date(),
       };
 
-      //alert sweet alert
       Swal.fire({
         title: "Mission enregistrée",
-        text: "La mission a bien été enregistrée",
+        text: "Un rapport d'intervention a été créé automatiquement",
         icon: "success",
         confirmButtonText: "Ok",
       }).then(() => {
@@ -115,33 +114,21 @@ export default function MissionForm() {
         // Mettre à jour la mission existante
         const missionRef = doc(db, "missions", missionId);
         await updateDoc(missionRef, missionData);
-
-        Swal.fire({
-          title: "Mission mise à jour",
-          text: "La mission a bien été mise à jour",
-          icon: "success",
-          confirmButtonText: "Ok",
-        }).then(() => {
-          window.location.href = "/missions";
-        });
       } else {
         // Créer une nouvelle mission
-        const missionRef = await addDoc(
-          collection(db, "missions"),
-          missionData
-        );
+        const missionRef = await addDoc(collection(db, "missions"), missionData);
         const missionId = missionRef.id; // Récupération de l'ID de la mission
 
         // Automatiser la création du rapport d'intervention associé
         const interventionReportData = {
-          missionId, // Associer le rapport à la mission par son ID
+          missionId,
           client,
           site,
-          intervenant,
-          actionsDone: [], // Vide au départ, sera rempli plus tard
-          remarques: [], // Vide au départ, sera rempli plus tard
-          photos: [], // Vide au départ, sera rempli plus tard
-          risques: false, // Initialement à "false"
+          intervenants, // Tableau d'intervenants
+          actionsDone: [],
+          remarques: [],
+          photos: [],
+          risques: false,
           createdAt: new Date(),
           interventionStartDate: dateStartIntervention,
           interventionEndDate: dateEndIntervention,
@@ -152,12 +139,8 @@ export default function MissionForm() {
           interventionReportData
         );
       }
-
     } catch (error) {
-      console.error(
-        "Erreur lors de la création ou mise à jour de la mission ou du rapport d'intervention : ",
-        error
-      );
+      console.error("Erreur lors de la création ou mise à jour de la mission ou du rapport d'intervention : ", error);
       Swal.fire({
         title: "Erreur",
         text: "Une erreur est survenue lors de la création ou mise à jour de la mission",
@@ -279,38 +262,50 @@ export default function MissionForm() {
           />
         </div>
 
-        <h3>Intervenant</h3>
+        <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
-          <label>Sélectionnez un intervenant :</label>
-          <select
-            value={intervenant}
-            onChange={(e) => setIntervenant(e.target.value)}
-            required
-          >
-            <option value="">-- Sélectionnez --</option>
-            {intervenantsExistants.map((interv, index) => (
-              <option key={index} value={interv}>
-                {interv}
-              </option>
-            ))}
-          </select>
+          <label>Sélectionnez un ou plusieurs intervenants :</label>
+          {intervenantsExistants.map((intervenant, index) => (
+            <div key={index}>
+              <input
+                type="checkbox"
+                value={intervenant}
+                checked={intervenants.includes(intervenant)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setIntervenants([...intervenants, e.target.value]);
+                  } else {
+                    setIntervenants(
+                      intervenants.filter((intervenant) => intervenant !== e.target.value)
+                    );
+                  }
+                }}
+              />
+              <label>{intervenant}</label>
+            </div>
+          ))}
+          
         </div>
 
-        <h3>Mission(s)</h3>
+        <h3>Missions</h3>
         {missions.map((mission, index) => (
           <div key={index} className={styles.formGroup}>
-            <label>Description de la mission {index + 1} :</label>
+            <label>Mission {index + 1} :</label>
             <input
               type="text"
               value={mission}
               onChange={(e) => {
-                const newMissions = [...missions];
-                newMissions[index] = e.target.value;
-                setMissions(newMissions);
+                const updatedMissions = [...missions];
+                updatedMissions[index] = e.target.value;
+                setMissions(updatedMissions);
               }}
               required
             />
-            <button type="button" onClick={() => removeMissionField(index)}>
+            <button
+              type="button"
+              onClick={() => removeMissionField(index)}
+              disabled={missions.length <= 1}
+            >
               Supprimer
             </button>
           </div>
@@ -319,21 +314,25 @@ export default function MissionForm() {
           Ajouter une mission
         </button>
 
-        <h3>Risques/EPI</h3>
+        <h3>Risques / EPI</h3>
         {risqueEPI.map((risque, index) => (
           <div key={index} className={styles.formGroup}>
-            <label>Risque/EPI {index + 1} :</label>
+            <label>Risque / EPI {index + 1} :</label>
             <input
               type="text"
               value={risque}
               onChange={(e) => {
-                const newRisqueEPI = [...risqueEPI];
-                newRisqueEPI[index] = e.target.value;
-                setRisqueEPI(newRisqueEPI);
+                const updatedRisqueEPI = [...risqueEPI];
+                updatedRisqueEPI[index] = e.target.value;
+                setRisqueEPI(updatedRisqueEPI);
               }}
               required
             />
-            <button type="button" onClick={() => removeRisqueField(index)}>
+            <button
+              type="button"
+              onClick={() => removeRisqueField(index)}
+              disabled={risqueEPI.length <= 1}
+            >
               Supprimer
             </button>
           </div>
@@ -342,7 +341,7 @@ export default function MissionForm() {
           Ajouter un risque/EPI
         </button>
 
-        <button type="submit">Enregistrer</button>
+        <button type="submit">Enregistrer la mission</button>
       </form>
     </div>
   );

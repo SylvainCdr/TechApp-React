@@ -1,86 +1,3 @@
-// <div className={styles.incidentsContainer}>
-//       <h1>Rapports d'incident</h1>
-
-//       <Link to="/incidents/create" className={styles.createIncident}>
-//         <i className="fa-solid fa-plus"></i> Créer un nouveau rapport d'incident
-//       </Link>
-
-//       {loading && <p>Chargement...</p>}
-//       {error && <p>Une erreur est survenue : {error.message}</p>}
-
-//       <ul className={styles.incidentsList}>
-//         {incidents.map((incident) => (
-//           <li key={incident.id} className={styles.incidentItem}>
-//             <h2>
-//               {" "}
-//               {incident.createdAt?.toDate().toLocaleDateString()} -{" "}
-//               {incident.client.nomEntreprise}
-//             </h2>
-//             <div className={styles.section1}>
-//               <div className={styles.section1Left}>
-//                 <h4>Entreprise / Site</h4>
-//                 <ul>
-//                   <li>Email : {incident.client.email}</li>
-//                   <li>Téléphone : {incident.client.tel}</li>
-//                   <li>Adresse du site : {incident.site.adresse}</li>
-//                   <li>Nom du contact sur site : {incident.site.nomContact}</li>
-//                   <li>Fonction du contact : {incident.site.fonctionContact}</li>
-//                   <li>Téléphone du contact : {incident.site.telContact}</li>
-//                 </ul>
-//               </div>
-
-//               <div className={styles.section1Right}>
-//                 <h4>Intervenant</h4>
-//                 <h3> {incident.intervenant}</h3>
-//                 {incident.photos && (
-//                   <img
-//                     src={incident.photos[0]}
-//                     alt={`Photo de ${incident.intervenant}`}
-//                     className={styles.technicianPhoto}
-//                   />
-//                 )}
-//               </div>
-//             </div>
-
-//             <div className={styles.section2}>
-//               <div className={styles.section2Left}>
-//                 <h4>Actions menées :</h4>
-//                 <ul>
-//                   {incident.actions.map((action, index) => (
-//                     <li key={index}>
-//                       <i class="fa-regular fa-circle-check"></i>
-//                       {action.description}
-//                     </li>
-//                   ))}
-//                 </ul>
-//               </div>
-
-//               <div className={styles.section2Right}>
-//                 <h4>Remarques :</h4>
-//                 <ul>
-//                   {incident.remarques.map((remarque, index) => (
-//                     <li key={index}>
-//                       <i className="fa-solid fa-minus"></i>
-//                       {remarque.remarque}
-//                     </li>
-//                   ))}
-//                 </ul>
-
-//                 <p>
-//                   <i className="fa-solid fa-triangle-exclamation"></i>
-//                   Intervention à risque : {incident.risques ? "Oui" : "Non"}
-//                 </p>
-//                 <p>
-//                   <i className="fa-solid fa-paperclip"></i>Nombre de photos
-//                   jointes : {incident.photos.length}
-//                 </p>
-//               </div>
-//             </div>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-
 .incidentsContainer {
   max-width: 1280px;
   min-height: 90vh;
@@ -150,27 +67,24 @@
       background-color: #52c41a;
       color: white;
       padding: 10px 0px;
-      width : 10rem;
+      width: 10rem;
       text-align: center;
       border-radius: 4px;
       font-weight: bold;
-     float : right;
-     
-
+      float: right;
     }
-    
+
     .badgeRed {
       background-color: #ff4d4f;
       color: white;
       padding: 10px 0px;
       padding: 10px 0px;
-      width : 10rem;
+      width: 10rem;
       text-align: center;
       border-radius: 4px;
-  
+
       font-weight: bold;
-      float : right;
-      
+      float: right;
     }
 
     h4 {
@@ -208,15 +122,15 @@
 
       .section1Left {
         width: 50%;
-display: flex;
-flex-direction: column;
+        display: flex;
+        flex-direction: column;
 
-ul { 
-align-self: center;
-li {
-  margin-bottom: 0.3rem;
-}
-}
+        ul {
+          align-self: center;
+          li {
+            margin-bottom: 0.3rem;
+          }
+        }
       }
 
       .section1Right {
@@ -225,13 +139,13 @@ li {
         flex-direction: column;
         align-items: center;
 
-        .technicianPhoto {
-          margin-top: 0.3rem;
-          width: 100px;
-          height: 100px;
-          object-fit: cover;
-          border-radius: 50%;
-          border: 1px solid #ddd;
+        ul {
+          justify-content: center;
+          li {
+            margin-left: 10px;
+            color: black;
+            padding: 10px;
+          }
         }
       }
     }
@@ -247,31 +161,31 @@ li {
         padding: 10px;
       }
       p {
-        border-top : 1px solid #ddd;
+        border-top: 1px solid #ddd;
         margin-left: 10px;
         transition: color 0.3s ease;
         color: black;
         padding: 10px;
       }
-    
+
       .section2Left {
         width: 50%;
         display: flex;
         flex-direction: column;
-        
-        ul,p { 
+
+        ul,
+        p {
           align-self: center;
-      }}
+        }
+      }
 
       .section2Right {
         width: 50%;
-        
 
         ul {
-          display : flex;
+          display: flex;
           justify-content: center;
           li {
-           
             img {
               width: 120px;
               height: 100px;
@@ -289,52 +203,50 @@ li {
       }
     }
   }
-    .section3 {
+  .section3 {
+    display: flex;
+    width: 100%;
+
+    .section3Left {
+      width: 50%;
       display: flex;
-      width: 100%;
-
-
-      .section3Left {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items : center;
-      }
-
-      .section3Right {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items : center;
-      }
-    
+      flex-direction: column;
+      align-items: center;
     }
-    .section4 {
-      width: 100%;
+
+    .section3Right {
+      width: 50%;
       display: flex;
-      justify-content: space-around;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  .section4 {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0px;
+    background-color: var(--col3);
+    border-radius: 0 0 4px 4px;
+    -webkit-border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+    -ms-border-radius: 0 0 4px 4px;
+    -o-border-radius: 0 0 4px 4px;
+
+    a {
       padding: 10px 0px;
-      background-color: var(--col3);
-      border-radius: 0 0 4px 4px;
-      -webkit-border-radius: 0 0 4px 4px;
-      -moz-border-radius: 0 0 4px 4px;
-      -ms-border-radius: 0 0 4px 4px;
-      -o-border-radius: 0 0 4px 4px;
+      width: 20%;
+      text-align: center;
+      background-color: #007bff;
+      color: white;
+      font-size: 1em;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
 
-      a {
-        padding: 10px 0px;
-        width: 20%;
-        text-align: center;
-        background-color: #007bff;
-        color: white;
-        font-size: 1em;
-        border-radius: 4px;
-        text-decoration: none;
-        transition: background-color 0.3s ease;
-
-        &:hover {
-          background-color: #0056b3;
-        }
+      &:hover {
+        background-color: #0056b3;
       }
     }
+  }
 }

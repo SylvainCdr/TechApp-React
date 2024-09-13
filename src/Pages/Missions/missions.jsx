@@ -50,39 +50,35 @@ export default function Missions() {
   };
 
   // Fonction pour supprimer une mission
-const deleteMission = async (missionId) => {
-  // Confirmation avant suppression
-  const result = await Swal.fire({
-      title: 'Êtes-vous sûr ?',
+  const deleteMission = async (missionId) => {
+    // Confirmation avant suppression
+    const result = await Swal.fire({
+      title: "Êtes-vous sûr ?",
       text: "Cette action est irréversible !",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Oui, supprimer !',
-      cancelButtonText: 'Annuler'
-  });
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, supprimer !",
+      cancelButtonText: "Annuler",
+    });
 
-  if (result.isConfirmed) {
+    if (result.isConfirmed) {
       try {
-          await deleteDoc(doc(db, "missions", missionId));
-          // Après suppression, mettre à jour la liste des missions
-          fetchMissions();
-          Swal.fire(
-              'Supprimé !',
-              'La mission a été supprimée.',
-              'success'
-          );
+        await deleteDoc(doc(db, "missions", missionId));
+        // Après suppression, mettre à jour la liste des missions
+        fetchMissions();
+        Swal.fire("Supprimé !", "La mission a été supprimée.", "success");
       } catch (error) {
-          console.error("Erreur lors de la suppression de la mission :", error);
-          Swal.fire(
-              'Erreur',
-              'Une erreur est survenue lors de la suppression de la mission.',
-              'error'
-          );
+        console.error("Erreur lors de la suppression de la mission :", error);
+        Swal.fire(
+          "Erreur",
+          "Une erreur est survenue lors de la suppression de la mission.",
+          "error"
+        );
       }
-  }
-};
+    }
+  };
 
   return (
     <div className={styles.missionsContainer}>
@@ -107,24 +103,32 @@ const deleteMission = async (missionId) => {
               <div className={styles.section1Left}>
                 <h3>Entreprise / Site</h3>
                 <ul>
-                  <li>Client : {mission.client.nomEntreprise}</li>
-                  <li>Email : {mission.client.email}</li>
-                  <li>Téléphone : {mission.client.tel}</li>
-                  <li>Site : {mission.site.adresse}</li>
-                  <li>Nom contact : {mission.site.nomContact}</li>
-                  <li>Fonction : {mission.site.fonctionContact}</li>
-                  <li>Téléphone : {mission.site.telContact}</li>
+                  <li><i class="fa-regular fa-building"></i> Client : {mission.client.nomEntreprise}</li>
+                  <li><i class="fa-solid fa-phone"></i>Téléphone : {mission.client.tel}</li>
+                  <li><i class="fa-solid fa-at"></i>Email : {mission.client.email}</li>
+                  <li><i class="fa-solid fa-location-dot"></i>Adresse du site : {mission.site.adresse}</li>
+                  <li><i class="fa-regular fa-user"></i>Contact sur site : {mission.site.nomContact}</li>
+                  <li><i class="fa-regular fa-address-card"></i>Fonction du contact : {mission.site.fonctionContact}</li>
+                  <li><i class="fa-solid fa-mobile-screen-button"></i> Téléphone : {mission.site.telContact}</li>
                 </ul>
               </div>
               <div className={styles.section1Right}>
-                <h3>Intervenant </h3>
-                <p>{mission.intervenant}</p>
-                {getTechnicianPhotoURL(mission.intervenant) && (
-                  <img
-                    src={getTechnicianPhotoURL(mission.intervenant)}
-                    alt={`Photo de ${mission.intervenant}`}
-                  />
-                )}
+                <h3>Intervenant(s) </h3>
+                <div className={styles.technicians}>
+                  {mission.intervenants && mission.intervenants.length > 0 ? (
+                    mission.intervenants.map((intervenant, index) => (
+                      <div key={index} className={styles.technicianItem}>
+                        <p>{intervenant}</p>
+                        <img
+                          src={getTechnicianPhotoURL(intervenant)}
+                          alt={`Photo de ${intervenant}`}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <p>Aucun intervenant</p>
+                  )}
+                </div>
               </div>
             </div>
             <div className={styles.section2}>
