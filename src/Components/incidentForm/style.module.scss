@@ -57,6 +57,27 @@
       }
     }
 
+    ul {
+      list-style: none;
+      padding: 0;
+      color : black;
+
+      li {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 4px;
+
+  
+      
+        }
+      
+    }
+
+
     .photoItem {
       img {
         width: 300px;

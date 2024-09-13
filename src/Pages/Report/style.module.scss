@@ -27,7 +27,7 @@
     border-radius: 5px;
     color: black;
     list-style: none;
- 
+
     h2 {
       background-color: var(--col2);
       font-size: 1.4em;
@@ -54,136 +54,118 @@
       text-transform: uppercase;
       margin-bottom: 1rem;
     }
- 
 
-  i {
-    margin-right: 8px;
-    margin-left: 8px;
-  }
-
-  .section1 {
-    width: 100%;
-    display: flex;
-    padding: 10px;
-    color: black;
-
-    .section1Left {
-      width: 50%;
-      display: flex;
-      flex-direction: column;
+    i {
+      margin-right: 8px;
+      margin-left: 8px;
     }
 
-    .section1Right {
-      width: 50%;
+    .section1 {
+      width: 100%;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 10px;
+      color: black;
 
-      .technicians {
-      
-        width: 100%;
+      .section1Left {
+        width: 50%;
         display: flex;
-        
-        .technicianItem {
+        flex-direction: column;
+      }
 
-          width: 33%;
+      .section1Right {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .technicians {
+          width: 100%;
           display: flex;
-          flex-direction: column;
-          align-items: center;
 
-         
-         img {
-            margin-top: 0.3rem;
-            width: 100px;
-            height: 100px;
+          .technicianItem {
+            width: 33%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            img {
+              margin-top: 0.3rem;
+              width: 100px;
+              height: 100px;
+              object-fit: cover;
+              border-radius: 50%;
+              -webkit-border-radius: 50%;
+              -moz-border-radius: 50%;
+              -ms-border-radius: 50%;
+              -o-border-radius: 50%;
+            }
+          }
+        }
+      }
+    }
+
+    .section2 {
+      width: 100%;
+      display: flex;
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        // margin-top: 10px;
+        margin-bottom: 10px;
+
+        th {
+          background-color: var(--col4);
+          text-transform: uppercase;
+          font-weight: 600;
+          padding: 10px;
+          color: white;
+          border-bottom: 1px solid #ddd;
+          margin-bottom: 10px;
+        }
+
+        td {
+          // padding: 10px;
+          border-bottom: 1px solid #ddd;
+          height: 50px;
+
+          align-items: center;
+          // text-align: center;
+          align-self: center;
+          vertical-align: middle;
+
+          img {
+            padding: 10px;
+            width: 300px;
+            height: 200px;
             object-fit: cover;
-            border-radius: 50%;
-            -webkit-border-radius: 50%;
-            -moz-border-radius: 50%;
-            -ms-border-radius: 50%;
-            -o-border-radius: 50%;
+          }
+        }
+      }
+
+      .section2Left {
+        width: 50%;
+      }
+
+      .section2Right {
+        width: 50%;
+
+        p {
+          color: black;
+          padding: 10px;
+          font-size: 1.1em;
+          font-weight: bold;
+          float: right;
+
+          .risqueOui {
+            color: red;
+          }
+
+          .risqueNon {
+            color: green;
           }
         }
       }
     }
   }
-
-  .section2 {
-    width: 100%;
-    display: flex;
-
-    
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      // margin-top: 10px;
-      margin-bottom: 10px;
-
-      th {
-        background-color: var(--col4);
-        text-transform: uppercase;
-        font-weight: 600;
-        padding: 10px;
-        color : white ;
-        border-bottom: 1px solid #ddd;
-        margin-bottom : 10px;
-      }
-
-      td {
-        // padding: 10px;
-        border-bottom: 1px solid #ddd;
-        height : 50px;
-        
-
-        align-items: center;
-        // text-align: center;
-        align-self: center;
-        vertical-align: middle;
-
-        img {
-          padding : 10px;
-          width: 300px;
-          height: 200px;
-          object-fit: cover;
-      
-        }
-        
-      }
-    }
-
-    .section2Left {
-      width: 50%;
-    
-    
-    }
-
-    .section2Right {
-      width: 50%;
-
-      p {
-       
-        color: black;
-        padding: 10px;
-        font-size: 1.1em;
-        font-weight: bold;
-        float : right;
-
-        .risqueOui {
-          color: red;
-        }
-        
-        .risqueNon {
-          color: green;
-        }
-        
-
-      }
-
- 
-
-    }
-  }
-
-}
 }

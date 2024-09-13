@@ -13,9 +13,9 @@ export default function IncidentForm({ initialData, onSubmit }) {
     nomContact: "",
     telContact: "",
   });
-  const [intervenant, setIntervenant] = useState("");
+  const [intervenants, setIntervenants] = useState([]);  
   const [photos, setPhotos] = useState([]);
-  const [remarques, setRemarques] = useState([{ remarque: "" }]);
+  const [remarques, setRemarques] = useState([{ remarque: "", photos: [] }]); // Assurez-vous que chaque remarque a des photos sous forme de tableau
   const [risques, setRisques] = useState(false);
   const [actions, setActions] = useState([""]);
   const [createdAt, setCreatedAt] = useState(new Date().toISOString());
@@ -26,9 +26,9 @@ export default function IncidentForm({ initialData, onSubmit }) {
     if (initialData) {
       setClient(initialData.client || {});
       setSite(initialData.site || {});
-      setIntervenant(initialData.intervenant || "");
+      setIntervenants(initialData.intervenants || []); // Intervenants est un tableau
       setPhotos(initialData.photos || []);
-      setRemarques(initialData.remarques || [{ remarque: "" }]);
+      setRemarques(initialData.remarques || [{ remarque: "", photos: [] }]); // Remarques avec photos
       setRisques(initialData.risques || false);
       setActions(initialData.actions || [""]);
       setCreatedAt(initialData.createdAt || new Date().toISOString());
@@ -37,13 +37,12 @@ export default function IncidentForm({ initialData, onSubmit }) {
     }
   }, [initialData]);
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const incidentData = {
       client,
       site,
-      intervenant,
+      intervenants,
       photos,
       remarques,
       risques,
@@ -55,8 +54,9 @@ export default function IncidentForm({ initialData, onSubmit }) {
     onSubmit(incidentData);
   };
 
+  // Gestion des champs dynamiques pour les remarques et autres
   const addRemarqueField = () => {
-    setRemarques([...remarques, { remarque: "" }]);
+    setRemarques([...remarques, { remarque: "", photos: [] }]);
   };
 
   const removeRemarqueField = (index) => {
@@ -171,16 +171,12 @@ export default function IncidentForm({ initialData, onSubmit }) {
           />
         </div>
 
-        <h3>Intervenant</h3>
-        <div className={styles.formGroup}>
-          <label>Intervenant :</label>
-          <input
-            type="text"
-            value={intervenant}
-            onChange={(e) => setIntervenant(e.target.value)}
-            required
-          />
-        </div>
+        <h3>Intervenant(s)</h3>
+        <ul>
+          {intervenants.map((intervenant, index) => (
+            <li key={index}>{intervenant}</li>
+          ))}
+        </ul>
 
         <h3>Risques</h3>
         <div className={styles.formGroup}>
@@ -203,6 +199,17 @@ export default function IncidentForm({ initialData, onSubmit }) {
               value={remarque.remarque}
               onChange={(e) => handleRemarqueChange(index, e.target.value)}
             />
+            <div>
+              <h4>Photos :</h4>
+              {remarque.photos?.map((photo, i) => (
+                <img
+                  key={i}
+                  src={photo}
+                  alt={`Photo ${i + 1} de la remarque ${index + 1}`}
+                  style={{ width: "100px", height: "auto" }}
+                />
+              ))}
+            </div>
             {remarques.length > 1 && (
               <button
                 type="button"
@@ -222,17 +229,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
           Ajouter une remarque
         </button>
 
-
-        <h3>Photos</h3>
-
-{photos.map((photo, index) => (
-  <div key={index} className={styles.photoItem}>
-    <img src={photo} alt={`Photo ${index}`} />
-  </div>
-))}
-
-
-        <h3>Actions menées par l'intervenant :</h3>
+        <h3>Actions menées :</h3>
         {actions.map((action, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Action :</label>
@@ -295,6 +292,3 @@ export default function IncidentForm({ initialData, onSubmit }) {
     </div>
   );
 }
-
-
-

@@ -88,7 +88,7 @@ export default function Mission() {
       {loading && <p>Chargement en cours...</p>}
       {error && <p>{error}</p>}
       <button onClick={generatePdf}>Télécharger en PDF</button>
-      
+
       {mission && (
         <div className={styles.missionItem}>
           <h2>

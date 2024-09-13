@@ -59,44 +59,41 @@ export default function InterventionReport() {
     return <p>{error}</p>;
   }
 
-    // Fonction pour obtenir l'URL de la photo du technicien
-    const getTechnicianPhotoURL = (name) => {
-      const technician = technicians.find((tech) => tech.name === name);
-      return technician ? technician.urlPhoto : null;
-    };
+  // Fonction pour obtenir l'URL de la photo du technicien
+  const getTechnicianPhotoURL = (name) => {
+    const technician = technicians.find((tech) => tech.name === name);
+    return technician ? technician.urlPhoto : null;
+  };
 
-    
+  const generatePdf = () => {
+    const input = document.getElementById("report-content");
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
 
-    const generatePdf = () => {
-      const input = document.getElementById("report-content");
-      html2canvas(input).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const imgWidth = 210;
-        const pageHeight = 295;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
-  
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
-  
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-        pdf.save(`Mission_${reportId}.pdf`);
-      });
-    };
-  
+      }
+      pdf.save(`Mission_${reportId}.pdf`);
+    });
+  };
 
   return (
     <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
       <button onClick={generatePdf}>Télécharger en PDF</button>
-      
+
       {report ? (
         <div className={styles.reportItem}>
           <h2>
@@ -120,23 +117,23 @@ export default function InterventionReport() {
             </div>
 
             <div className={styles.section1Right}>
-                <h4>Intervenant(s)</h4>
-                <div className={styles.technicians}>
-                  {report.intervenants && report.intervenants.length > 0 ? (
-                    report.intervenants.map((intervenant, index) => (
-                      <div key={index} className={styles.technicianItem}>
-                        <p>{intervenant}</p>
-                        <img
-                          src={getTechnicianPhotoURL(intervenant)}
-                          alt={`Photo de ${intervenant}`}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <p>Aucun intervenant</p>
-                  )}
-                </div>
+              <h4>Intervenant(s)</h4>
+              <div className={styles.technicians}>
+                {report.intervenants && report.intervenants.length > 0 ? (
+                  report.intervenants.map((intervenant, index) => (
+                    <div key={index} className={styles.technicianItem}>
+                      <p>{intervenant}</p>
+                      <img
+                        src={getTechnicianPhotoURL(intervenant)}
+                        alt={`Photo de ${intervenant}`}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p>Aucun intervenant</p>
+                )}
               </div>
+            </div>
           </div>
 
           <div className={styles.section2}>
@@ -197,7 +194,7 @@ export default function InterventionReport() {
                         ))}
                       </td>
                       <td>
-                      <i class="fa-solid fa-chevron-right"></i>{" "}
+                        <i class="fa-solid fa-chevron-right"></i>{" "}
                         {remarque.remarque}
                       </td>
                       {/* Colonne pour les photos */}
@@ -206,12 +203,16 @@ export default function InterventionReport() {
                 </tbody>
               </table>
               <p>
-  <i className="fa-solid fa-triangle-exclamation"></i> Intervention à risque :{" "}
-  <span className={report.risques ? styles.risqueOui : styles.risqueNon}>
-    {report.risques ? "Oui" : "Non"}
-  </span>
-</p>
-
+                <i className="fa-solid fa-triangle-exclamation"></i>{" "}
+                Intervention à risque :{" "}
+                <span
+                  className={
+                    report.risques ? styles.risqueOui : styles.risqueNon
+                  }
+                >
+                  {report.risques ? "Oui" : "Non"}
+                </span>
+              </p>
             </div>
           </div>
 
