@@ -1,7 +1,7 @@
 import styles from "./style.module.scss";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs, doc, deleteDoc  } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -29,43 +29,39 @@ export default function IncidentReports() {
     fetchIncidents();
   }, []);
 
- // Fonction pour supprimer un incident avec alerte de confirmation
-const deleteIncident = async (id) => {
-  const result = await Swal.fire({
-      title: 'Êtes-vous sûr ?',
+  // Fonction pour supprimer un incident avec alerte de confirmation
+  const deleteIncident = async (id) => {
+    const result = await Swal.fire({
+      title: "Êtes-vous sûr ?",
       text: "Cette action est irréversible !",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Oui, supprimer !',
-      cancelButtonText: 'Annuler'
-  });
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, supprimer !",
+      cancelButtonText: "Annuler",
+    });
 
-  if (result.isConfirmed) {
+    if (result.isConfirmed) {
       try {
-          await deleteDoc(doc(db, "incidentReports", id));
-          fetchIncidents(); // Met à jour la liste des incidents après suppression
-          Swal.fire(
-              'Supprimé !',
-              'L\'incident a été supprimé.',
-              'success'
-          );
+        await deleteDoc(doc(db, "incidentReports", id));
+        fetchIncidents(); // Met à jour la liste des incidents après suppression
+        Swal.fire("Supprimé !", "L'incident a été supprimé.", "success");
       } catch (error) {
-          console.error("Erreur lors de la suppression de l'incident : ", error);
-          Swal.fire(
-              'Erreur',
-              'Une erreur est survenue lors de la suppression de l\'incident.',
-              'error'
-          );
+        console.error("Erreur lors de la suppression de l'incident : ", error);
+        Swal.fire(
+          "Erreur",
+          "Une erreur est survenue lors de la suppression de l'incident.",
+          "error"
+        );
       }
-  }
-};
+    }
+  };
 
-// Fonction de gestionnaire d'événement pour la suppression de l'incident
-const handleDelete = (id) => {
-  deleteIncident(id); // Utilise SweetAlert2 pour la confirmation
-};
+  // Fonction de gestionnaire d'événement pour la suppression de l'incident
+  const handleDelete = (id) => {
+    deleteIncident(id); // Utilise SweetAlert2 pour la confirmation
+  };
 
   return (
     <div className={styles.incidentsContainer}>
@@ -82,12 +78,22 @@ const handleDelete = (id) => {
               {incident.createdAt?.toDate().toLocaleDateString()} -{" "}
               {incident.client.nomEntreprise}
             </h2>
-            {incident.missionsDangereuses && incident.missionsDangereuses.length > 0 ? (
-                  <div className={styles.badgeGreen}>Complété</div>
-                ) : (
-                  <div className={styles.badgeRed}>À compléter</div>
-                )}
-            <p> {incident.interventionReportId ? <Link to={`/report/${incident.interventionReportId}`}>Voir le rapport d'intervention associée</Link> : "Aucune fiche mission associée"} </p>
+            {incident.missionsDangereuses &&
+            incident.missionsDangereuses.length > 0 ? (
+              <div className={styles.badgeGreen}>Complété</div>
+            ) : (
+              <div className={styles.badgeRed}>À compléter</div>
+            )}
+            <p>
+              {" "}
+              {incident.interventionReportId ? (
+                <Link to={`/report/${incident.interventionReportId}`}>
+                  Voir le rapport d'intervention associée
+                </Link>
+              ) : (
+                "Aucune fiche mission associée"
+              )}{" "}
+            </p>
 
             <div className={styles.section1}>
               <div className={styles.section1Left}>
@@ -117,7 +123,7 @@ const handleDelete = (id) => {
 
             <div className={styles.section2}>
               <div className={styles.section2Left}>
-                <h4>Remarques de l'intervenant :</h4>
+                <h4>Remarque(s) :</h4>
                 <ul>
                   {incident.remarques.map((remarque, index) => (
                     <li key={index}>
@@ -130,18 +136,35 @@ const handleDelete = (id) => {
                   <i className="fa-solid fa-triangle-exclamation"></i>
                   Intervention à risque : {incident.risques ? "Oui" : "Non"}
                 </p>
-                <p>
+                {/* <p>
                   <i className="fa-solid fa-paperclip"></i>Nombre de photos
                   jointes : {incident.photos.length}
-                </p>
+                </p> */}
               </div>
 
               <div className={styles.section2Right}>
-                <h4>Photos :</h4>
+                <h4>Photo(s) :</h4>
                 <ul>
-                  {incident.photos.map((photo, index) => (
+                  {incident.remarques.map((remarque, index) => (
                     <li key={index}>
-                      <img src={photo} alt={`Photo ${index}`} />
+                      {/* Vérification s'il y a des photos associées */}
+                      {remarque.photos && remarque.photos.length > 0 && (
+                        <div>
+                          {/* Affichage de chaque photo */}
+                          {remarque.photos.map((photo, i) => (
+                            <img
+                              key={i}
+                              src={photo}
+                              alt={`Photo ${i + 1} de la remarque`}
+                              style={{
+                                width: "100px",
+                                height: "auto",
+                                marginRight: "10px",
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -149,7 +172,7 @@ const handleDelete = (id) => {
             </div>
             <div className={styles.section3}>
               <div className={styles.section3Left}>
-                <h4>Actions menées par l'intervenant :</h4>
+                <h4>Action(s) corrective(s) :</h4>
                 <ul>
                   {incident.actions.map((action, index) => (
                     <li key={index}>
@@ -163,17 +186,19 @@ const handleDelete = (id) => {
                 <h4>Mission(s) dangereuse(s) :</h4>
                 {incident.missionsDangereuses.map((mission, index) => (
                   <p key={index}>
-                     <i className="fa-solid fa-triangle-exclamation"></i>
+                    <i className="fa-solid fa-triangle-exclamation"></i>
                     {mission}
                   </p>
                 ))}
-                
-
               </div>
             </div>
             <div className={styles.section4}>
-              <Link to={`/incident/${incident.id}`}>Voir la fiche incident </Link>
-              <Link to={`/incidents/edit/${incident.id}`}>Remplir / Modifier</Link>
+              <Link to={`/incident/${incident.id}`}>
+                Voir la fiche incident{" "}
+              </Link>
+              <Link to={`/incidents/edit/${incident.id}`}>
+                Remplir / Modifier
+              </Link>
               <Link onClick={() => handleDelete(incident.id)}>Supprimer</Link>
             </div>
           </li>

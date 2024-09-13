@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { db } from "../../firebase/firebase";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export default function InterventionReport() {
   const { reportId } = useParams(); // Récupérer l'ID du rapport depuis l'URL
@@ -57,9 +59,44 @@ export default function InterventionReport() {
     return <p>{error}</p>;
   }
 
+    // Fonction pour obtenir l'URL de la photo du technicien
+    const getTechnicianPhotoURL = (name) => {
+      const technician = technicians.find((tech) => tech.name === name);
+      return technician ? technician.urlPhoto : null;
+    };
+
+    
+
+    const generatePdf = () => {
+      const input = document.getElementById("report-content");
+      html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgWidth = 210;
+        const pageHeight = 295;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+  
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+  
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        pdf.save(`Mission_${reportId}.pdf`);
+      });
+    };
+  
+
   return (
-    <div className={styles.reportContainer}>
+    <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
+      <button onClick={generatePdf}>Télécharger en PDF</button>
+      
       {report ? (
         <div className={styles.reportItem}>
           <h2>
@@ -83,74 +120,103 @@ export default function InterventionReport() {
             </div>
 
             <div className={styles.section1Right}>
-              <h4>Intervenant</h4>
-              <h3> {report.intervenant}</h3>
-
-              <img
-                src={
-                  technicians.find((tech) => tech.name === report.intervenant)
-                    ?.urlPhoto
-                }
-                alt="Photo de l'intervenant"
-              />
-            </div>
+                <h4>Intervenant(s)</h4>
+                <div className={styles.technicians}>
+                  {report.intervenants && report.intervenants.length > 0 ? (
+                    report.intervenants.map((intervenant, index) => (
+                      <div key={index} className={styles.technicianItem}>
+                        <p>{intervenant}</p>
+                        <img
+                          src={getTechnicianPhotoURL(intervenant)}
+                          alt={`Photo de ${intervenant}`}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <p>Aucun intervenant</p>
+                  )}
+                </div>
+              </div>
           </div>
 
           <div className={styles.section2}>
             <div className={styles.section2Left}>
               <h4>Actions menées </h4>
-              <div>
-                {report.actionsDone?.map((action, index) => (
-                  <div key={index}>
-                    <li>
-                      <i className="fa-solid fa-check"></i> {action.description}
-                    </li>
-                    {/* Boucle sur les photos de chaque action */}
-                    <div>
-                      {action.photos?.map((photo, i) => (
-                        <img
-                          key={i}
-                          src={photo}
-                          alt={`Photo ${i + 1} de l'action ${index + 1}`}
-                          style={{ width: "100px", height: "auto" }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Photos</th>
+                    <th>Description de l'action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.actionsDone?.map((action, index) => (
+                    <tr key={index}>
+                      {/* Colonne pour la description de l'action */}
+                      <td>
+                        {action.photos?.map((photo, i) => (
+                          <img
+                            key={i}
+                            src={photo}
+                            alt={`Photo ${i + 1} de l'action ${index + 1}`}
+                          />
+                        ))}
+                      </td>
+                      <td>
+                        <i className="fa-solid fa-check"></i>{" "}
+                        {action.description}
+                      </td>
+                      {/* Colonne pour les photos */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
             <div className={styles.section2Right}>
-              <h4> Remarques / Risques</h4>
-              {report.remarques?.map((remarque, index) => (
-                  <div key={index}>
-                    <li>
-                      <i className="fa-solid fa-check"></i> {remarque.remarque}
-                    </li>
-                    {/* Boucle sur les photos de chaque action */}
-                    <div>
-                      {remarque.photos?.map((photo, i) => (
-                        <img
-                          key={i}
-                          src={photo}
-                          alt={`Photo ${i + 1} de l'action ${index + 1}`}
-                          style={{ width: "100px", height: "auto" }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
+              <h4>Remarques / Risques</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Photos</th>
+                    <th>Remarque</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.remarques?.map((remarque, index) => (
+                    <tr key={index}>
+                      {/* Colonne pour la description de la remarque */}
+                      <td>
+                        {remarque.photos?.map((photo, i) => (
+                          <img
+                            key={i}
+                            src={photo}
+                            alt={`Photo ${i + 1} de la remarque ${index + 1}`}
+                          />
+                        ))}
+                      </td>
+                      <td>
+                      <i class="fa-solid fa-chevron-right"></i>{" "}
+                        {remarque.remarque}
+                      </td>
+                      {/* Colonne pour les photos */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
               <p>
-                {" "}
-                <i class="fa-solid fa-triangle-exclamation"></i> Intervention à
-                risque : {report.risques ? "Oui" : "Non"}
-              </p>
+  <i className="fa-solid fa-triangle-exclamation"></i> Intervention à risque :{" "}
+  <span className={report.risques ? styles.risqueOui : styles.risqueNon}>
+    {report.risques ? "Oui" : "Non"}
+  </span>
+</p>
+
             </div>
           </div>
 
           <div>
-            <h4>Photos :</h4>
+            <h4>AUTRES :</h4>
             {/* <div>
   {report.remarques && report.remarques[0].photos && report.remarques[0].photos.map((photo, i) => (
     <img key={i} src={photo} alt={`Photo ${i + 1}`}  />

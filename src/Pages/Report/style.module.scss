@@ -49,7 +49,6 @@
       font-weight: bold;
       padding: 10px 0px;
       background-color: var(--col3);
-      color: black;
       width: 100%;
       text-align: center;
       text-transform: uppercase;
@@ -59,6 +58,7 @@
 
   i {
     margin-right: 8px;
+    margin-left: 8px;
   }
 
   .section1 {
@@ -79,16 +79,32 @@
       flex-direction: column;
       align-items: center;
 
-      img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 50%;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        -ms-border-radius: 50%;
-        -o-border-radius: 50%;
-}
+      .technicians {
+      
+        width: 100%;
+        display: flex;
+        
+        .technicianItem {
+
+          width: 33%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+         
+         img {
+            margin-top: 0.3rem;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+          }
+        }
+      }
     }
   }
 
@@ -96,35 +112,78 @@
     width: 100%;
     display: flex;
 
+    
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      // margin-top: 10px;
+      margin-bottom: 10px;
+
+      th {
+        background-color: var(--col4);
+        text-transform: uppercase;
+        font-weight: 600;
+        padding: 10px;
+        color : white ;
+        border-bottom: 1px solid #ddd;
+        margin-bottom : 10px;
+      }
+
+      td {
+        // padding: 10px;
+        border-bottom: 1px solid #ddd;
+        height : 50px;
+        
+
+        align-items: center;
+        // text-align: center;
+        align-self: center;
+        vertical-align: middle;
+
+        img {
+          padding : 10px;
+          width: 300px;
+          height: 200px;
+          object-fit: cover;
+      
+        }
+        
+      }
+    }
+
     .section2Left {
       width: 50%;
-      display: flex;
-      flex-direction: column;
-      ul {
-        align-self: center;
-      }
+    
+    
     }
 
     .section2Right {
       width: 50%;
+
+      p {
+       
+        color: black;
+        padding: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+        float : right;
+
+        .risqueOui {
+          color: red;
+        }
+        
+        .risqueNon {
+          color: green;
+        }
+        
+
+      }
 
  
 
     }
   }
 
-  .photosContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  .photo {
-    width: 400px;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 5px;
-  }
 }
 }

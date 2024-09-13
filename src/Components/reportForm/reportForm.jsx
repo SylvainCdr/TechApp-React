@@ -60,93 +60,91 @@ export default function ReportForm({ initialData, onSubmit }) {
     fetchTechnicians();
   }, []);
 
-  // Gérer l'ajout de photos pour chaque action
-  const handleActionPhotoChange = (index, e) => {
-    const files = Array.from(e.target.files);
-    const newActionsDone = [...actionsDone];
-    newActionsDone[index].photos = files; // Remplacer par les nouvelles photos sélectionnées
-    setActionsDone(newActionsDone);
-  };
+// Gérer l'ajout de photos pour chaque action
+const handleActionPhotoChange = (index, e) => {
+  const files = Array.from(e.target.files);
+  const newActionsDone = [...actionsDone];
+  
+  // Conserver les anciennes photos et ajouter les nouvelles
+  newActionsDone[index].photos = [...newActionsDone[index].photos, ...files];
+  setActionsDone(newActionsDone);
+};
 
-  // Gérer l'ajout de photos pour chaque remarque
-  const handleRemarquePhotoChange = (index, e) => {
-    const files = Array.from(e.target.files);
-    const newRemarques = [...remarques];
-    newRemarques[index].photos = files; // Remplacer par les nouvelles photos sélectionnées
-    setRemarques(newRemarques);
-  };
+// Gérer l'ajout de photos pour chaque remarque
+const handleRemarquePhotoChange = (index, e) => {
+  const files = Array.from(e.target.files);
+  const newRemarques = [...remarques];
+  
+  // Conserver les anciennes photos et ajouter les nouvelles
+  newRemarques[index].photos = [...newRemarques[index].photos, ...files];
+  setRemarques(newRemarques);
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      // Gérer les photos pour chaque action
-      for (const [index, action] of actionsDone.entries()) {
-        const uploadedActionPhotos = [];
-        if (action.photos.length > 0) {
-          for (const file of action.photos) {
-            const storageRef = ref(storage, `interventionPhotos/actions/${file.name}`);
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
-            uploadedActionPhotos.push(downloadURL);
-          }
+  try {
+    // Gérer les photos pour chaque action
+    for (const [index, action] of actionsDone.entries()) {
+      const uploadedActionPhotos = [];
+
+      // Parcours des photos associées à l'action
+      for (const file of action.photos) {
+        if (file instanceof File) { // Si c'est un nouveau fichier (pas une URL)
+          const storageRef = ref(storage, `interventionPhotos/actions/${file.name}`);
+          await uploadBytes(storageRef, file); // Téléchargement du fichier
+          const downloadURL = await getDownloadURL(storageRef); // Obtenir l'URL de téléchargement
+          uploadedActionPhotos.push(downloadURL); // Ajouter l'URL aux photos uploadées
+        } else {
+          uploadedActionPhotos.push(file); // Si c'est déjà une URL, la garder
         }
-        actionsDone[index].photos = uploadedActionPhotos; // Ajouter les URLs des photos uploadées
       }
-
-      // Gérer les photos pour chaque remarque
-      for (const [index, remarque] of remarques.entries()) {
-        const uploadedRemarquePhotos = [];
-        if (remarque.photos.length > 0) {
-          for (const file of remarque.photos) {
-            const storageRef = ref(storage, `interventionPhotos/remarques/${file.name}`);
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
-            uploadedRemarquePhotos.push(downloadURL);
-          }
-        }
-        remarques[index].photos = uploadedRemarquePhotos; // Ajouter les URLs des photos uploadées
-      }
-
-      // Données du rapport à envoyer
-      const reportData = {
-        client,
-        site,
-        intervenants,
-        actionsDone,
-        remarques,
-        risques,
-        createdAt: initialData?.createdAt || new Date(),
-        updatedAt: new Date(),
-        interventionStartDate: dateStartIntervention,
-        interventionEndDate: dateEndIntervention,
-      };
-
-      // Appel de la fonction onSubmit
-      await onSubmit(reportData);
-
-      // Si un risque est identifié, créer une fiche d'incident
-      if (risques) {
-        const incidentData = {
-          client,
-          site,
-          intervenants,
-          missionsDangereuses,
-          actions: actionsDone.map((a) => a.description),
-          remarques: remarques.map((r) => r.remarque),
-          risques: "OUI",
-          interventionReportId: initialData?.id || "",
-        };
-        await createOrUpdateIncidentReport(incidentData);
-      }
-
-      alert("Rapport soumis avec succès.");
-      window.location.href = "/reports";
-    } catch (error) {
-      console.error("Erreur lors de la soumission du rapport : ", error);
-      alert("Une erreur est survenue lors de la soumission du rapport.");
+      actionsDone[index].photos = uploadedActionPhotos; // Conserver les URLs (anciennes et nouvelles)
     }
-  };
+
+    // Gérer les photos pour chaque remarque
+    for (const [index, remarque] of remarques.entries()) {
+      const uploadedRemarquePhotos = [];
+
+      // Parcours des photos associées à la remarque
+      for (const file of remarque.photos) {
+        if (file instanceof File) { // Si c'est un nouveau fichier (pas une URL)
+          const storageRef = ref(storage, `interventionPhotos/remarques/${file.name}`);
+          await uploadBytes(storageRef, file); // Téléchargement du fichier
+          const downloadURL = await getDownloadURL(storageRef); // Obtenir l'URL de téléchargement
+          uploadedRemarquePhotos.push(downloadURL); // Ajouter l'URL aux photos uploadées
+        } else {
+          uploadedRemarquePhotos.push(file); // Si c'est déjà une URL, la garder
+        }
+      }
+      remarques[index].photos = uploadedRemarquePhotos; // Conserver les URLs (anciennes et nouvelles)
+    }
+
+    // Données du rapport à envoyer
+    const reportData = {
+      client,
+      site,
+      intervenants,
+      actionsDone,  // Ne contient plus que des URLs pour les photos
+      remarques,    // Ne contient plus que des URLs pour les photos
+      risques,
+      createdAt: initialData?.createdAt || new Date(),
+      updatedAt: new Date(),
+      interventionStartDate: dateStartIntervention,
+      interventionEndDate: dateEndIntervention,
+    };
+
+    // Appel de la fonction onSubmit pour envoyer les données à Firestore
+    await onSubmit(reportData);
+
+    alert("Rapport soumis avec succès.");
+    window.location.href = "/reports";
+  } catch (error) {
+    console.error("Erreur lors de la soumission du rapport : ", error);
+    alert("Une erreur est survenue lors de la soumission du rapport.");
+  }
+};
+
 
   const addActionField = () => {
     setActionsDone([...actionsDone, { description: "", photos: [] }]);
