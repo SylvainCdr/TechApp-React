@@ -99,12 +99,13 @@ export default function IncidentReports() {
               <div className={styles.section1Left}>
                 <h4>Entreprise / Site</h4>
                 <ul>
-                  <li>Email : {incident.client.email}</li>
-                  <li>Téléphone : {incident.client.tel}</li>
-                  <li>Adresse du site : {incident.site.adresse}</li>
-                  <li>Nom du contact sur site : {incident.site.nomContact}</li>
-                  <li>Fonction du contact : {incident.site.fonctionContact}</li>
-                  <li>Téléphone du contact : {incident.site.telContact}</li>
+                  <li><i class="fa-regular fa-building"></i> Client : {incident.client.nomEntreprise}</li>
+                  <li><i class="fa-solid fa-phone"></i>Téléphone : {incident.client.tel}</li>
+                  <li><i class="fa-solid fa-at"></i>Email : {incident.client.email}</li>
+                  <li><i class="fa-solid fa-location-dot"></i>Adresse du site : {incident.site.adresse}</li>
+                  <li><i class="fa-regular fa-user"></i>Contact sur site : {incident.site.nomContact}</li>
+                  <li><i class="fa-regular fa-address-card"></i>Fonction du contact : {incident.site.fonctionContact}</li>
+                  <li><i class="fa-solid fa-mobile-screen-button"></i> Téléphone : {incident.site.telContact}</li>
                 </ul>
               </div>
 
