@@ -156,11 +156,7 @@ export default function IncidentReports() {
                               key={i}
                               src={photo}
                               alt={`Photo ${i + 1} de la remarque`}
-                              style={{
-                                width: "100px",
-                                height: "auto",
-                                marginRight: "10px",
-                              }}
+                           
                             />
                           ))}
                         </div>
@@ -172,7 +168,16 @@ export default function IncidentReports() {
             </div>
             <div className={styles.section3}>
               <div className={styles.section3Left}>
-                <h4>Action(s) corrective(s) :</h4>
+              <h4>Mission(s) dangereuse(s) :</h4>
+                {incident.missionsDangereuses.map((mission, index) => (
+                  <p key={index}>
+                    <i className="fa-solid fa-triangle-exclamation"></i>
+                    {mission}
+                  </p>
+                ))}
+              </div>
+              <div className={styles.section3Right}>
+              <h4>Action(s) corrective(s) :</h4>
                 <ul>
                   {incident.actions.map((action, index) => (
                     <li key={index}>
@@ -181,25 +186,17 @@ export default function IncidentReports() {
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className={styles.section3Right}>
-                <h4>Mission(s) dangereuse(s) :</h4>
-                {incident.missionsDangereuses.map((mission, index) => (
-                  <p key={index}>
-                    <i className="fa-solid fa-triangle-exclamation"></i>
-                    {mission}
-                  </p>
-                ))}
+             
               </div>
             </div>
             <div className={styles.section4}>
-              <Link to={`/incident/${incident.id}`}>
+              <Link to={`/incident/${incident.id}`} className={styles.viewBtn}>
                 Voir la fiche incident{" "}
               </Link>
-              <Link to={`/incidents/edit/${incident.id}`}>
+              <Link to={`/incidents/edit/${incident.id}`}  className={styles.editBtn}>
                 Remplir / Modifier
               </Link>
-              <Link onClick={() => handleDelete(incident.id)}>Supprimer</Link>
+              <Link onClick={() => handleDelete(incident.id)}  className={styles.deleteBtn}>Supprimer</Link>
             </div>
           </li>
         ))}

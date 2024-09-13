@@ -82,6 +82,14 @@ export default function Mission() {
     });
   };
 
+  // Fonction pour copier les informations du site dans le presse-papiers
+  const handleCopy = () => {
+    const siteInfo = `${mission.site.adresse}`;
+    navigator.clipboard.writeText(siteInfo).then(() => {
+      alert("Informations du site copiées dans le presse-papiers !");
+    });
+  };
+
   return (
     <div className={styles.missionContainer} id="mission-content">
       <h1>Fiche Mission N° {missionId}</h1>
@@ -98,12 +106,17 @@ export default function Mission() {
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
-              <p>Email : {mission.client.email}</p>
-              <p>Téléphone : {mission.client.tel}</p>
-              <p>Site : {mission.site.adresse}</p>
-              <p>Nom contact : {mission.site.nomContact}</p>
-              <p>Fonction : {mission.site.fonctionContact}</p>
-              <p>Téléphone : {mission.site.telContact}</p>
+              <p><i class="fa-regular fa-building"></i> Client : {mission.client.nomEntreprise}</p>
+                  <p><i class="fa-solid fa-phone"></i>Téléphone : {mission.client.tel}</p>
+                  <p><i class="fa-solid fa-at"></i>Email : {mission.client.email}</p>
+                  <p><i class="fa-solid fa-location-dot"></i>Adresse du site : {mission.site.adresse}</p>
+                  <p><i class="fa-regular fa-user"></i>Contact sur site : {mission.site.nomContact}</p>
+                  <p><i class="fa-regular fa-address-card"></i>Fonction du contact : {mission.site.fonctionContact}</p>
+                  <p><i class="fa-solid fa-mobile-screen-button"></i> Téléphone : {mission.site.telContact}</p>
+                
+              <button onClick={handleCopy} className={styles.copyButton}>
+                  Copier l'adresse du site
+                </button>
             </ul>
             <div className={styles.section1Right}>
               <h3>Intervenant(s)</h3>
@@ -130,7 +143,7 @@ export default function Mission() {
               <h3>Mission(s) :</h3>
               <ul>
                 {mission.missions.map((mission, index) => (
-                  <li key={index}>{mission}</li>
+                  <li key={index}><i class="fa-solid fa-chevron-right"></i>{mission}</li>
                 ))}
               </ul>
             </div>
@@ -138,7 +151,7 @@ export default function Mission() {
               <h3>Risques / EPI</h3>
               <ul>
                 {mission.risqueEPI.map((risque, index) => (
-                  <li key={index}>{risque}</li>
+                  <li key={index}>  <i class="fa-solid fa-minus"></i>{risque}</li>
                 ))}
               </ul>
             </div>

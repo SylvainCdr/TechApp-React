@@ -73,12 +73,11 @@
   }
 
   .techniciansList {
-    display: grid ;
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
 
     .technicianItem {
-
       border: 1px solid #ddd;
       border-radius: 5px;
       padding: 10px;
@@ -101,7 +100,7 @@
         -moz-border-radius: 8px;
         -ms-border-radius: 8px;
         -o-border-radius: 8px;
-}
+      }
 
       p {
         margin-top: 0.5rem;
@@ -113,31 +112,31 @@
         margin-top: 1.5rem;
 
         .editButton {
-          background-color: #28a745;
+          background-color: #007bff;
           border: none;
-          padding: 5px 10px;
+          padding: 10px;
           cursor: pointer;
           border-radius: 3px;
           color: #fff;
-          font-size: 14px;
-        }
-
-        .editButton:hover {
-          background-color: #218838;
+  
+          width: 30%;
+          &:hover {
+            scale: 1.1;
+          }
         }
 
         .deleteButton {
+          width: 30%;
           background-color: #dc3545;
           border: none;
-          padding: 5px 10px;
+          padding: 10px;
           cursor: pointer;
           border-radius: 3px;
           color: #fff;
-          font-size: 14px;
-        }
-
-        .deleteButton:hover {
-          background-color: #c82333;
+       
+          &:hover {
+            scale: 1.1;
+          }
         }
       }
     }
