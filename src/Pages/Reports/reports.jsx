@@ -122,13 +122,33 @@ export default function Reports() {
               <div className={styles.section1Left}>
                 <h4>Entreprise / Site</h4>
                 <ul>
-                  <li><i class="fa-regular fa-building"></i> Client : {report.client.nomEntreprise}</li>
-                  <li><i class="fa-solid fa-phone"></i>Téléphone : {report.client.tel}</li>
-                  <li><i class="fa-solid fa-at"></i>Email : {report.client.email}</li>
-                  <li><i class="fa-solid fa-location-dot"></i>Adresse du site : {report.site.adresse}</li>
-                  <li><i class="fa-regular fa-user"></i>Contact sur site : {report.site.nomContact}</li>
-                  <li><i class="fa-regular fa-address-card"></i>Fonction du contact : {report.site.fonctionContact}</li>
-                  <li><i class="fa-solid fa-mobile-screen-button"></i> Téléphone : {report.site.telContact}</li>
+                  <li>
+                    <i class="fa-regular fa-building"></i> Client :{" "}
+                    {report.client.nomEntreprise}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                    {report.client.tel}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-at"></i>Email : {report.client.email}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                    {report.site.adresse}
+                  </li>
+                  <li>
+                    <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                    {report.site.nomContact}
+                  </li>
+                  <li>
+                    <i class="fa-regular fa-address-card"></i>Fonction du
+                    contact : {report.site.fonctionContact}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
+                    {report.site.telContact}
+                  </li>
                 </ul>
               </div>
 
@@ -193,14 +213,14 @@ export default function Reports() {
                   ))}
                 </div>
 
-
                 <p>
                   <i className="fa-solid fa-paperclip"></i>
                   Nombre de photos jointes :{" "}
                   {report.remarques
                     ? report.remarques.reduce(
                         (total, remarque) =>
-                          total + (remarque.photos ? remarque.photos.length : 0),
+                          total +
+                          (remarque.photos ? remarque.photos.length : 0),
                         0
                       )
                     : 0}
@@ -210,7 +230,6 @@ export default function Reports() {
                   <i className="fa-solid fa-triangle-exclamation"></i>
                   Intervention à risque : {report.risques ? "Oui" : "Non"}
                 </p>
-               
               </div>
             </div>
 

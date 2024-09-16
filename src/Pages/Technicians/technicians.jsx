@@ -217,7 +217,7 @@ export default function TechniciansPage() {
             />
           </div>
           <div>
-            <label>Fonction :</label>
+            <label>  Fonction :</label>
             <input
               type="text"
               value={formData.role}
@@ -269,9 +269,9 @@ export default function TechniciansPage() {
                 alt={`${technician.firstName} ${technician.lastName}`}
               />
             )}
-            <p>Fonction : {technician.role}</p>
-            <p>Téléphone : {technician.phone}</p>
-            <p>Email : {technician.email}</p>
+            <p> <i class="fa-regular fa-id-card"></i>Fonction : {technician.role}</p>
+            <p> <i class="fa-solid fa-phone"></i>Téléphone : {technician.phone}</p>
+            <p> <i class="fa-solid fa-at"></i>Email : {technician.email}</p>
             <div className={styles.buttons}>
               <button
                 className={styles.editButton}

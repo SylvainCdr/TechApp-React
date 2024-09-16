@@ -74,7 +74,7 @@
         -moz-border-radius: 50%;
         -ms-border-radius: 50%;
         -o-border-radius: 50%;
-}
+      }
 
       .badgeRed {
         background-color: #ff4d4f;
@@ -105,7 +105,7 @@
       i {
         margin-right: 8px;
         font-size: 1.2rem;
-        color : rgb(133, 133, 133);
+        color: rgb(133, 133, 133);
       }
 
       .section1 {
@@ -144,20 +144,17 @@
           align-items: center;
 
           .technicians {
-          
             width: 100%;
             display: flex;
             justify-content: space-around;
-            
+
             .technicianItem {
-    
               width: 33%;
               display: flex;
               flex-direction: column;
               align-items: center;
-  
-             
-             img {
+
+              img {
                 margin-top: 0.3rem;
                 width: 100px;
                 height: 100px;

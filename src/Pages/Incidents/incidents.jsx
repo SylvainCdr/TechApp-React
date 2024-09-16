@@ -99,13 +99,34 @@ export default function IncidentReports() {
               <div className={styles.section1Left}>
                 <h4>Entreprise / Site</h4>
                 <ul>
-                  <li><i class="fa-regular fa-building"></i> Client : {incident.client.nomEntreprise}</li>
-                  <li><i class="fa-solid fa-phone"></i>Téléphone : {incident.client.tel}</li>
-                  <li><i class="fa-solid fa-at"></i>Email : {incident.client.email}</li>
-                  <li><i class="fa-solid fa-location-dot"></i>Adresse du site : {incident.site.adresse}</li>
-                  <li><i class="fa-regular fa-user"></i>Contact sur site : {incident.site.nomContact}</li>
-                  <li><i class="fa-regular fa-address-card"></i>Fonction du contact : {incident.site.fonctionContact}</li>
-                  <li><i class="fa-solid fa-mobile-screen-button"></i> Téléphone : {incident.site.telContact}</li>
+                  <li>
+                    <i class="fa-regular fa-building"></i> Client :{" "}
+                    {incident.client.nomEntreprise}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                    {incident.client.tel}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-at"></i>Email :{" "}
+                    {incident.client.email}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                    {incident.site.adresse}
+                  </li>
+                  <li>
+                    <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                    {incident.site.nomContact}
+                  </li>
+                  <li>
+                    <i class="fa-regular fa-address-card"></i>Fonction du
+                    contact : {incident.site.fonctionContact}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
+                    {incident.site.telContact}
+                  </li>
                 </ul>
               </div>
 
@@ -157,7 +178,6 @@ export default function IncidentReports() {
                               key={i}
                               src={photo}
                               alt={`Photo ${i + 1} de la remarque`}
-                           
                             />
                           ))}
                         </div>
@@ -169,7 +189,7 @@ export default function IncidentReports() {
             </div>
             <div className={styles.section3}>
               <div className={styles.section3Left}>
-              <h4>Mission(s) dangereuse(s) :</h4>
+                <h4>Mission(s) dangereuse(s) :</h4>
                 {incident.missionsDangereuses.map((mission, index) => (
                   <p key={index}>
                     <i className="fa-solid fa-triangle-exclamation"></i>
@@ -178,7 +198,7 @@ export default function IncidentReports() {
                 ))}
               </div>
               <div className={styles.section3Right}>
-              <h4>Action(s) corrective(s) :</h4>
+                <h4>Action(s) corrective(s) :</h4>
                 <ul>
                   {incident.actions.map((action, index) => (
                     <li key={index}>
@@ -187,17 +207,24 @@ export default function IncidentReports() {
                     </li>
                   ))}
                 </ul>
-             
               </div>
             </div>
             <div className={styles.section4}>
               <Link to={`/incident/${incident.id}`} className={styles.viewBtn}>
                 Voir la fiche incident{" "}
               </Link>
-              <Link to={`/incidents/edit/${incident.id}`}  className={styles.editBtn}>
+              <Link
+                to={`/incidents/edit/${incident.id}`}
+                className={styles.editBtn}
+              >
                 Remplir / Modifier
               </Link>
-              <Link onClick={() => handleDelete(incident.id)}  className={styles.deleteBtn}>Supprimer</Link>
+              <Link
+                onClick={() => handleDelete(incident.id)}
+                className={styles.deleteBtn}
+              >
+                Supprimer
+              </Link>
             </div>
           </li>
         ))}

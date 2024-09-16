@@ -79,7 +79,7 @@
       i {
         margin-right: 8px;
         font-size: 1.2rem;
-        color : rgb(133, 133, 133);
+        color: rgb(133, 133, 133);
       }
       .section1 {
         width: 100%;
@@ -204,19 +204,22 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .missionsContainer {
     .section1 {
+      width: 100%;
       display: flex;
       flex-direction: column;
-      width: 100%;
+
+      
       .section1Left {
+        display: block;
         width: 100%;
       }
 
       .section1Right {
         width: 100%;
       }
-    }
-  }
+    
+  }}
 }

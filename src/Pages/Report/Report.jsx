@@ -106,14 +106,34 @@ export default function InterventionReport() {
             <div className={styles.section1Left}>
               <h4>Entreprise / Site</h4>
               <ul>
-                  <li><i class="fa-regular fa-building"></i> Client : {report.client.nomEntreprise}</li>
-                  <li><i class="fa-solid fa-phone"></i>Téléphone : {report.client.tel}</li>
-                  <li><i class="fa-solid fa-at"></i>Email : {report.client.email}</li>
-                  <li><i class="fa-solid fa-location-dot"></i>Adresse du site : {report.site.adresse}</li>
-                  <li><i class="fa-regular fa-user"></i>Contact sur site : {report.site.nomContact}</li>
-                  <li><i class="fa-regular fa-address-card"></i>Fonction du contact : {report.site.fonctionContact}</li>
-                  <li><i class="fa-solid fa-mobile-screen-button"></i> Téléphone : {report.site.telContact}</li>
-                </ul>
+                <li>
+                  <i class="fa-regular fa-building"></i> Client :{" "}
+                  {report.client.nomEntreprise}
+                </li>
+                <li>
+                  <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                  {report.client.tel}
+                </li>
+                <li>
+                  <i class="fa-solid fa-at"></i>Email : {report.client.email}
+                </li>
+                <li>
+                  <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                  {report.site.adresse}
+                </li>
+                <li>
+                  <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                  {report.site.nomContact}
+                </li>
+                <li>
+                  <i class="fa-regular fa-address-card"></i>Fonction du contact
+                  : {report.site.fonctionContact}
+                </li>
+                <li>
+                  <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
+                  {report.site.telContact}
+                </li>
+              </ul>
             </div>
 
             <div className={styles.section1Right}>

@@ -64,20 +64,19 @@
       -o-border-radius: 5px;
     }
     .badgeGreen {
-  
       background-color: #52c41a;
       color: white;
       padding: 10px 0px;
       width: 10rem;
       text-align: center;
-      border-radius:50%;
+      border-radius: 50%;
       font-weight: bold;
       float: right;
-      -webkit-border-radius:50%;
-      -moz-border-radius:50%;
-      -ms-border-radius:50%;
-      -o-border-radius:50%;
-}
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+    }
 
     .badgeRed {
       background-color: #ff4d4f;
@@ -97,8 +96,8 @@
       font-size: 1.1em;
       font-weight: bold;
       padding: 10px 0px;
-      background-color: var(--col3);
-      color: black;
+      background-color: var(--col1);
+      color: white;
       width: 100%;
       text-align: center;
       text-transform: uppercase;
@@ -108,7 +107,7 @@
     i {
       margin-right: 8px;
       font-size: 1.2rem;
-      color : rgb(133, 133, 133);
+      color: rgb(133, 133, 133);
     }
 
     .section1 {
@@ -226,6 +225,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      li {
+        margin-left: 10px;
+        color: black;
+        padding: 10px;
+      }
     }
   }
   .section4 {

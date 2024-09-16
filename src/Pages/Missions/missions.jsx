@@ -103,13 +103,33 @@ export default function Missions() {
               <div className={styles.section1Left}>
                 <h3>Entreprise / Site</h3>
                 <ul>
-                  <li><i class="fa-regular fa-building"></i> Client : {mission.client.nomEntreprise}</li>
-                  <li><i class="fa-solid fa-phone"></i>Téléphone : {mission.client.tel}</li>
-                  <li><i class="fa-solid fa-at"></i>Email : {mission.client.email}</li>
-                  <li><i class="fa-solid fa-location-dot"></i>Adresse du site : {mission.site.adresse}</li>
-                  <li><i class="fa-regular fa-user"></i>Contact sur site : {mission.site.nomContact}</li>
-                  <li><i class="fa-regular fa-address-card"></i>Fonction du contact : {mission.site.fonctionContact}</li>
-                  <li><i class="fa-solid fa-mobile-screen-button"></i> Téléphone : {mission.site.telContact}</li>
+                  <li>
+                    <i class="fa-regular fa-building"></i> Client :{" "}
+                    {mission.client.nomEntreprise}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                    {mission.client.tel}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-at"></i>Email : {mission.client.email}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                    {mission.site.adresse}
+                  </li>
+                  <li>
+                    <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                    {mission.site.nomContact}
+                  </li>
+                  <li>
+                    <i class="fa-regular fa-address-card"></i>Fonction du
+                    contact : {mission.site.fonctionContact}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
+                    {mission.site.telContact}
+                  </li>
                 </ul>
               </div>
               <div className={styles.section1Right}>
