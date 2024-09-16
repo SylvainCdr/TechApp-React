@@ -1,49 +1,55 @@
 import React from "react";
-import "./style.scss";
+import styles from "./style.module.scss";
 import { NavLink } from "react-router-dom";
 
-
 function Header() {
+  const burgerToggle = () => {
+    const nav = document.querySelector(`.${styles.nav}`);
+    const burgerMenu = document.querySelector(`.${styles.header__burgerMenu}`);
+    nav.classList.toggle(styles.active);
+    burgerMenu.classList.toggle(styles.active);
+  };
 
-
-  // Creation fonction menu Burger
-  let isBurgerOpen = false;
-  function burgerToggle() {
-    const nav = document.querySelector(".header__nav");
-    console.log(nav);
-    nav.classList.toggle("active");
-    isBurgerOpen = !isBurgerOpen;
-  }
-  // Fin fonction menu Burger
+  const handleLinkClick = () => {
+    const nav = document.querySelector(`.${styles.nav}`);
+    const burgerMenu = document.querySelector(`.${styles.header__burgerMenu}`);
+    nav.classList.remove(styles.active);
+    burgerMenu.classList.remove(styles.active);
+  };
 
   return (
-    <>
-      <div className="header">
-        <nav className="header__nav">
-          <ul onClick={burgerToggle}>
-
-
-            <li>
-              <NavLink to="/"><img src="assets/logo-pix-dark.png" alt=""  className="logo" /> </NavLink>
-            </li>
-            <li>
-              <NavLink to="/missions">Fiches missions</NavLink>
-            </li>
-            <li>
-              <NavLink to="/reports">Rapports d'intervention</NavLink>
-            </li>
-            <li>
-              <NavLink to="/incidents">Fiches incidents</NavLink>
-            </li>
-            <li>
-              <NavLink to="/tech">Techniciens</NavLink>
-            </li>
-      
-          </ul>
-          <div className="header__burgerMenu" onClick={burgerToggle}></div>
-        </nav>
-      </div>
-    </>
+    <div className={styles.headerContainer}>
+      <nav className={styles.nav}>
+        <ul>
+          <li>
+            <NavLink to="/" onClick={handleLinkClick}>
+              <img src="assets/logo-pix-dark.png" alt="Logo" className="logo" />
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/missions" onClick={handleLinkClick}>
+              Fiches missions
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/reports" onClick={handleLinkClick}>
+              Rapports d'intervention
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/incidents" onClick={handleLinkClick}>
+              Fiches incidents
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/tech" onClick={handleLinkClick}>
+              Techniciens
+            </NavLink>
+          </li>
+        </ul>
+        <div className={styles.header__burgerMenu} onClick={burgerToggle} />
+      </nav>
+    </div>
   );
 }
 

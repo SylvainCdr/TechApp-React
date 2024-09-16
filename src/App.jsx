@@ -12,6 +12,7 @@ import InterventionReport from "./Pages/Report/Report";
 import EditMission from "./Pages/EditMission/editMission";
 import Mission from "./Pages/Mission/mission";
 import EditIncident from "./Pages/EditIncident/editIncident";
+import Incident from "./Pages/Incident/incident";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           />
           <Route path="/reports/edit/:reportId" element={<EditReport />} />
           <Route path="/incidents/edit/:incidentId" element={<EditIncident />} />
+          <Route path = "/incident/:incidentId" element = {<Incident />} />
 
           {/* EX : <Route path="/logement/:logementId" element={<Rental />} /> */}
         </Route>

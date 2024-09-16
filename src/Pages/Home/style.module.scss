@@ -3,32 +3,44 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  min-height: 90vh;
 
   img {
-    width: 20rem;
-    margin-bottom: 35px;
+    width: 50%;
+    max-width: 30rem;
+    margin-bottom: 15px;
+    margin-top : 5%;
   }
 
   h1 {
     font-size: 2rem;
-    margin-bottom: 80px;
-    text-transform: uppercase;
+    margin-bottom: 40px;
+   font-family: "barlow-condensed", sans-serif;
+   letter-spacing: 2px;
     color: white;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .categories {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     gap: 30px;
-
-    a {
+    background-color: rgba(255, 255, 255, 0.055);
+    padding: 30px;
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+    a
+{
       text-decoration: none;
-      width: 15rem;
+      width: 10rem;
+      height: 10rem;
       color: white;
       font-size: 1.2rem;
+      font-family: "barlow-condensed", sans-serif;
       text-transform: uppercase;
       justify-content: center;
       align-items: center;
@@ -37,17 +49,39 @@
       background-color: var(--col1);
       box-shadow: 0 4px 10px rgba(227, 227, 227, 0.271);
       padding: 20px;
-      border-radius: 5px;
-      -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
-      -ms-border-radius: 5px;
-      -o-border-radius: 5px;
+      border-radius: 1rem;
+      -webkit-border-radius: 1rem;
+      -moz-border-radius: 1rem;
+      -ms-border-radius: 1rem;
+      -o-border-radius: 1rem;
       transition: all 0.3s ease;
     }
 
     a:hover {
       background-color: var(--col1);
       scale: 1.1;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .homepageContainer {
+    img {
+      width: 70%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .categories {
+      grid-template-columns: repeat(2, 1fr);
+
+      a {
+        width: 7rem;
+        height: 7rem;
+        font-size: 1rem;
+      }
     }
   }
 }

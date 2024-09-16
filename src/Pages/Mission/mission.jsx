@@ -6,6 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import Swal from "sweetalert2";
 
 export default function Mission() {
   const { missionId } = useParams();
@@ -86,7 +87,13 @@ export default function Mission() {
   const handleCopy = () => {
     const siteInfo = `${mission.site.adresse}`;
     navigator.clipboard.writeText(siteInfo).then(() => {
-      alert("Informations du site copiées dans le presse-papiers !");
+      Swal.fire ({
+        title: "Adresse copiée !",
+        text: "L'adresse du site a été copiée dans le presse-papiers",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500
+      });
     });
   };
 
