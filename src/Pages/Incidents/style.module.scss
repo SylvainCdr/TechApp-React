@@ -67,7 +67,7 @@
       background-color: #52c41a;
       color: white;
       padding: 10px 0px;
-      width: 10rem;
+      width: 8rem;
       text-align: center;
       border-radius: 50%;
       font-weight: bold;
@@ -83,7 +83,7 @@
       color: white;
       padding: 10px 0px;
       padding: 10px 0px;
-      width: 10rem;
+      width: 8rem;
       text-align: center;
       border-radius: 4px;
 
@@ -269,6 +269,72 @@
     }
     .deleteBtn {
       background-color: #dc3545;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .incidentsContainer {
+    .incidentsList {
+      list-style: none;
+      padding: 0;
+
+      .incidentItem {
+        .section1 {
+          display: flex;
+          flex-direction: column;
+
+          .section1Left {
+            width: 100%;
+
+            ul {
+              align-self: center;
+              li {
+                margin-bottom: 5px;
+              }
+            }
+          }
+
+          .section1Right {
+            width: 100%;
+
+            .technicians {
+              width: 100%;
+              display: flex;
+              justify-content: space-around;
+
+              .technicianItem {
+                width: 20%;
+                padding-top: 0.1rem;
+
+                img {
+                  margin-top: 0.3rem;
+                  width: 80px;
+                  height: 80px;
+                  object-fit: cover;
+                  border-radius: 50%;
+                  -webkit-border-radius: 50%;
+                  -moz-border-radius: 50%;
+                  -ms-border-radius: 50%;
+                  -o-border-radius: 50%;
+                }
+              }
+            }
+          }
+        }
+        .section2 {
+          display: flex;
+          flex-direction: column;
+
+          .section2Left {
+            width: 100%;
+
+          }
+            .section2Right {
+              width: 100%;
+            }
+        }
+      }
     }
   }
 }

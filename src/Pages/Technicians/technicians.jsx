@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { db, storage } from "../../firebase/firebase";
 import {
   collection,
@@ -16,6 +16,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import styles from "./style.module.scss";
+import { motion } from "framer-motion";
 
 export default function TechniciansPage() {
   const [technicians, setTechnicians] = useState([]);
@@ -71,20 +72,20 @@ export default function TechniciansPage() {
         await updateDoc(technicianRef, data);
 
         Swal.fire({
-          title: 'Succès',
-          text: 'Technicien mis à jour avec succès !',
-          icon: 'success',
-          confirmButtonText: 'OK'
+          title: "Succès",
+          text: "Technicien mis à jour avec succès !",
+          icon: "success",
+          confirmButtonText: "OK",
         });
       } else {
         // Création d'un nouveau technicien
         await addDoc(collection(db, "technicians"), data);
 
         Swal.fire({
-          title: 'Succès',
-          text: 'Technicien ajouté avec succès !',
-          icon: 'success',
-          confirmButtonText: 'OK'
+          title: "Succès",
+          text: "Technicien ajouté avec succès !",
+          icon: "success",
+          confirmButtonText: "OK",
         });
       }
 
@@ -107,10 +108,10 @@ export default function TechniciansPage() {
         error
       );
       Swal.fire({
-        title: 'Erreur',
-        text: 'Une erreur est survenue lors de la soumission du formulaire.',
-        icon: 'error',
-        confirmButtonText: 'OK'
+        title: "Erreur",
+        text: "Une erreur est survenue lors de la soumission du formulaire.",
+        icon: "error",
+        confirmButtonText: "OK",
       });
     }
   };
@@ -139,14 +140,14 @@ export default function TechniciansPage() {
   // Fonction pour gérer la suppression d'un technicien avec SweetAlert2
   const handleDelete = async (technician) => {
     const result = await Swal.fire({
-      title: 'Êtes-vous sûr ?',
+      title: "Êtes-vous sûr ?",
       text: "Cette action est irréversible !",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Oui, supprimer !',
-      cancelButtonText: 'Annuler'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, supprimer !",
+      cancelButtonText: "Annuler",
     });
 
     if (result.isConfirmed) {
@@ -164,19 +165,15 @@ export default function TechniciansPage() {
         const technicianRef = doc(db, "technicians", technician.id);
         await deleteDoc(technicianRef);
 
-        Swal.fire(
-          'Supprimé !',
-          'Le technicien a été supprimé.',
-          'success'
-        );
+        Swal.fire("Supprimé !", "Le technicien a été supprimé.", "success");
         fetchTechnicians();
       } catch (error) {
         console.error("Erreur lors de la suppression du technicien : ", error);
         Swal.fire({
-          title: 'Erreur',
-          text: 'Une erreur est survenue lors de la suppression.',
-          icon: 'error',
-          confirmButtonText: 'OK'
+          title: "Erreur",
+          text: "Une erreur est survenue lors de la suppression.",
+          icon: "error",
+          confirmButtonText: "OK",
         });
       }
     }
@@ -188,7 +185,7 @@ export default function TechniciansPage() {
 
       {/* Bouton pour afficher ou cacher le formulaire */}
       <button onClick={() => setShowForm(!showForm)}>
-        {showForm ?  "Fermer le formulaire" : "  Ajouter un technicien"}
+        {showForm ? "Fermer le formulaire" : "  Ajouter un technicien"}
       </button>
 
       {/* Formulaire qui s'affiche si showForm est vrai */}
@@ -217,7 +214,7 @@ export default function TechniciansPage() {
             />
           </div>
           <div>
-            <label>  Fonction :</label>
+            <label> Fonction :</label>
             <input
               type="text"
               value={formData.role}
@@ -264,14 +261,30 @@ export default function TechniciansPage() {
               {technician.firstName} {technician.lastName}
             </h2>
             {technician.urlPhoto && (
-              <img
+              <motion.img
                 src={technician.urlPhoto}
                 alt={`${technician.firstName} ${technician.lastName}`}
+                initial={{ scale: 0 }}
+                animate={{ rotate: 360, scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20
+                }}
               />
             )}
-            <p> <i class="fa-regular fa-id-card"></i>Fonction : {technician.role}</p>
-            <p> <i class="fa-solid fa-phone"></i>Téléphone : {technician.phone}</p>
-            <p> <i class="fa-solid fa-at"></i>Email : {technician.email}</p>
+            <p>
+              {" "}
+              <i class="fa-regular fa-id-card"></i>Fonction : {technician.role}
+            </p>
+            <p>
+              {" "}
+              <i class="fa-solid fa-phone"></i>Téléphone : {technician.phone}
+            </p>
+            <p>
+              {" "}
+              <i class="fa-solid fa-at"></i>Email : {technician.email}
+            </p>
             <div className={styles.buttons}>
               <button
                 className={styles.editButton}

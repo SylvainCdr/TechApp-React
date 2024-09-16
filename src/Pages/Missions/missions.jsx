@@ -4,6 +4,7 @@ import { db } from "../../firebase/firebase";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 
 export default function Missions() {
   const [missions, setMissions] = useState([]);
@@ -139,9 +140,13 @@ export default function Missions() {
                     mission.intervenants.map((intervenant, index) => (
                       <div key={index} className={styles.technicianItem}>
                         <p>{intervenant}</p>
-                        <img
+                        <motion.img
                           src={getTechnicianPhotoURL(intervenant)}
                           alt={`Photo de ${intervenant}`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.5 }}
                         />
                       </div>
                     ))
@@ -181,14 +186,14 @@ export default function Missions() {
                 to={`/mission/${mission.id}`}
                 className={styles.viewMission}
               >
-                Voir
+                <i class="fa-solid fa-eye"></i>
               </Link>
 
               <Link
                 to={`/missions/edit/${mission.id}`}
                 className={styles.editMission}
               >
-                Modifier
+                <i class="fa-solid fa-pen-to-square"></i>
               </Link>
 
               {/* Bouton Supprimer */}
@@ -196,7 +201,7 @@ export default function Missions() {
                 className={styles.deleteMission}
                 onClick={() => deleteMission(mission.id)}
               >
-                Supprimer
+                <i class="fa-solid fa-trash"></i>
               </Link>
             </div>
           </div>

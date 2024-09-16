@@ -1,8 +1,18 @@
 import React from "react";
 import styles from "./style.module.scss";
 import { NavLink } from "react-router-dom";
+import { motion } from "framer-motion"
+
+
 
 function Header() {
+
+  const variants = {
+    open: { opacity: 1, x: 0 },
+    closed: { opacity: 0, x: "-100%" },
+  }
+
+
   const burgerToggle = () => {
     const nav = document.querySelector(`.${styles.nav}`);
     const burgerMenu = document.querySelector(`.${styles.header__burgerMenu}`);

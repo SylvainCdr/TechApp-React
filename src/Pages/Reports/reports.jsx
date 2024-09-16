@@ -4,6 +4,7 @@ import { db } from "../../firebase/firebase";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
@@ -159,9 +160,13 @@ export default function Reports() {
                     report.intervenants.map((intervenant, index) => (
                       <div key={index} className={styles.technicianItem}>
                         <p>{intervenant}</p>
-                        <img
+                        <motion.img
                           src={getTechnicianPhotoURL(intervenant)}
                           alt={`Photo de ${intervenant}`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition = {{duration: 0.5}}
                         />
                       </div>
                     ))

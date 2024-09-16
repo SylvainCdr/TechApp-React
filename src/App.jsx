@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Template from "./Components/Template/Template";
+import ScrollToTop from "./utils/scrollToTop";
 import Home from "./Pages/Home/Home";
 import Missions from "./Pages/Missions/missions";
 import Reports from "./Pages/Reports/reports";
@@ -17,6 +18,7 @@ import Incident from "./Pages/Incident/incident";
 function App() {
   return (
     <BrowserRouter>
+          <ScrollToTop /> 
       <Routes>
         <Route element={<Template />}>
           <Route path="/" element={<Home />} />

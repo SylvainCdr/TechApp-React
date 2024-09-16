@@ -126,14 +126,14 @@
           border-radius: 3px;
           color: #fff;
   
-          width: 30%;
+          width: 40%;
           &:hover {
             scale: 1.1;
           }
         }
 
         .deleteButton {
-          width: 30%;
+          width: 40%;
           background-color: #dc3545;
           border: none;
           padding: 10px;
@@ -148,4 +148,20 @@
       }
     }
   }
+
+
+  @media (max-width: 1080px) {
+    .techniciansList {
+      grid-template-columns: 1fr 1fr;
+    }
+
+
+  }
+
+  @media (max-width: 700px) {
+    .techniciansList {
+      grid-template-columns: 1fr;
+    }
+  }
 }
+
