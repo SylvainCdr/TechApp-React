@@ -30,11 +30,13 @@ function Header() {
   return (
     <div className={styles.headerContainer}>
       <nav className={styles.nav}>
+        
+            <NavLink to="/" onClick={handleLinkClick}>
+              <img src="assets/techapp-logo2.png" alt="ACCUEIL" className={styles.logo} />
+              
+            </NavLink>
         <ul className={styles.navUl}>
           <li className={styles.navLi}>
-            <NavLink to="/" onClick={handleLinkClick}>
-              <img src="assets/logo-pix-dark.png" alt="Logo" className="logo" />
-            </NavLink>
           </li>
           <li className={styles.navLi}>
             <NavLink to="/missions" onClick={handleLinkClick}>

@@ -149,6 +149,52 @@
       }
 
     }
-  
   }
-  
+
+
+  @media (max-width: 768px) {
+    .incidentContainer {
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      .incidentItem {
+        padding: 10px;
+        h2 {
+          font-size: 1.2rem;
+        }
+        h3 {
+          font-size: 1rem;
+        }
+        i {
+          font-size: 1rem;
+        }
+        .section1 {
+          display: flex;
+          flex-direction: column;
+          .section1Left {
+            width: 100%;
+            
+          }
+          .section1Right {
+            width: 100%;
+           
+          }
+        }
+        .section2 {
+          display: flex;
+          flex-direction: column;
+          .section2Left {
+            width: 100%;
+            li {
+              margin-left: 20%;
+            }
+          }
+          .section2Right {
+            width: 100%;
+           
+          }
+        }
+      }
+    }
+  }

@@ -149,7 +149,7 @@ export default function Incident() {
             {incident.remarques && incident.remarques.length > 0 ? (
               incident.remarques.map((remarqueObj, index) => (
                 <div key={index} className={styles.remarqueItem}>
-                  <p>{remarqueObj.remarque}</p>
+                  <p> <i class="fa-solid fa-chevron-right"></i>{remarqueObj.remarque}</p>
                   {remarqueObj.photos &&
                     remarqueObj.photos.map((photoUrl, i) => (
                       <img
