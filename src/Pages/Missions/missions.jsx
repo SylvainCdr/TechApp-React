@@ -181,7 +181,7 @@ export default function Missions() {
                 to={`/mission/${mission.id}`}
                 className={styles.viewMission}
               >
-                Voir la fiche mission
+                Voir
               </Link>
 
               <Link

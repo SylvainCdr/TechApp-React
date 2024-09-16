@@ -20,28 +20,28 @@ function Header() {
   return (
     <div className={styles.headerContainer}>
       <nav className={styles.nav}>
-        <ul>
-          <li>
+        <ul className={styles.navUl}>
+          <li className={styles.navLi}>
             <NavLink to="/" onClick={handleLinkClick}>
               <img src="assets/logo-pix-dark.png" alt="Logo" className="logo" />
             </NavLink>
           </li>
-          <li>
+          <li className={styles.navLi}>
             <NavLink to="/missions" onClick={handleLinkClick}>
               Fiches missions
             </NavLink>
           </li>
-          <li>
+          <li className={styles.navLi}>
             <NavLink to="/reports" onClick={handleLinkClick}>
               Rapports d'intervention
             </NavLink>
           </li>
-          <li>
+          <li className={styles.navLi}>
             <NavLink to="/incidents" onClick={handleLinkClick}>
               Fiches incidents
             </NavLink>
           </li>
-          <li>
+          <li className={styles.navLi}>
             <NavLink to="/tech" onClick={handleLinkClick}>
               Techniciens
             </NavLink>

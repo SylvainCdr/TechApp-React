@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: space-between;
 
-    ul {
+    .navUl {
       display: flex;
       font-size: 1.1rem;
       font-weight: 500;
@@ -24,7 +24,7 @@
       justify-content: center;
     }
 
-    li {
+    .navLi  {
       margin: auto;
 
       img {
@@ -67,10 +67,10 @@
     font-size: 3rem;
   }
 
-  ul {
+  .navUl {
     position: fixed;
     left: -110%;
-    top: 3.8em;
+    top: 3em;
     flex-direction: column;
     transition: 0.25s ease-in-out;
     background-color: rgb(57, 57, 57);
@@ -88,7 +88,7 @@
     left: 0;
   }
 
-  li {
+  .navLi {
     padding: 1rem 0;
 
     &:hover {
