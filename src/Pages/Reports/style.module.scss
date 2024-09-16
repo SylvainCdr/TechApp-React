@@ -52,7 +52,7 @@
         font-size: 1.4em;
         color: white;
         padding: 10px;
-   
+
         margin-bottom: 1rem;
         text-align: center;
         text-transform: uppercase;
@@ -229,6 +229,13 @@
         -moz-transition: background-color 0.3s ease;
         -ms-transition: background-color 0.3s ease;
         -o-transition: background-color 0.3s ease;
+
+        i {
+          color: white;
+          font-size: 1.5rem;
+          margin: 0;
+          padding: 0;
+        }
         &:hover {
           scale: 1.1;
         }
@@ -254,7 +261,7 @@
         .section1 {
           display: flex;
           flex-direction: column;
-          padding : 0px;
+          padding: 0px;
 
           .section1Left {
             width: 100%;

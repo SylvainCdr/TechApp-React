@@ -97,7 +97,11 @@ export default function Reports() {
 
       <ul className={styles.reportsList}>
         {reports.map((report) => (
-          <li key={report.id} className={styles.reportItem}>
+          <motion.li key={report.id} className={styles.reportItem}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}>
             <h2>
               {report.interventionStartDate} / {report.interventionEndDate} -{" "}
               {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
@@ -160,13 +164,10 @@ export default function Reports() {
                     report.intervenants.map((intervenant, index) => (
                       <div key={index} className={styles.technicianItem}>
                         <p>{intervenant}</p>
-                        <motion.img
+                        <img
                           src={getTechnicianPhotoURL(intervenant)}
                           alt={`Photo de ${intervenant}`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition = {{duration: 0.5}}
+                      
                         />
                       </div>
                     ))
@@ -240,24 +241,24 @@ export default function Reports() {
 
             <div className={styles.section3}>
               <Link to={`/report/${report.id}`} className={styles.viewButton}>
-                Voir le rapport
+              <i class="fa-solid fa-eye"></i>
               </Link>
 
               <Link
                 to={`/reports/edit/${report.id}`}
                 className={styles.editButton}
               >
-                Remplir / Modifier
+               <i class="fa-solid fa-pen-to-square"></i>
               </Link>
 
               <Link
                 className={styles.deleteButton}
                 onClick={() => deleteReportHandler(report.id)}
               >
-                Supprimer
+                <i class="fa-solid fa-trash"></i>
               </Link>
             </div>
-          </li>
+          </motion.li>
         ))}
       </ul>
     </div>

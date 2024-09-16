@@ -90,7 +90,11 @@ export default function Missions() {
 
       <div className={styles.missionsList}>
         {missions.map((mission) => (
-          <div className={styles.missionItem}>
+          <motion.div className={styles.missionItem}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}>
             <h2>
               {mission.createdAt.toDate().toLocaleDateString()} -{" "}
               {mission.client.nomEntreprise}
@@ -140,13 +144,10 @@ export default function Missions() {
                     mission.intervenants.map((intervenant, index) => (
                       <div key={index} className={styles.technicianItem}>
                         <p>{intervenant}</p>
-                        <motion.img
+                        <img
                           src={getTechnicianPhotoURL(intervenant)}
                           alt={`Photo de ${intervenant}`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.5 }}
+                       
                         />
                       </div>
                     ))
@@ -204,7 +205,7 @@ export default function Missions() {
                 <i class="fa-solid fa-trash"></i>
               </Link>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

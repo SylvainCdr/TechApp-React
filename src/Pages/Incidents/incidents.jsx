@@ -4,6 +4,7 @@ import { db } from "../../firebase/firebase";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 
 export default function IncidentReports() {
   const [loading, setLoading] = useState(false);
@@ -72,7 +73,11 @@ export default function IncidentReports() {
 
       <ul className={styles.incidentsList}>
         {incidents.map((incident) => (
-          <li key={incident.id} className={styles.incidentItem}>
+          <motion.li key={incident.id} className={styles.incidentItem} 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}>
             <h2>
               {" "}
               {incident.createdAt?.toDate().toLocaleDateString()} -{" "}
@@ -211,22 +216,22 @@ export default function IncidentReports() {
             </div>
             <div className={styles.section4}>
               <Link to={`/incident/${incident.id}`} className={styles.viewBtn}>
-                Voir la fiche incident{" "}
+              <i class="fa-solid fa-eye"></i>
               </Link>
               <Link
                 to={`/incidents/edit/${incident.id}`}
                 className={styles.editBtn}
               >
-                Remplir / Modifier
+               <i class="fa-solid fa-pen-to-square"></i>
               </Link>
               <Link
                 onClick={() => handleDelete(incident.id)}
                 className={styles.deleteBtn}
               >
-                Supprimer
+               <i class="fa-solid fa-trash"></i>
               </Link>
             </div>
-          </li>
+          </motion.li>
         ))}
       </ul>
     </div>

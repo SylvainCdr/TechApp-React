@@ -290,13 +290,13 @@ export default function TechniciansPage() {
                 className={styles.editButton}
                 onClick={() => handleEdit(technician)}
               >
-                Modifier
+               <i class="fa-solid fa-pen-to-square"></i>
               </button>
               <button
                 className={styles.deleteButton}
                 onClick={() => handleDelete(technician)}
               >
-                Supprimer
+                <i class="fa-solid fa-trash"></i>
               </button>
             </div>
           </div>

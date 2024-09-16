@@ -21,7 +21,7 @@
 
   .reportItem {
     background-color: #fff;
-    border: 1px solid #ddd;
+
     // padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -64,7 +64,7 @@
     .section1 {
       width: 100%;
       display: flex;
-      padding: 10px;
+
       color: black;
 
       .section1Left {
@@ -177,5 +177,80 @@
         }
       }
     }
+  }
+
+  @media (max-width: 768px) {
+    .reportContainer {
+      padding: 10px;
+    }
+
+      .reportItem {
+        h2 {
+          font-size: 1.1em;
+        }
+
+        h4 {
+          font-size: 1em;
+        }
+
+        .section1 {
+          display: flex;
+          flex-direction: column;
+
+          .section1Left {
+            width: 100%;
+
+            ul {
+              li {
+                font-size: 0.8em;
+              }
+            }
+          }
+
+          .section1Right {
+            width: 100%;
+            .technicians {
+              .technicianItem {
+                img {
+                  width: 80px;
+                  height: 80px;
+                  margin-bottom: 1rem;
+                }
+              }
+            }
+          }
+        }
+
+        .section2 {
+          display: flex;
+          flex-direction: column;
+
+          .section2Left {
+            width: 100%; }
+          .section2Right {
+            width: 100%; }
+         
+          table {
+            th {
+              font-size: 0.8em;
+            }
+
+            td {
+              img {
+                width: 200px;
+                height: 150px;
+              }
+            }
+          }
+
+          .section2Right {
+            p {
+              font-size: 0.8em;
+            }
+          }
+        }
+
+      }
+    
   }
 }
