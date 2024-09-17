@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 export default function Reports() {
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const reportsPerPage = 6; // Nombre de rapports par page
 
   // Fonction pour récupérer les rapports d'intervention depuis Firestore
   const fetchReports = async () => {
@@ -86,6 +88,19 @@ export default function Reports() {
     deleteReport(id); // Utilise SweetAlert2 pour la confirmation
   };
 
+  const currentReports = reports.slice(
+    (currentPage - 1) * reportsPerPage,
+    currentPage * reportsPerPage
+  );
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+  
+  const totalPages = Math.ceil(reports.length / reportsPerPage);
+  
   return (
     <div className={styles.reportsContainer}>
       <h1>Rapports d'intervention</h1>
@@ -95,9 +110,8 @@ export default function Reports() {
         d'intervention
       </Link>
 
-
       <ul className={styles.reportsList}>
-        {reports.map((report) => (
+        {currentReports.map((report) => (
           <motion.li key={report.id} className={styles.reportItem}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -129,30 +143,30 @@ export default function Reports() {
                 <h4>Entreprise / Site</h4>
                 <ul>
                   <li>
-                    <i class="fa-regular fa-building"></i> Client :{" "}
+                    <i className="fa-regular fa-building"></i> Client :{" "}
                     {report.client.nomEntreprise}
                   </li>
                   <li>
-                    <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                    <i className="fa-solid fa-phone"></i>Téléphone :{" "}
                     {report.client.tel}
                   </li>
                   <li>
-                    <i class="fa-solid fa-at"></i>Email : {report.client.email}
+                    <i className="fa-solid fa-at"></i>Email : {report.client.email}
                   </li>
                   <li>
-                    <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                    <i className="fa-solid fa-location-dot"></i>Adresse du site :{" "}
                     {report.site.adresse}
                   </li>
                   <li>
-                    <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                    <i className="fa-regular fa-user"></i>Contact sur site :{" "}
                     {report.site.nomContact}
                   </li>
                   <li>
-                    <i class="fa-regular fa-address-card"></i>Fonction du
+                    <i className="fa-regular fa-address-card"></i>Fonction du
                     contact : {report.site.fonctionContact}
                   </li>
                   <li>
-                    <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
+                    <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
                     {report.site.telContact}
                   </li>
                 </ul>
@@ -262,6 +276,26 @@ export default function Reports() {
           </motion.li>
         ))}
       </ul>
+
+      {/* Pagination */}
+      <div className={styles.pagination}>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Précédent
+        </button>
+        <span>
+          Page {currentPage} sur {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Suivant
+        </button>
+      </div>
+
     </div>
   );
 }

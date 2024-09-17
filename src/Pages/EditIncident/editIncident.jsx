@@ -46,7 +46,7 @@ export default function EditIncident() {
             await updateDoc(docRef, incidentData);
 
             // Redirection ou message de succès ici
-            window.alert("Incident mis à jour avec succès !");
+          
             window.location.href = "/incidents"; // Redirection vers la liste des incidents
         } catch (error) {
             console.error("Erreur lors de la mise à jour de l'incident : ", error);

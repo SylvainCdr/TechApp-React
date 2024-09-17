@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 export default function Missions() {
   const [missions, setMissions] = useState([]);
   const [technicians, setTechnicians] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const missionsPerPage = 6; // Nombre de missions par page
 
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
@@ -31,7 +33,7 @@ export default function Missions() {
       const techniciansList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().firstName + " " + doc.data().lastName,
-        urlPhoto: doc.data().urlPhoto, // Assurez-vous que le champ photoURL existe
+        urlPhoto: doc.data().urlPhoto, // Assurez-vous que le champ urlPhoto existe
       }));
       setTechnicians(techniciansList);
     } catch (error) {
@@ -81,6 +83,20 @@ export default function Missions() {
     }
   };
 
+  const totalPages = Math.ceil(missions.length / missionsPerPage);
+
+  // Extraire les missions pour la page actuelle
+  const currentMissions = missions.slice(
+    (currentPage - 1) * missionsPerPage,
+    currentPage * missionsPerPage
+  );
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   return (
     <div className={styles.missionsContainer}>
       <h1>Fiches Missions</h1>
@@ -89,18 +105,21 @@ export default function Missions() {
       </Link>
 
       <div className={styles.missionsList}>
-        {missions.map((mission) => (
-          <motion.div className={styles.missionItem}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}>
+        {currentMissions.map((mission) => (
+          <motion.div
+            className={styles.missionItem}
+            key={mission.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             <h2>
               {mission.createdAt.toDate().toLocaleDateString()} -{" "}
               {mission.client.nomEntreprise}
             </h2>
             <p>
-              Date(s) d'intervention :{mission.interventionStartDate} -{" "}
+              Date(s) d'intervention : {mission.interventionStartDate} -{" "}
               {mission.interventionEndDate}
             </p>
 
@@ -109,36 +128,37 @@ export default function Missions() {
                 <h3>Entreprise / Site</h3>
                 <ul>
                   <li>
-                    <i class="fa-regular fa-building"></i> Client :{" "}
+                    <i className="fa-regular fa-building"></i> Client :{" "}
                     {mission.client.nomEntreprise}
                   </li>
                   <li>
-                    <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                    <i className="fa-solid fa-phone"></i> Téléphone :{" "}
                     {mission.client.tel}
                   </li>
                   <li>
-                    <i class="fa-solid fa-at"></i>Email : {mission.client.email}
+                    <i className="fa-solid fa-at"></i> Email :{" "}
+                    {mission.client.email}
                   </li>
                   <li>
-                    <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                    <i className="fa-solid fa-location-dot"></i> Adresse du site :{" "}
                     {mission.site.adresse}
                   </li>
                   <li>
-                    <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                    <i className="fa-regular fa-user"></i> Contact sur site :{" "}
                     {mission.site.nomContact}
                   </li>
                   <li>
-                    <i class="fa-regular fa-address-card"></i>Fonction du
-                    contact : {mission.site.fonctionContact}
+                    <i className="fa-regular fa-address-card"></i> Fonction du contact :{" "}
+                    {mission.site.fonctionContact}
                   </li>
                   <li>
-                    <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
+                    <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
                     {mission.site.telContact}
                   </li>
                 </ul>
               </div>
               <div className={styles.section1Right}>
-                <h3>Intervenant(s) </h3>
+                <h3>Intervenant(s)</h3>
                 <div className={styles.technicians}>
                   {mission.intervenants && mission.intervenants.length > 0 ? (
                     mission.intervenants.map((intervenant, index) => (
@@ -147,7 +167,6 @@ export default function Missions() {
                         <img
                           src={getTechnicianPhotoURL(intervenant)}
                           alt={`Photo de ${intervenant}`}
-                       
                         />
                       </div>
                     ))
@@ -163,7 +182,7 @@ export default function Missions() {
                 <ul>
                   {mission.missions.map((mission, index) => (
                     <li key={index}>
-                      <i class="fa-solid fa-chevron-right"></i>
+                      <i className="fa-solid fa-chevron-right"></i>
                       {mission}
                     </li>
                   ))}
@@ -174,7 +193,7 @@ export default function Missions() {
                 <ul>
                   {mission.risqueEPI.map((risque, index) => (
                     <li key={index}>
-                      <i class="fa-solid fa-minus"></i>
+                      <i className="fa-solid fa-minus"></i>
                       {risque}
                     </li>
                   ))}
@@ -187,14 +206,14 @@ export default function Missions() {
                 to={`/mission/${mission.id}`}
                 className={styles.viewMission}
               >
-                <i class="fa-solid fa-eye"></i>
+                <i className="fa-solid fa-eye"></i>
               </Link>
 
               <Link
                 to={`/missions/edit/${mission.id}`}
                 className={styles.editMission}
               >
-                <i class="fa-solid fa-pen-to-square"></i>
+                <i className="fa-solid fa-pen-to-square"></i>
               </Link>
 
               {/* Bouton Supprimer */}
@@ -202,11 +221,30 @@ export default function Missions() {
                 className={styles.deleteMission}
                 onClick={() => deleteMission(mission.id)}
               >
-                <i class="fa-solid fa-trash"></i>
+                <i className="fa-solid fa-trash"></i>
               </Link>
             </div>
           </motion.div>
         ))}
+      </div>
+
+      {/* Pagination */}
+      <div className={styles.pagination}>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Précédent
+        </button>
+        <span>
+          Page {currentPage} sur {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Suivant
+        </button>
       </div>
     </div>
   );

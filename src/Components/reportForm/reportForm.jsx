@@ -137,8 +137,7 @@ const handleSubmit = async (e) => {
     // Appel de la fonction onSubmit pour envoyer les données à Firestore
     await onSubmit(reportData);
 
-    alert("Rapport soumis avec succès.");
-    window.location.href = "/reports";
+  
   } catch (error) {
     console.error("Erreur lors de la soumission du rapport : ", error);
     alert("Une erreur est survenue lors de la soumission du rapport.");

@@ -13,7 +13,8 @@
 
     .logo {
       width: 8rem;
-      margin-left: 35%;
+      margin-left: 30%;
+      margin-right : 4em;
       cursor: pointer;
       justify-items: center;
       justify-self: center;
@@ -43,9 +44,7 @@
       .activeLink {
         border-bottom: 2px solid var(--col1); /* Soulignement de la page active */
       }
-      .logo {
-        width: 12rem;
-      }
+     
 
       i {
         font-size: 1.3rem;

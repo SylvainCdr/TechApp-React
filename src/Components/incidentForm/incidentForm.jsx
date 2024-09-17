@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
+import { addDoc, getDocs, collection } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import Swal from "sweetalert2";
 
 export default function IncidentForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
@@ -13,9 +16,12 @@ export default function IncidentForm({ initialData, onSubmit }) {
     nomContact: "",
     telContact: "",
   });
-  const [intervenants, setIntervenants] = useState([]);  
+  const [technicians, setTechnicians] = useState([]);
+  const [selectedIntervenant, setSelectedIntervenant] = useState([]); // Intervenant sélectionné
+  const [customIntervenant, setCustomIntervenant] = useState([]); // Intervenant personnalisé
+  const [intervenantType, setIntervenantType] = useState(""); // "sélection" ou "autre"
   const [photos, setPhotos] = useState([]);
-  const [remarques, setRemarques] = useState([{ remarque: "", photos: [] }]); // Assurez-vous que chaque remarque a des photos sous forme de tableau
+  const [remarques, setRemarques] = useState([{ remarque: "", photos: [] }]);
   const [risques, setRisques] = useState(false);
   const [actions, setActions] = useState([""]);
   const [createdAt, setCreatedAt] = useState(new Date().toISOString());
@@ -26,9 +32,9 @@ export default function IncidentForm({ initialData, onSubmit }) {
     if (initialData) {
       setClient(initialData.client || {});
       setSite(initialData.site || {});
-      setIntervenants(initialData.intervenants || []); // Intervenants est un tableau
+      setTechnicians(initialData.intervenants || []);
       setPhotos(initialData.photos || []);
-      setRemarques(initialData.remarques || [{ remarque: "", photos: [] }]); // Remarques avec photos
+      setRemarques(initialData.remarques || [{ remarque: "", photos: [] }]);
       setRisques(initialData.risques || false);
       setActions(initialData.actions || [""]);
       setCreatedAt(initialData.createdAt || new Date().toISOString());
@@ -37,12 +43,29 @@ export default function IncidentForm({ initialData, onSubmit }) {
     }
   }, [initialData]);
 
+  // Fonction pour récupérer les techniciens depuis Firestore
+  const fetchTechnicians = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "technicians"));
+      const techniciansList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTechnicians(techniciansList);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des techniciens : ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTechnicians();
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const incidentData = {
       client,
       site,
-      intervenants,
       photos,
       remarques,
       risques,
@@ -50,11 +73,40 @@ export default function IncidentForm({ initialData, onSubmit }) {
       createdAt,
       missionsDangereuses,
       interventionReportId,
+      intervenants: intervenantType === "autre" ? [customIntervenant] : selectedIntervenant,
     };
+    console.log('Données de la fiche incident:', incidentData);
     onSubmit(incidentData);
+    const incidentRef = collection(db, "incidentReports");
+    addDoc(incidentRef, incidentData);
+  
+    Swal.fire({
+      title: "Fiche incident créée ou mise à jour !",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    setTimeout(() => {
+      window.location.href = "/incidents";
+    }, 1500);
+  };
+  
+  
+
+  const handleIntervenantChange = (e) => {
+    const value = e.target.value;
+    if (value === "autre") {
+      setIntervenantType("autre");
+    } else {
+      setIntervenantType("selection");
+      setSelectedIntervenant(value);
+    }
   };
 
-  // Gestion des champs dynamiques pour les remarques et autres
+  const handleCustomIntervenantChange = (e) => {
+    setCustomIntervenant(e.target.value);
+  };
+
   const addRemarqueField = () => {
     setRemarques([...remarques, { remarque: "", photos: [] }]);
   };
@@ -171,12 +223,28 @@ export default function IncidentForm({ initialData, onSubmit }) {
           />
         </div>
 
-        <h3>Intervenant(s)</h3>
-        <ul>
-          {intervenants.map((intervenant, index) => (
-            <li key={index}>{intervenant}</li>
-          ))}
-        </ul>
+        <h3>Intervenant</h3>
+        <div className={styles.formGroup}>
+          <label>Choisir un intervenant :</label>
+          <select onChange={handleIntervenantChange} value={intervenantType}>
+            <option value="">Sélectionner un intervenant</option>
+            {technicians.map((technician, index) => (
+              <option key={index} value={technician.id}>{technician.nom}</option>
+            ))}
+            <option value="autre">Autre intervenant...</option>
+          </select>
+        </div>
+
+        {intervenantType === "autre" && (
+          <div className={styles.formGroup}>
+            <label>Nom de l'autre intervenant :</label>
+            <input
+              type="text"
+              value={customIntervenant}
+              onChange={handleCustomIntervenantChange}
+            />
+          </div>
+        )}
 
         <h3>Risques</h3>
         <div className={styles.formGroup}>
@@ -192,102 +260,84 @@ export default function IncidentForm({ initialData, onSubmit }) {
 
         <h3>Remarque(s) de l'intervenant :</h3>
         {remarques.map((remarque, index) => (
-          <div key={index} className={styles.formGroup}>
-            <label>Remarque :</label>
+          <div key={index} className={styles.remarqueField}>
             <input
               type="text"
               value={remarque.remarque}
               onChange={(e) => handleRemarqueChange(index, e.target.value)}
+              placeholder="Ajouter une remarque"
             />
-            <div>
-              <h4>Photos :</h4>
-              {remarque.photos?.map((photo, i) => (
-                <img
-                  key={i}
-                  src={photo}
-                  alt={`Photo ${i + 1} de la remarque ${index + 1}`}
-                  style={{ width: "100px", height: "auto" }}
-                />
-              ))}
-            </div>
-            {remarques.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeRemarqueField(index)}
-                className={styles.removeRemarqueButton}
-              >
-                Supprimer
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => removeRemarqueField(index)}
+            >
+              Supprimer remarque
+            </button>
           </div>
         ))}
         <button
           type="button"
           onClick={addRemarqueField}
-          className={styles.addRemarqueButton}
         >
-          Ajouter une remarque
+          Ajouter remarque
         </button>
 
-        <h3>Actions menées :</h3>
+        <h3>Actions :</h3>
         {actions.map((action, index) => (
-          <div key={index} className={styles.formGroup}>
-            <label>Action :</label>
+          <div key={index} className={styles.actionField}>
             <input
               type="text"
               value={action}
               onChange={(e) => handleActionChange(index, e.target.value)}
+              placeholder="Ajouter une action"
             />
-            {actions.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeActionField(index)}
-                className={styles.removeActionButton}
-              >
-                Supprimer
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => removeActionField(index)}
+            >
+              Supprimer action
+            </button>
           </div>
         ))}
         <button
           type="button"
           onClick={addActionField}
-          className={styles.addActionButton}
         >
-          Ajouter une action
+          Ajouter action
         </button>
 
-        <h3>Mission(s) dangereuse(s) :</h3>
+        <h3>Missions Dangereuses :</h3>
         {missionsDangereuses.map((mission, index) => (
-          <div key={index} className={styles.formGroup}>
-            <label>Mission dangereuse :</label>
+          <div key={index} className={styles.missionField}>
             <input
               type="text"
               value={mission}
               onChange={(e) => handleMissionDangereuseChange(index, e.target.value)}
+              placeholder="Ajouter une mission dangereuse"
             />
-            {missionsDangereuses.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeMissionDangereuseField(index)}
-                className={styles.removeMissionButton}
-              >
-                Supprimer
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => removeMissionDangereuseField(index)}
+            >
+              Supprimer mission dangereuse
+            </button>
           </div>
         ))}
         <button
           type="button"
           onClick={addMissionDangereuseField}
-          className={styles.addMissionButton}
         >
-          Ajouter une mission dangereuse
+          Ajouter mission dangereuse
         </button>
 
-        <button type="submit" className={styles.submitButton}>
-          Soumettre
-        </button>
+        <h3>Photos :</h3>
+        <div>
+          {photos.map((photo, index) => (
+            <img key={index} src={photo} alt={`photo-${index}`} className={styles.photo} />
+          ))}
+        </div>
+
+        <button type="submit">Soumettre</button>
       </form>
     </div>
   );
