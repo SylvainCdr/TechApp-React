@@ -88,9 +88,9 @@ function Header() {
 
           {/* Affiche le bouton de déconnexion uniquement si un utilisateur est connecté */}
           {user && (
-            <li className={styles.navLi}>
+            <p>
               <Logout />
-            </li>
+            </p>
           )}
         </ul>
         <div className={styles.header__burgerMenu} onClick={burgerToggle} />

@@ -23,5 +23,5 @@ export default function Logout() {
     }
   };
 
-  return <button onClick={handleLogout} className={styles.logout}> Déconnexion </button>;
+  return <button onClick={handleLogout} className={styles.logout}> <i class="fa-solid fa-user-slash"></i> </button>;
 }
