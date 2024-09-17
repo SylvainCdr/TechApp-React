@@ -143,13 +143,18 @@
           // text-align: center;
           align-self: center;
           vertical-align: middle;
+        }
 
-          img {
-            padding: 10px;
-            width: 300px;
-            height: 200px;
-            object-fit: cover;
-          }
+        img {
+          padding: 10px;
+          width: 300px;
+          height: 200px;
+          object-fit: cover;
+          border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-border-radius: 8px;
+          -ms-border-radius: 8px;
+          -o-border-radius: 8px;
         }
       }
 
@@ -184,73 +189,73 @@
       padding: 10px;
     }
 
-      .reportItem {
-        h2 {
-          font-size: 1.1em;
-        }
-
-        h4 {
-          font-size: 1em;
-        }
-
-        .section1 {
-          display: flex;
-          flex-direction: column;
-
-          .section1Left {
-            width: 100%;
-
-            ul {
-              li {
-                font-size: 0.8em;
-              }
-            }
-          }
-
-          .section1Right {
-            width: 100%;
-            .technicians {
-              .technicianItem {
-                img {
-                  width: 80px;
-                  height: 80px;
-                  margin-bottom: 1rem;
-                }
-              }
-            }
-          }
-        }
-
-        .section2 {
-          display: flex;
-          flex-direction: column;
-
-          .section2Left {
-            width: 100%; }
-          .section2Right {
-            width: 100%; }
-         
-          table {
-            th {
-              font-size: 0.8em;
-            }
-
-            td {
-              img {
-                width: 200px;
-                height: 150px;
-              }
-            }
-          }
-
-          .section2Right {
-            p {
-              font-size: 0.8em;
-            }
-          }
-        }
-
+    .reportItem {
+      h2 {
+        font-size: 1.1em;
       }
-    
+
+      h4 {
+        font-size: 1em;
+      }
+
+      .section1 {
+        display: flex;
+        flex-direction: column;
+
+        .section1Left {
+          width: 100%;
+
+          ul {
+            li {
+              font-size: 0.8em;
+            }
+          }
+        }
+
+        .section1Right {
+          width: 100%;
+          .technicians {
+            .technicianItem {
+              img {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 1rem;
+              }
+            }
+          }
+        }
+      }
+
+      .section2 {
+        display: flex;
+        flex-direction: column;
+
+        .section2Left {
+          width: 100%;
+        }
+        .section2Right {
+          width: 100%;
+        }
+
+        table {
+          th {
+            font-size: 0.8em;
+          }
+
+          td {
+            img {
+              width: 200px;
+              height: 150px;
+            }
+          }
+        }
+
+        .section2Right {
+          p {
+            font-size: 0.8em;
+          }
+        }
+      }
+    }
   }
 }

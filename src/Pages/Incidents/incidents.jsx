@@ -68,6 +68,10 @@ export default function IncidentReports() {
     <div className={styles.incidentsContainer}>
       <h1>Fiches d'incident</h1>
 
+      <Link to="/incidents/create" className={styles.createIncident}>
+        <i class="fa-solid fa-plus"></i> Créer une nouvelle fiche incident
+      </Link>
+
       {loading && <p>Chargement...</p>}
       {error && <p>Une erreur est survenue : {error.message}</p>}
 

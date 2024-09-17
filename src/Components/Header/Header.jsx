@@ -32,7 +32,7 @@ function Header() {
       <nav className={styles.nav}>
         
             <NavLink to="/" onClick={handleLinkClick}>
-              <img src="assets/techapp-logo2.png" alt="ACCUEIL" className={styles.logo} />
+              <img src="assets/techapp-logo3.png" alt="ACCUEIL" className={styles.logo} />
               
             </NavLink>
         <ul className={styles.navUl}>
@@ -56,6 +56,11 @@ function Header() {
           <li className={styles.navLi}>
             <NavLink to="/tech" onClick={handleLinkClick}>
               Techniciens
+            </NavLink>
+          </li>
+          <li className={styles.navLi}>
+            <NavLink to="/search" onClick={handleLinkClick}>
+            <i class="fa-solid fa-magnifying-glass"></i>
             </NavLink>
           </li>
         </ul>

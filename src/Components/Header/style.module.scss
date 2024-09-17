@@ -12,12 +12,16 @@
     justify-content: space-between;
 
     .logo {
-      width: 10rem;
-      margin-left: 25%;
-&:hover {
+      width: 8rem;
+      margin-left: 35%;
+      cursor: pointer;
+      justify-items: center;
+      justify-self: center;
+      justify-content: center;
+
+      &:hover {
         transform: scale(1.1);
       }
-      
     }
 
     .navUl {
@@ -32,9 +36,8 @@
       list-style: none;
       justify-content: center;
     }
-   
 
-    .navLi  {
+    .navLi {
       margin: auto;
 
       .logo {
@@ -68,7 +71,7 @@
   }
 
   .header__burgerMenu:before {
-    content: "\2630"; 
+    content: "\2630";
     font-size: 3rem;
   }
 
@@ -92,7 +95,7 @@
     -moz-transition: 0.25s ease-in-out;
     -ms-transition: 0.25s ease-in-out;
     -o-transition: 0.25s ease-in-out;
-}
+  }
 
   .active ul {
     left: 0;

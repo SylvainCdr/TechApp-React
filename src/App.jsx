@@ -14,6 +14,8 @@ import EditMission from "./Pages/EditMission/editMission";
 import Mission from "./Pages/Mission/mission";
 import EditIncident from "./Pages/EditIncident/editIncident";
 import Incident from "./Pages/Incident/incident";
+import Search from "./Pages/Search/search";
+import CreateIncident from "./Pages/CreateIncident/createIncident";
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           <Route path="/reports/edit/:reportId" element={<EditReport />} />
           <Route path="/incidents/edit/:incidentId" element={<EditIncident />} />
           <Route path = "/incident/:incidentId" element = {<Incident />} />
+          <Route path="/incidents/create" element={<CreateIncident />} />
+          <Route path="/search" element={<Search />} />
 
           {/* EX : <Route path="/logement/:logementId" element={<Rental />} /> */}
         </Route>

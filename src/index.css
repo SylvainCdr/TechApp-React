@@ -140,6 +140,17 @@ body {
 background-size: cover;
 background-repeat: no-repeat;
   color: white;
+
+  h1{
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+
+
+    text-transform: uppercase;
+    font-weight: 800;
+  }
  
 }
 
@@ -151,3 +162,4 @@ background-repeat: no-repeat;
     --col5: #4F9D69;
   
   }
+
