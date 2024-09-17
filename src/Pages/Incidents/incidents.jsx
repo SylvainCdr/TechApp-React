@@ -66,7 +66,7 @@ export default function IncidentReports() {
 
   return (
     <div className={styles.incidentsContainer}>
-      <h1>Fiches d'incident</h1>
+      <h1>Fiches d'incidents</h1>
 
       <Link to="/incidents/create" className={styles.createIncident}>
         <i class="fa-solid fa-plus"></i> Créer une nouvelle fiche incident

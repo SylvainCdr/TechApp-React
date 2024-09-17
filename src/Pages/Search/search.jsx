@@ -37,7 +37,7 @@ export default function Search() {
   return (
     <div className={styles.searchContainer}>
 
-        <h1> Recherche</h1>
+        <h1> Recherche de rapport</h1>
       <input
         type="text"
         placeholder= "Rechercher par nom d'entreprise"
@@ -80,7 +80,7 @@ export default function Search() {
                   )}
                 </td>
                 <td>
-                  <Link to={`/report/${report.id}`}>Voir le rapport</Link>
+                  <Link to={`/report/${report.id}`}><i class="fa-solid fa-eye"></i></Link>
                 </td>
               </tr>
             ))}

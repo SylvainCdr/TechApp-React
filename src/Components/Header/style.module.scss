@@ -40,8 +40,22 @@
     .navLi {
       margin: auto;
 
+      .activeLink {
+        border-bottom: 2px solid var(--col1); /* Soulignement de la page active */
+      }
       .logo {
         width: 12rem;
+      }
+
+      i {
+        font-size: 1.3rem;
+        background-color: var(--col1);
+        padding: 0.5rem;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
       }
 
       &:hover {
