@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
+import Logout from "../logout/logout";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase/firebase"; // Ton fichier de config Firebase
 
 function Header() {
-  const variants = {
-    open: { opacity: 1, x: 0 },
-    closed: { opacity: 0, x: "-100%" },
-  };
+  const [user, setUser] = useState(null); // État pour suivre si un utilisateur est connecté
+
+  // Surveille l'état de connexion de l'utilisateur
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser); // Met à jour l'état avec l'utilisateur connecté ou null s'il est déconnecté
+    });
+
+    // Cleanup: désinscrire l'observateur lors du démontage du composant
+    return () => unsubscribe();
+  }, []);
 
   const burgerToggle = () => {
     const nav = document.querySelector(`.${styles.nav}`);
@@ -26,7 +36,7 @@ function Header() {
   return (
     <div className={styles.headerContainer}>
       <nav className={styles.nav}>
-        <NavLink to="/" onClick={handleLinkClick}>
+        <NavLink to="/home" onClick={handleLinkClick}>
           <img src="assets/techapp-logo3.png" alt="ACCUEIL" className={styles.logo} />
         </NavLink>
         <ul className={styles.navUl}>
@@ -75,6 +85,13 @@ function Header() {
               <i className="fa-solid fa-magnifying-glass"></i>
             </NavLink>
           </li>
+
+          {/* Affiche le bouton de déconnexion uniquement si un utilisateur est connecté */}
+          {user && (
+            <li className={styles.navLi}>
+              <Logout />
+            </li>
+          )}
         </ul>
         <div className={styles.header__burgerMenu} onClick={burgerToggle} />
       </nav>

@@ -1,0 +1,18 @@
+.logout {
+ 
+  
+    color: white;
+    background-color: #f44336;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 1rem;
+ 
+    transition: 0.3s;
+    &:hover {
+        background-color: #f44336;
+        color: white;
+    }
+}

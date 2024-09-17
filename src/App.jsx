@@ -16,31 +16,93 @@ import EditIncident from "./Pages/EditIncident/editIncident";
 import Incident from "./Pages/Incident/incident";
 import Search from "./Pages/Search/search";
 import CreateIncident from "./Pages/CreateIncident/createIncident";
+import ProtectedRoute from "./Components/protectedRoute/ProtectedRoute";
+import Login from "./Components/login/login";
 
 function App() {
   return (
     <BrowserRouter>
-          <ScrollToTop /> 
+      <ScrollToTop />
       <Routes>
         <Route element={<Template />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/missions" element={<Missions />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/incidents" element={<IncidentReports />} />
-          <Route path="/missions/create" element={<CreateMission />} />
-          <Route path="/missions/edit/:missionId" element={<EditMission />} />
-          <Route path="/mission/:missionId" element={<Mission />} />
-          <Route path="/tech" element={<Technicians />} />
-          <Route path="/reports/create" element={<CreateReport />} />
+        <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
           <Route
-            path="report/:reportId"
-            element={<InterventionReport />}
+            path="/missions"
+            element={
+              <ProtectedRoute>
+                <Missions />{" "}
+              </ProtectedRoute>
+            }
           />
-          <Route path="/reports/edit/:reportId" element={<EditReport />} />
-          <Route path="/incidents/edit/:incidentId" element={<EditIncident />} />
-          <Route path = "/incident/:incidentId" element = {<Incident />} />
-          <Route path="/incidents/create" element={<CreateIncident />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/reports" element={
+             <ProtectedRoute>
+            <Reports />
+            </ProtectedRoute>
+            } />
+          <Route path="/incidents" element={
+            <ProtectedRoute>
+            <IncidentReports />
+            </ProtectedRoute>
+            } />
+          <Route path="/missions/create" element={
+            <ProtectedRoute>
+            <CreateMission />
+            </ProtectedRoute>
+            } />
+          <Route path="/missions/edit/:missionId" element={
+            <ProtectedRoute>
+            <EditMission />
+            </ProtectedRoute>
+            } />
+          <Route path="/mission/:missionId" element={
+            <ProtectedRoute>
+            <Mission />
+            </ProtectedRoute>
+            } />
+          <Route path="/tech" element={
+            <ProtectedRoute>
+            <Technicians />
+            </ProtectedRoute>
+            } />
+          <Route path="/reports/create" element={
+            <ProtectedRoute>
+            <CreateReport />
+            </ProtectedRoute>
+            } />
+          <Route path="report/:reportId" element={
+            <ProtectedRoute>
+            <InterventionReport />
+            </ProtectedRoute>
+            } />
+          <Route path="/reports/edit/:reportId" element={
+            <ProtectedRoute>
+            <EditReport />
+            </ProtectedRoute>
+            } />
+          <Route
+            path="/incidents/edit/:incidentId"
+            element={<ProtectedRoute>
+
+            <EditIncident />
+            </ProtectedRoute>
+          }
+          />
+          <Route path="/incident/:incidentId" element={
+            <ProtectedRoute>
+            <Incident />
+            </ProtectedRoute>
+            } />
+          <Route path="/incidents/create" element={
+            <ProtectedRoute>
+            <CreateIncident />
+            </ProtectedRoute>
+            } />
+          <Route path="/search" element={
+            <ProtectedRoute>
+            <Search />
+            </ProtectedRoute>
+            } />
 
           {/* EX : <Route path="/logement/:logementId" element={<Rental />} /> */}
         </Route>
