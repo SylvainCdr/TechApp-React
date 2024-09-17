@@ -1,7 +1,7 @@
 import styles from "./style.module.scss";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc, query, orderBy } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
@@ -16,7 +16,9 @@ export default function IncidentReports() {
   const fetchIncidents = async () => {
     setLoading(true);
     try {
-      const querySnapshot = await getDocs(collection(db, "incidentReports"));
+      // Requête pour récupérer les incidents triés par date de création décroissante
+      const q = query(collection(db, "incidentReports"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
       const incidentsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

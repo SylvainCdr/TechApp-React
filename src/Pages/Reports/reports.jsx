@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc, query, orderBy } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
@@ -15,9 +15,9 @@ export default function Reports() {
   // Fonction pour récupérer les rapports d'intervention depuis Firestore
   const fetchReports = async () => {
     try {
-      const querySnapshot = await getDocs(
-        collection(db, "interventionReports")
-      );
+      // Requête pour récupérer les rapports triés par date de création (createdAt) décroissante
+      const q = query(collection(db, "interventionReports"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
       const reportsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

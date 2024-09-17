@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./style.module.scss";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { motion } from "framer-motion";
 
@@ -16,18 +16,21 @@ export default function Search() {
     );
 
 
-  const fetchReports = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "interventionReports"));
-      const reportsList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setReports(reportsList);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des rapports : ", error);
-    }
-  };
+ // Fonction pour récupérer les rapports d'intervention depuis Firestore
+ const fetchReports = async () => {
+  try {
+    // Requête pour récupérer les rapports triés par date de création (createdAt) décroissante
+    const q = query(collection(db, "interventionReports"), orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const reportsList = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setReports(reportsList);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des rapports : ", error);
+  }
+};
 
     useEffect(() => {
         fetchReports();
@@ -58,7 +61,8 @@ export default function Search() {
               <th>Date(s)</th>
               
               <th>Intervenant(s)</th>
-              <th>Action</th>
+              <th>Actions</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -80,7 +84,9 @@ export default function Search() {
                   )}
                 </td>
                 <td>
-                  <Link to={`/report/${report.id}`}><i class="fa-solid fa-eye"></i></Link>
+                  <Link to={`/report/${report.id}`} className={styles.viewBtn}><i class="fa-solid fa-eye"></i></Link>
+                  <Link to ={`/reports/edit/${report.id}`}  className={styles.editBtn}><i class="fa-solid fa-edit"></i></Link>
+                 
                 </td>
               </tr>
             ))}

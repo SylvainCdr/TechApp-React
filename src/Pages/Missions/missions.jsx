@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc, orderBy, query } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
@@ -15,7 +15,9 @@ export default function Missions() {
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "missions"));
+      // Requête pour récupérer les missions triées par date de création (createdAt) décroissante
+      const q = query(collection(db, "missions"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
       const missionsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
