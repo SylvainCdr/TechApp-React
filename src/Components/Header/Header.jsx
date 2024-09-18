@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
 import Logout from "../logout/logout";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../firebase/firebase"; // Ton fichier de config Firebase
+import { auth } from "../../firebase/firebase";
 
 function Header() {
   const [user, setUser] = useState(null); // État pour suivre si un utilisateur est connecté
+  const [menuOpen, setMenuOpen] = useState(false); // État pour contrôler le menu burger
 
   // Surveille l'état de connexion de l'utilisateur
   useEffect(() => {
@@ -19,24 +19,36 @@ function Header() {
     return () => unsubscribe();
   }, []);
 
+  // Gère l'ouverture et la fermeture du menu burger
   const burgerToggle = () => {
-    const nav = document.querySelector(`.${styles.nav}`);
-    const burgerMenu = document.querySelector(`.${styles.header__burgerMenu}`);
-    nav.classList.toggle(styles.active);
-    burgerMenu.classList.toggle(styles.active);
+    setMenuOpen(!menuOpen);
   };
 
+  // Gère la fermeture du menu lorsque l'utilisateur clique sur un lien
   const handleLinkClick = () => {
-    const nav = document.querySelector(`.${styles.nav}`);
-    const burgerMenu = document.querySelector(`.${styles.header__burgerMenu}`);
-    nav.classList.remove(styles.active);
-    burgerMenu.classList.remove(styles.active);
+    setMenuOpen(false);
   };
+
+  // Ferme le menu si on clique en dehors
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      const nav = document.querySelector(`.${styles.nav}`);
+      if (menuOpen && nav && !nav.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [menuOpen]);
 
   return (
     <div className={styles.headerContainer}>
-      <nav className={styles.nav}>
-        <NavLink to="/home" onClick={handleLinkClick}>
+      <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
+        <NavLink to="/" onClick={handleLinkClick}>
           <img src="assets/techapp-logo3.png" alt="ACCUEIL" className={styles.logo} />
         </NavLink>
         <ul className={styles.navUl}>
@@ -86,14 +98,21 @@ function Header() {
             </NavLink>
           </li>
 
-          {/* Affiche le bouton de déconnexion uniquement si un utilisateur est connecté */}
-          {user && (
-            <p>
-              <Logout />
-            </p>
+          {/* Affiche le bouton de déconnexion et l'icône toggle-on uniquement si un utilisateur est connecté */}
+          {user ? (
+            <>
+              <li><Logout /></li>
+            </>
+          ) : (
+            <li className={styles.toggleOff}>
+              <i className="fa-solid fa-toggle-off"></i>
+            </li>
           )}
         </ul>
-        <div className={styles.header__burgerMenu} onClick={burgerToggle} />
+        <div
+          className={`${styles.header__burgerMenu} ${menuOpen ? styles.active : ""}`}
+          onClick={burgerToggle}
+        />
       </nav>
     </div>
   );

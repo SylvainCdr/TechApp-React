@@ -1,4 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase/firebase"; // Assure-toi que le fichier Firebase est bien configuré
 import Template from "./Components/Template/Template";
 import ScrollToTop from "./utils/scrollToTop";
 import Home from "./Pages/Home/Home";
@@ -20,91 +23,46 @@ import ProtectedRoute from "./Components/protectedRoute/ProtectedRoute";
 import Login from "./Components/login/login";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Suivre l'état de l'utilisateur connecté
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div>Chargement...</div>; // Affiche un état de chargement tant que l'authentification est vérifiée
+  }
+
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
         <Route element={<Template />}>
-        <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route
-            path="/missions"
-            element={
-              <ProtectedRoute>
-                <Missions />{" "}
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/reports" element={
-             <ProtectedRoute>
-            <Reports />
-            </ProtectedRoute>
-            } />
-          <Route path="/incidents" element={
-            <ProtectedRoute>
-            <IncidentReports />
-            </ProtectedRoute>
-            } />
-          <Route path="/missions/create" element={
-            <ProtectedRoute>
-            <CreateMission />
-            </ProtectedRoute>
-            } />
-          <Route path="/missions/edit/:missionId" element={
-            <ProtectedRoute>
-            <EditMission />
-            </ProtectedRoute>
-            } />
-          <Route path="/mission/:missionId" element={
-            <ProtectedRoute>
-            <Mission />
-            </ProtectedRoute>
-            } />
-          <Route path="/tech" element={
-            <ProtectedRoute>
-            <Technicians />
-            </ProtectedRoute>
-            } />
-          <Route path="/reports/create" element={
-            <ProtectedRoute>
-            <CreateReport />
-            </ProtectedRoute>
-            } />
-          <Route path="report/:reportId" element={
-            <ProtectedRoute>
-            <InterventionReport />
-            </ProtectedRoute>
-            } />
-          <Route path="/reports/edit/:reportId" element={
-            <ProtectedRoute>
-            <EditReport />
-            </ProtectedRoute>
-            } />
-          <Route
-            path="/incidents/edit/:incidentId"
-            element={<ProtectedRoute>
-
-            <EditIncident />
-            </ProtectedRoute>
-          }
-          />
-          <Route path="/incident/:incidentId" element={
-            <ProtectedRoute>
-            <Incident />
-            </ProtectedRoute>
-            } />
-          <Route path="/incidents/create" element={
-            <ProtectedRoute>
-            <CreateIncident />
-            </ProtectedRoute>
-            } />
-          <Route path="/search" element={
-            <ProtectedRoute>
-            <Search />
-            </ProtectedRoute>
-            } />
-
-          {/* EX : <Route path="/logement/:logementId" element={<Rental />} /> */}
+          {/* Si l'utilisateur est connecté, redirige vers /home, sinon vers /login */}
+          <Route path="/" element={user ? <Navigate to="/home" /> : <Login />} />
+          
+          {/* Pages protégées par l'authentification */}
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/missions" element={<ProtectedRoute><Missions /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+          <Route path="/incidents" element={<ProtectedRoute><IncidentReports /></ProtectedRoute>} />
+          <Route path="/missions/create" element={<ProtectedRoute><CreateMission /></ProtectedRoute>} />
+          <Route path="/missions/edit/:missionId" element={<ProtectedRoute><EditMission /></ProtectedRoute>} />
+          <Route path="/mission/:missionId" element={<ProtectedRoute><Mission /></ProtectedRoute>} />
+          <Route path="/tech" element={<ProtectedRoute><Technicians /></ProtectedRoute>} />
+          <Route path="/reports/create" element={<ProtectedRoute><CreateReport /></ProtectedRoute>} />
+          <Route path="report/:reportId" element={<ProtectedRoute><InterventionReport /></ProtectedRoute>} />
+          <Route path="/reports/edit/:reportId" element={<ProtectedRoute><EditReport /></ProtectedRoute>} />
+          <Route path="/incidents/edit/:incidentId" element={<ProtectedRoute><EditIncident /></ProtectedRoute>} />
+          <Route path="/incident/:incidentId" element={<ProtectedRoute><Incident /></ProtectedRoute>} />
+          <Route path="/incidents/create" element={<ProtectedRoute><CreateIncident /></ProtectedRoute>} />
+          <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -264,13 +264,10 @@ export default function TechniciansPage() {
               <motion.img
                 src={technician.urlPhoto}
                 alt={`${technician.firstName} ${technician.lastName}`}
-                initial={{ scale: 0 }}
-                animate={{ rotate: 360, scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 20
-                }}
+                initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
               />
             )}
             <p>

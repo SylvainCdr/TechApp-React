@@ -36,14 +36,8 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // Redirige l'utilisateur après la connexion
-      Swal.fire({
-        icon: "success",
-        title: "Vous êtes connecté",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        window.location.replace("/home");
-      });
+   
+      
     } catch (error) {
       setError(error.message);
     }

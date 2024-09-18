@@ -3,18 +3,27 @@
   box-shadow: 0 0 10px rgba(255, 254, 254, 0.5);
   margin-bottom: 1.5rem;
   width: 100%;
-
+  position: fixed;
+  z-index: 1000;
+  
   .nav {
+   
     width: 100%;
     height: 4rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
+    .toggleOff {
+      font-size: 2.5rem;
+      color: rgb(255, 40, 32);
+    
+    }
+
     .logo {
       width: 8rem;
       margin-left: 30%;
-      margin-right : 4em;
+      margin-right: 4em;
       cursor: pointer;
       justify-items: center;
       justify-self: center;
@@ -36,6 +45,7 @@
       padding: 0;
       list-style: none;
       justify-content: center;
+      padding-right :2rem;
     }
 
     .navLi {
@@ -44,7 +54,6 @@
       .activeLink {
         border-bottom: 2px solid var(--col1); /* Soulignement de la page active */
       }
-     
 
       i {
         font-size: 1.3rem;
@@ -66,7 +75,12 @@
       color: white;
       text-decoration: none;
     }
+   
+    
   }
+
+  
+  
 }
 
 .header__burgerMenu {
@@ -81,7 +95,13 @@
     padding-right: 7%; /* Place it on the right */
     align-items: center;
     margin-left: auto; /* Ensures the burger menu aligns to the right */
+    
+    
   }
+ 
+ 
+  
+ 
 
   .header__burgerMenu:before {
     content: "\2630";
@@ -96,7 +116,7 @@
   .navUl {
     position: fixed;
     left: -110%;
-    top: 3em;
+    top: 3.5em;
     flex-direction: column;
     transition: 0.25s ease-in-out;
     background-color: rgb(57, 57, 57);
@@ -108,17 +128,22 @@
     -moz-transition: 0.25s ease-in-out;
     -ms-transition: 0.25s ease-in-out;
     -o-transition: 0.25s ease-in-out;
-  }
 
+   
+
+   
+  }
+  
   .active ul {
     left: 0;
   }
 
   .navLi {
-    padding: 1rem 0;
+    padding: 0.8rem 0;
 
-    &:hover {
-      background: #707070;
-    }
+  
   }
+
+  
 }
+

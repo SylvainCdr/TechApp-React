@@ -1,30 +1,38 @@
-import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { Navigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/firebase";
-import styles from "./style.module.scss";
-import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useEffect } from "react";
 
-export default function ProtectedRoute({ children }) {
-  const [user, setUser] = useState(null);
+const ProtectedRoute = ({ children }) => {
+  const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    // Surveille l'état de connexion
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
+    if (user) {
+      
+    } else if (!loading && !user) {
+      Swal.fire({
+        icon: "info",
+        title: "Vous êtes déconnecté",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+     
 
-    return () => unsubscribe(); // Nettoie l'écouteur
-  }, []);
+    }
+  }, [user, loading]);
 
-  if (!user) {
-    return (
-      <div className={styles.protectedRouteContainer}>
-        <i className="fa-regular fa-circle-xmark"></i>
-        <p>Vous devez être connecté pour accéder à cette page.</p>
-        <Link to="/">Se connecter</Link>
-      </div>
-    );
+  if (loading) {
+    return <div>Chargement...</div>;
   }
 
-  return children; // Affiche la page protégée si l'utilisateur est connecté
-}
+  if (error) {
+    return <div>Erreur : {error.message}</div>;
+  }
+
+
+
+  return user ? children : <Navigate to="/" />;
+};
+
+export default ProtectedRoute;
