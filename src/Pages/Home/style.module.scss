@@ -6,20 +6,20 @@
   min-height: 90vh;
   max-width: 1280px;
   margin: auto;
-  padding-top : 4rem;
+  padding-top: 4rem;
 
   img {
     width: 80%;
     max-width: 30rem;
     margin-bottom: 15px;
-    margin-top : 5%;
+    margin-top: 5%;
   }
 
   h1 {
     font-size: 2rem;
     margin-bottom: 40px;
-   font-family: "barlow-condensed", sans-serif;
-   letter-spacing: 2px;
+    font-family: "barlow-condensed", sans-serif;
+    letter-spacing: 2px;
     color: white;
     font-weight: 700;
   }
@@ -31,13 +31,13 @@
     gap: 30px;
     background-color: rgba(255, 255, 255, 0.103);
     padding: 30px;
-    border-radius: 0.5rem;
-    -webkit-border-radius: 0.5rem;
-    -moz-border-radius: 0.5rem;
-    -ms-border-radius: 0.5rem;
-    -o-border-radius: 0.5rem;
-    a
-{
+    border-radius: 3rem;
+    -webkit-border-radius: 3rem;
+    -moz-border-radius: 3rem;
+    -ms-border-radius: 3rem;
+    -o-border-radius: 3rem;
+
+    a {
       text-decoration: none;
       width: 10rem;
       height: 10rem;
@@ -51,13 +51,13 @@
       text-align: center;
       background-color: var(--col1);
       padding: 20px;
-      border-radius:50%;
+      border-radius: 50%;
       transition: all 0.3s ease;
-      -webkit-border-radius:50%;
-      -moz-border-radius:50%;
-      -ms-border-radius:50%;
-      -o-border-radius:50%;
-}
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+    }
 
     a:hover {
       background-color: var(--col1);

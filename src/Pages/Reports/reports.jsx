@@ -113,10 +113,13 @@ const Reports = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2>
-              {report.interventionStartDate} / {report.interventionEndDate} -{" "}
-              {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
-            </h2>
+           <h2>
+  {new Date(report.interventionStartDate).toLocaleDateString('fr-FR') === new Date(report.interventionEndDate).toLocaleDateString('fr-FR') 
+    ? new Date(report.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
+    : `${new Date(report.interventionStartDate).toLocaleDateString('fr-FR')} / ${new Date(report.interventionEndDate).toLocaleDateString('fr-FR')}`}{" "}
+  - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+</h2>
+
             <span
               className={
                 report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed

@@ -110,6 +110,12 @@ export default function Mission() {
             {mission.createdAt?.toDate().toLocaleDateString()} -{" "}
             {mission.client.nomEntreprise}
           </h2>
+          <p>
+  Date(s) d'intervention : 
+  {new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') === new Date(mission.interventionEndDate).toLocaleDateString('fr-FR') 
+    ? new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
+    : `${new Date(mission.interventionStartDate).toLocaleDateString('fr-FR')} - ${new Date(mission.interventionEndDate).toLocaleDateString('fr-FR')}`} {/* Sinon afficher les deux */}
+</p>
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>

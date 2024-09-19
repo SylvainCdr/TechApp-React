@@ -105,11 +105,13 @@ export default function InterventionReport() {
 
       {report ? (
         <div className={styles.reportItem}>
-          <h2>
-            {" "}
-            {report.interventionStartDate} / {report.interventionEndDate} -{" "}
-            {report.client.nomEntreprise}
-          </h2>
+      <h2>
+  {new Date(report.interventionStartDate).toLocaleDateString('fr-FR') === new Date(report.interventionEndDate).toLocaleDateString('fr-FR') 
+    ? new Date(report.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
+    : `${new Date(report.interventionStartDate).toLocaleDateString('fr-FR')} / ${new Date(report.interventionEndDate).toLocaleDateString('fr-FR')}`}{" "}
+  - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+</h2>
+
 
           <div className={styles.section1}>
             <div className={styles.section1Left}>

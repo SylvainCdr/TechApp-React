@@ -119,9 +119,11 @@ export default function MissionForm() {
   
       Swal.fire({
         title: "Mission enregistrée",
-        text: "Un rapport d'intervention a été créé automatiquement",
+        text: "Un rapport d'intervention a été créé automatiquement et le(s) technicien(s) a/ont été notifié(s) par email",
         icon: "success",
         confirmButtonText: "Ok",
+      }) .then(() => {
+        window.location.href = "/missions";
       });
     } catch (error) {
       console.error("Erreur lors de la création/mise à jour de la mission :", error);
@@ -132,6 +134,10 @@ export default function MissionForm() {
         confirmButtonText: "Ok",
       });
     }
+
+     
+ 
+    
   };
   
   
