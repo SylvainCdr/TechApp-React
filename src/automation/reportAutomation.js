@@ -2,7 +2,6 @@ import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { sendEmail } from "../utils/emailService"; // Importation du service d'email
 
-// Fonction pour obtenir l'email du technicien par ID
 // Fonction pour obtenir les informations du technicien par ID
 const getTechnicianInfoById = async (technicianId) => {
   console.log(`Recherche des infos pour l'ID : ${technicianId}`);
@@ -12,18 +11,22 @@ const getTechnicianInfoById = async (technicianId) => {
 
     if (!docSnapshot.exists()) {
       console.log(`Aucun technicien trouvé avec l'ID ${technicianId}`);
-      return null; // Retourne null si aucun technicien trouvé
+      return null;
     } else {
       const data = docSnapshot.data();
       console.log('Technicien trouvé :', data);
+      
+      // Combiner le prénom et le nom de famille
+      const fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim(); 
+
       return {
         email: data.email || null,
-        firstName: data.firtsName || 'Technician'  // Si pas de nom, utiliser "Technician"
+        fullName: fullName || 'Technicien'
       };
     }
   } catch (error) {
     console.error('Erreur lors de la récupération des infos :', error);
-    return null; // Retourne null en cas d'erreur
+    return null;
   }
 };
 
@@ -68,24 +71,31 @@ export const createInterventionReport = async (missionId, missionData) => {
     );
 
     // Filtrer les infos null ou undefined
-    const validInfos = intervenantsInfos.filter(info => info !== null);
+    const validInfos = intervenantsInfos.filter((info) => info !== null);
 
     // Envoi des emails
-    validInfos.forEach(async (info) => {
-      try {
-        await sendEmail({
-          to: info.email,
-          to_name: info.firstName,  // Utiliser le nom du technicien
-          missionId: missionId,
-          reportId: reportRef.id,
-        });
-        console.log(`Email envoyé avec succès à ${info.email}`);
-      } catch (error) {
-        console.error(`Erreur lors de l'envoi de l'email à ${info.email} :`, error);
-      }
+validInfos.forEach(async (info) => {
+  try {
+    await sendEmail({
+      to: info.email,
+      to_name: info.fullName,  // Utiliser le nom complet du technicien
+      missionId: missionId,
+      reportId: reportRef.id,
+      startDate: missionData.interventionStartDate,
+      endDate: missionData.interventionEndDate,
+      clientName: missionData.client.nomEntreprise,
     });
+    console.log(`Email envoyé avec succès à ${info.email}`);
   } catch (error) {
-    console.error("Erreur lors de la création du rapport d'intervention :", error);
+    console.error(`Erreur lors de l'envoi de l'email à ${info.email} :`, error);
+  }
+});
+
+  } catch (error) {
+    console.error(
+      "Erreur lors de la création du rapport d'intervention :",
+      error
+    );
     throw error;
   }
 };
