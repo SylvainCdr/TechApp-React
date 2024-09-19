@@ -11,6 +11,7 @@ import {
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { createInterventionReport } from "../../automation/reportAutomation";
 
 export default function MissionForm() {
   const { missionId } = useParams(); // Récupération de l'ID de la mission
@@ -36,18 +37,19 @@ export default function MissionForm() {
     new Date().toISOString().substring(0, 10)
   ); // Format YYYY-MM-DD
 
-  // Fonction pour récupérer les techniciens depuis Firestore
   const fetchIntervenants = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "technicians"));
-      const techniciansList = querySnapshot.docs.map(
-        (doc) => doc.data().firstName + " " + doc.data().lastName
-      );
+      const techniciansList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        name: doc.data().firstName + " " + doc.data().lastName,
+      }));
       setIntervenantsExistants(techniciansList);
     } catch (error) {
       console.error("Erreur lors de la récupération des techniciens : ", error);
     }
   };
+  
 
   // Fonction pour récupérer les données de la mission existante
   const fetchMission = async () => {
@@ -84,15 +86,16 @@ export default function MissionForm() {
     fetchMission();
   }, [missionId]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Créer la fiche mission
+      // Créer ou mettre à jour la mission
       const missionData = {
         client,
         site,
-        intervenants, // Utilisation du tableau d'intervenants
+        intervenants, // stocke les IDs des techniciens
         missions,
         risqueEPI,
         interventionStartDate: dateStartIntervention,
@@ -100,16 +103,7 @@ export default function MissionForm() {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-
-      Swal.fire({
-        title: "Mission enregistrée",
-        text: "Un rapport d'intervention a été créé automatiquement",
-        icon: "success",
-        confirmButtonText: "Ok",
-      }).then(() => {
-        window.location.href = "/missions";
-      });
-
+  
       if (missionId) {
         // Mettre à jour la mission existante
         const missionRef = doc(db, "missions", missionId);
@@ -117,38 +111,30 @@ export default function MissionForm() {
       } else {
         // Créer une nouvelle mission
         const missionRef = await addDoc(collection(db, "missions"), missionData);
-        const missionId = missionRef.id; // Récupération de l'ID de la mission
-
-        // Automatiser la création du rapport d'intervention associé
-        const interventionReportData = {
-          missionId,
-          client,
-          site,
-          intervenants, // Tableau d'intervenants
-          actionsDone: [],
-          remarques: [],
-          photos: [],
-          risques: false,
-          createdAt: new Date(),
-          interventionStartDate: dateStartIntervention,
-          interventionEndDate: dateEndIntervention,
-        };
-
-        await addDoc(
-          collection(db, "interventionReports"),
-          interventionReportData
-        );
+        const missionId = missionRef.id; // Récupérer l'ID de la mission créée
+  
+        // Appel à la fonction d'automatisation pour créer le rapport d'intervention
+        await createInterventionReport(missionId, missionData);
       }
+  
+      Swal.fire({
+        title: "Mission enregistrée",
+        text: "Un rapport d'intervention a été créé automatiquement",
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
     } catch (error) {
-      console.error("Erreur lors de la création ou mise à jour de la mission ou du rapport d'intervention : ", error);
+      console.error("Erreur lors de la création/mise à jour de la mission :", error);
       Swal.fire({
         title: "Erreur",
-        text: "Une erreur est survenue lors de la création ou mise à jour de la mission",
+        text: "Une erreur est survenue lors de la création/mise à jour de la mission",
         icon: "error",
         confirmButtonText: "Ok",
       });
     }
   };
+  
+  
 
   // Ajouter un nouveau champ pour les missions
   const addMissionField = () => {
@@ -263,29 +249,29 @@ export default function MissionForm() {
         </div>
 
         <h3>Intervenant(s)</h3>
-        <div className={styles.formGroup}>
-          <label>Sélectionnez un ou plusieurs intervenants :</label>
-          {intervenantsExistants.map((intervenant, index) => (
-            <div key={index}>
-              <input
-                type="checkbox"
-                value={intervenant}
-                checked={intervenants.includes(intervenant)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setIntervenants([...intervenants, e.target.value]);
-                  } else {
-                    setIntervenants(
-                      intervenants.filter((intervenant) => intervenant !== e.target.value)
-                    );
-                  }
-                }}
-              />
-              <label>{intervenant}</label>
-            </div>
-          ))}
-          
-        </div>
+<div className={styles.formGroup}>
+  <label>Sélectionnez un ou plusieurs intervenants :</label>
+  {intervenantsExistants.map((intervenant) => (
+    <div key={intervenant.id}>
+      <input
+        type="checkbox"
+        value={intervenant.id}
+        checked={intervenants.includes(intervenant.id)}
+        onChange={(e) => {
+          if (e.target.checked) {
+            setIntervenants([...intervenants, e.target.value]);
+          } else {
+            setIntervenants(
+              intervenants.filter((id) => id !== e.target.value)
+            );
+          }
+        }}
+      />
+      <label>{intervenant.name}</label>
+    </div>
+  ))}
+</div>
+
 
         <h3>Missions</h3>
         {missions.map((mission, index) => (

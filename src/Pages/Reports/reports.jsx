@@ -1,60 +1,65 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs, doc, deleteDoc, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  deleteDoc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
-export default function Reports() {
+const Reports = () => {
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 6; // Nombre de rapports par page
 
-  // Fonction pour récupérer les rapports d'intervention depuis Firestore
-  const fetchReports = async () => {
-    try {
-      // Requête pour récupérer les rapports triés par date de création (createdAt) décroissante
-      const q = query(collection(db, "interventionReports"), orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
-      const reportsList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setReports(reportsList);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des rapports : ", error);
-    }
-  };
-
-  // Fonction pour récupérer les techniciens depuis Firestore
-  const fetchTechnicians = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "technicians"));
-      const techniciansList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        name: doc.data().firstName + " " + doc.data().lastName,
-        urlPhoto: doc.data().urlPhoto,
-      }));
-      setTechnicians(techniciansList);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des techniciens : ", error);
-    }
-  };
-
   useEffect(() => {
-    fetchReports();
-    fetchTechnicians();
+    const fetchData = async () => {
+      try {
+        const reportsQuery = query(
+          collection(db, "interventionReports"),
+          orderBy("createdAt", "desc")
+        );
+        const reportsSnapshot = await getDocs(reportsQuery);
+        const reportsList = reportsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setReports(reportsList);
+
+        const techniciansSnapshot = await getDocs(
+          collection(db, "technicians")
+        );
+        const techniciansList = techniciansSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: `${doc.data().firstName} ${doc.data().lastName}`,
+          urlPhoto: doc.data().urlPhoto,
+        }));
+        setTechnicians(techniciansList);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données : ", error);
+        Swal.fire(
+          "Erreur",
+          "Une erreur est survenue lors de la récupération des données.",
+          "error"
+        );
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // Fonction pour obtenir l'URL de la photo du technicien
-  const getTechnicianPhotoURL = (name) => {
-    const technician = technicians.find((tech) => tech.name === name);
+  const getTechnicianPhotoURL = (id) => {
+    const technician = technicians.find((tech) => tech.id === id);
     return technician ? technician.urlPhoto : null;
   };
 
-  // Fonction pour supprimer un rapport avec alerte de confirmation
   const deleteReport = async (id) => {
     const result = await Swal.fire({
       title: "Êtes-vous sûr ?",
@@ -70,7 +75,7 @@ export default function Reports() {
     if (result.isConfirmed) {
       try {
         await deleteDoc(doc(db, "interventionReports", id));
-        fetchReports(); // Met à jour la liste des rapports après suppression
+        setReports(reports.filter((report) => report.id !== id));
         Swal.fire("Supprimé !", "Le rapport a été supprimé.", "success");
       } catch (error) {
         console.error("Erreur lors de la suppression du rapport : ", error);
@@ -83,24 +88,12 @@ export default function Reports() {
     }
   };
 
-  // Fonction de gestionnaire d'événement pour la suppression du rapport
-  const deleteReportHandler = (id) => {
-    deleteReport(id); // Utilise SweetAlert2 pour la confirmation
-  };
-
   const currentReports = reports.slice(
     (currentPage - 1) * reportsPerPage,
     currentPage * reportsPerPage
   );
-
-  const handlePageChange = (newPage) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
-  
   const totalPages = Math.ceil(reports.length / reportsPerPage);
-  
+
   return (
     <div className={styles.reportsContainer}>
       <h1>Rapports d'intervention</h1>
@@ -112,22 +105,26 @@ export default function Reports() {
 
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
-          <motion.li key={report.id} className={styles.reportItem}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}>
+          <motion.li
+            key={report.id}
+            className={styles.reportItem}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <h2>
               {report.interventionStartDate} / {report.interventionEndDate} -{" "}
               {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
             </h2>
-            {/* Vérification de la présence des actions et affichage du badge */}
-            {report.actionsDone && report.actionsDone.length > 0 ? (
-              <span className={styles.badgeGreen}>Complété</span>
-            ) : (
-              <span className={styles.badgeRed}>À compléter</span>
-            )}
-            {/* Lien vers la fiche missions associée  */}
+            <span
+              className={
+                report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
+              }
+            >
+              {report.actionsDone?.length ? "Complété" : "À compléter"}
+            </span>
+
             <p>
               {report.missionId ? (
                 <Link to={`/mission/${report.missionId}`}>
@@ -147,27 +144,28 @@ export default function Reports() {
                     {report.client.nomEntreprise}
                   </li>
                   <li>
-                    <i className="fa-solid fa-phone"></i>Téléphone :{" "}
+                    <i className="fa-solid fa-phone"></i> Téléphone :{" "}
                     {report.client.tel}
                   </li>
                   <li>
-                    <i className="fa-solid fa-at"></i>Email : {report.client.email}
+                    <i className="fa-solid fa-at"></i> Email :{" "}
+                    {report.client.email}
                   </li>
                   <li>
-                    <i className="fa-solid fa-location-dot"></i>Adresse du site :{" "}
-                    {report.site.adresse}
+                    <i className="fa-solid fa-location-dot"></i> Adresse du site
+                    : {report.site.adresse}
                   </li>
                   <li>
-                    <i className="fa-regular fa-user"></i>Contact sur site :{" "}
+                    <i className="fa-regular fa-user"></i> Contact sur site :{" "}
                     {report.site.nomContact}
                   </li>
                   <li>
-                    <i className="fa-regular fa-address-card"></i>Fonction du
+                    <i className="fa-regular fa-address-card"></i> Fonction du
                     contact : {report.site.fonctionContact}
                   </li>
                   <li>
-                    <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
-                    {report.site.telContact}
+                    <i className="fa-solid fa-mobile-screen-button"></i>{" "}
+                    Téléphone : {report.site.telContact}
                   </li>
                 </ul>
               </div>
@@ -176,13 +174,15 @@ export default function Reports() {
                 <h4>Intervenant(s)</h4>
                 <div className={styles.technicians}>
                   {report.intervenants && report.intervenants.length > 0 ? (
-                    report.intervenants.map((intervenant, index) => (
+                    report.intervenants.map((intervenantId, index) => (
                       <div key={index} className={styles.technicianItem}>
-                        <p>{intervenant}</p>
+                        <p>
+                          {technicians.find((tech) => tech.id === intervenantId)
+                            ?.name || "Nom inconnu"}
+                        </p>
                         <img
-                          src={getTechnicianPhotoURL(intervenant)}
-                          alt={`Photo de ${intervenant}`}
-                      
+                          src={getTechnicianPhotoURL(intervenantId)}
+                          alt={`Photo de technicien`}
                         />
                       </div>
                     ))
@@ -195,60 +195,45 @@ export default function Reports() {
 
             <div className={styles.section2}>
               <div className={styles.section2Left}>
-                {/* Affichage des actions menées */}
                 <h4>Actions menées :</h4>
-
-                <div>
+                <ul>
                   {report.actionsDone?.map((action, index) => (
-                    <div key={index}>
-                      <li>
-                        <i className="fa-solid fa-check"></i>{" "}
-                        {action.description}
-                      </li>
-                    </div>
+                    <li key={index}>
+                      <i className="fa-solid fa-check"></i> {action.description}
+                    </li>
                   ))}
-                  <p>
-                    <i className="fa-solid fa-paperclip"></i>
-                    Nombre de photos jointes :{" "}
-                    {report.actionsDone
-                      ? report.actionsDone.reduce(
-                          (total, action) =>
-                            total + (action.photos ? action.photos.length : 0),
-                          0
-                        )
-                      : 0}
-                  </p>
-                </div>
+                </ul>
+                <p>
+                  <i className="fa-solid fa-paperclip"></i> Nombre de photos
+                  jointes :{" "}
+                  {report.actionsDone?.reduce(
+                    (total, action) =>
+                      total + (action.photos ? action.photos.length : 0),
+                    0
+                  ) || 0}
+                </p>
               </div>
 
               <div className={styles.section2Right}>
-                {/* Affichage des remarques */}
                 <h4>Remarques :</h4>
-                <div>
+                <ul>
                   {report.remarques?.map((remarque, index) => (
                     <li key={index}>
-                      {" "}
-                      <i className="fa-solid fa-minus"></i>
-                      {remarque.remarque}
+                      <i className="fa-solid fa-minus"></i> {remarque.remarque}
                     </li>
                   ))}
-                </div>
-
+                </ul>
                 <p>
-                  <i className="fa-solid fa-paperclip"></i>
-                  Nombre de photos jointes :{" "}
-                  {report.remarques
-                    ? report.remarques.reduce(
-                        (total, remarque) =>
-                          total +
-                          (remarque.photos ? remarque.photos.length : 0),
-                        0
-                      )
-                    : 0}
+                  <i className="fa-solid fa-paperclip"></i> Nombre de photos
+                  jointes :{" "}
+                  {report.remarques?.reduce(
+                    (total, remarque) =>
+                      total + (remarque.photos ? remarque.photos.length : 0),
+                    0
+                  ) || 0}
                 </p>
-
                 <p>
-                  <i className="fa-solid fa-triangle-exclamation"></i>
+                  <i className="fa-solid fa-triangle-exclamation"></i>{" "}
                   Intervention à risque : {report.risques ? "Oui" : "Non"}
                 </p>
               </div>
@@ -256,46 +241,38 @@ export default function Reports() {
 
             <div className={styles.section3}>
               <Link to={`/report/${report.id}`} className={styles.viewButton}>
-              <i class="fa-solid fa-eye"></i>
+                <i className="fa-solid fa-eye"></i>
               </Link>
-
               <Link
                 to={`/reports/edit/${report.id}`}
                 className={styles.editButton}
               >
-               <i class="fa-solid fa-pen-to-square"></i>
+                <i className="fa-solid fa-pen-to-square"></i>
               </Link>
-
               <Link
                 className={styles.deleteButton}
-                onClick={() => deleteReportHandler(report.id)}
+                onClick={() => deleteReport(report.id)}
               >
-                <i class="fa-solid fa-trash"></i>
+                <i className="fa-solid fa-trash"></i>
               </Link>
             </div>
           </motion.li>
         ))}
       </ul>
 
-      {/* Pagination */}
       <div className={styles.pagination}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Précédent
-        </button>
-        <span>
-          Page {currentPage} sur {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Suivant
-        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            className={index + 1 === currentPage ? styles.activePage : ""}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
       </div>
-
     </div>
   );
-}
+};
+
+export default Reports;

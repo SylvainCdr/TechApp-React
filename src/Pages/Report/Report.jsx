@@ -21,6 +21,16 @@ export default function InterventionReport() {
 
       if (docSnap.exists()) {
         setReport({ id: docSnap.id, ...docSnap.data() });
+
+        const techniciansSnapshot = await getDocs(
+          collection(db, "technicians")
+        );
+        const techniciansList = techniciansSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: `${doc.data().firstName} ${doc.data().lastName}`,
+          urlPhoto: doc.data().urlPhoto,
+        }));
+        setTechnicians(techniciansList);
       } else {
         setError("Rapport introuvable");
       }
@@ -59,9 +69,8 @@ export default function InterventionReport() {
     return <p>{error}</p>;
   }
 
-  // Fonction pour obtenir l'URL de la photo du technicien
-  const getTechnicianPhotoURL = (name) => {
-    const technician = technicians.find((tech) => tech.name === name);
+  const getTechnicianPhotoURL = (id) => {
+    const technician = technicians.find((tech) => tech.id === id);
     return technician ? technician.urlPhoto : null;
   };
 
@@ -137,22 +146,25 @@ export default function InterventionReport() {
             </div>
 
             <div className={styles.section1Right}>
-              <h4>Intervenant(s)</h4>
-              <div className={styles.technicians}>
-                {report.intervenants && report.intervenants.length > 0 ? (
-                  report.intervenants.map((intervenant, index) => (
-                    <div key={index} className={styles.technicianItem}>
-                      <p>{intervenant}</p>
-                      <img
-                        src={getTechnicianPhotoURL(intervenant)}
-                        alt={`Photo de ${intervenant}`}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <p>Aucun intervenant</p>
-                )}
-              </div>
+            <h4>Intervenant(s)</h4>
+                <div className={styles.technicians}>
+                  {report.intervenants && report.intervenants.length > 0 ? (
+                    report.intervenants.map((intervenantId, index) => (
+                      <div key={index} className={styles.technicianItem}>
+                        <p>
+                          {technicians.find((tech) => tech.id === intervenantId)
+                            ?.name || "Nom inconnu"}
+                        </p>
+                        <img
+                          src={getTechnicianPhotoURL(intervenantId)}
+                          alt={`Photo de technicien`}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <p>Aucun intervenant</p>
+                  )}
+                </div>
             </div>
           </div>
 

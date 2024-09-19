@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [reports, setReports] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
 
   // Fonction de filtrage des rapports sur le champ nomEntreprise uniquement
     const filteredReports = reports.filter((report) =>
@@ -27,6 +28,15 @@ export default function Search() {
       ...doc.data(),
     }));
     setReports(reportsList);
+    const techniciansSnapshot = await getDocs(
+      collection(db, "technicians")
+    );
+    const techniciansList = techniciansSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      name: `${doc.data().firstName} ${doc.data().lastName}`,
+      urlPhoto: doc.data().urlPhoto,
+    }));
+    setTechnicians(techniciansList);
   } catch (error) {
     console.error("Erreur lors de la récupération des rapports : ", error);
   }
@@ -72,16 +82,10 @@ export default function Search() {
                 <td>{report.interventionStartDate} / {report.interventionEndDate}</td>
               
                 <td>
-                  {report.intervenants && report.intervenants.length > 0 ? (
-                    report.intervenants.map((intervenant, index) => (
-                      <span key={index}>
-                        {intervenant}
-                        {index < report.intervenants.length - 1 ? ", " : ""}
-                      </span>
-                    ))
-                  ) : (
-                    <span>Aucun intervenant</span>
-                  )}
+                  {report.intervenants.map((intervenant) => {
+                    const technician = technicians.find((tech) => tech.id === intervenant);
+                    return technician ? technician.name : "Technicien introuvable";
+                  }).join(", ")}
                 </td>
                 <td>
                   <Link to={`/report/${report.id}`} className={styles.viewBtn}><i class="fa-solid fa-eye"></i></Link>

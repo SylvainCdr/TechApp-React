@@ -15,7 +15,6 @@ export default function Missions() {
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
     try {
-      // Requête pour récupérer les missions triées par date de création (createdAt) décroissante
       const q = query(collection(db, "missions"), orderBy("createdAt", "desc"));
       const querySnapshot = await getDocs(q);
       const missionsList = querySnapshot.docs.map((doc) => ({
@@ -48,15 +47,14 @@ export default function Missions() {
     fetchTechnicians();
   }, []);
 
-  // Fonction pour obtenir l'URL de la photo du technicien
-  const getTechnicianPhotoURL = (name) => {
-    const technician = technicians.find((tech) => tech.name === name);
+  // Fonction pour obtenir l'URL de la photo du technicien par ID
+  const getTechnicianPhotoURL = (id) => {
+    const technician = technicians.find((tech) => tech.id === id);
     return technician ? technician.urlPhoto : null;
   };
 
   // Fonction pour supprimer une mission
   const deleteMission = async (missionId) => {
-    // Confirmation avant suppression
     const result = await Swal.fire({
       title: "Êtes-vous sûr ?",
       text: "Cette action est irréversible !",
@@ -71,7 +69,6 @@ export default function Missions() {
     if (result.isConfirmed) {
       try {
         await deleteDoc(doc(db, "missions", missionId));
-        // Après suppression, mettre à jour la liste des missions
         fetchMissions();
         Swal.fire("Supprimé !", "La mission a été supprimée.", "success");
       } catch (error) {
@@ -163,12 +160,12 @@ export default function Missions() {
                 <h3>Intervenant(s)</h3>
                 <div className={styles.technicians}>
                   {mission.intervenants && mission.intervenants.length > 0 ? (
-                    mission.intervenants.map((intervenant, index) => (
+                    mission.intervenants.map((intervenantId, index) => (
                       <div key={index} className={styles.technicianItem}>
-                        <p>{intervenant}</p>
+                        <p>{technicians.find(tech => tech.id === intervenantId)?.name || "Nom inconnu"}</p>
                         <img
-                          src={getTechnicianPhotoURL(intervenant)}
-                          alt={`Photo de ${intervenant}`}
+                          src={getTechnicianPhotoURL(intervenantId)}
+                          alt={`Photo de technicien`}
                         />
                       </div>
                     ))

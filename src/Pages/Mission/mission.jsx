@@ -49,8 +49,8 @@ export default function Mission() {
   };
 
   // Fonction pour récupérer l'URL de la photo de l'intervenant
-  const getTechnicianPhotoURL = (intervenant) => {
-    const technician = technicians.find((tech) => tech.name === intervenant);
+  const getTechnicianPhotoURL = (technicianId) => {
+    const technician = technicians.find((tech) => tech.id === technicianId);
     return technician ? technician.urlPhoto : "/assets/default-avatar.jpg"; // Avatar par défaut si pas de photo
   };
 
@@ -114,30 +114,30 @@ export default function Mission() {
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
               <p>
-                <i class="fa-regular fa-building"></i> Client :{" "}
+                <i className="fa-regular fa-building"></i> Client :{" "}
                 {mission.client.nomEntreprise}
               </p>
               <p>
-                <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                <i className="fa-solid fa-phone"></i>Téléphone :{" "}
                 {mission.client.tel}
               </p>
               <p>
-                <i class="fa-solid fa-at"></i>Email : {mission.client.email}
+                <i className="fa-solid fa-at"></i>Email : {mission.client.email}
               </p>
               <p>
-                <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                <i className="fa-solid fa-location-dot"></i>Adresse du site :{" "}
                 {mission.site.adresse}
               </p>
               <p>
-                <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                <i className="fa-regular fa-user"></i>Contact sur site :{" "}
                 {mission.site.nomContact}
               </p>
               <p>
-                <i class="fa-regular fa-address-card"></i>Fonction du contact :{" "}
+                <i className="fa-regular fa-address-card"></i>Fonction du contact :{" "}
                 {mission.site.fonctionContact}
               </p>
               <p>
-                <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
+                <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
                 {mission.site.telContact}
               </p>
 
@@ -149,12 +149,12 @@ export default function Mission() {
               <h3>Intervenant(s)</h3>
               <div className={styles.technicians}>
                 {mission.intervenants && mission.intervenants.length > 0 ? (
-                  mission.intervenants.map((intervenant, index) => (
+                  mission.intervenants.map((technicianId, index) => (
                     <div key={index} className={styles.technicianItem}>
-                      <p>{intervenant}</p>
+                      <p>{technicianId}</p>
                       <img
-                        src={getTechnicianPhotoURL(intervenant)}
-                        alt={`Photo de ${intervenant}`}
+                        src={getTechnicianPhotoURL(technicianId)}
+                        alt={`Photo de ${technicianId}`}
                         className={styles.technicianPhoto}
                       />
                     </div>
@@ -171,7 +171,7 @@ export default function Mission() {
               <ul>
                 {mission.missions.map((mission, index) => (
                   <li key={index}>
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i className="fa-solid fa-chevron-right"></i>
                     {mission}
                   </li>
                 ))}
@@ -182,8 +182,7 @@ export default function Mission() {
               <ul>
                 {mission.risqueEPI.map((risque, index) => (
                   <li key={index}>
-                    {" "}
-                    <i class="fa-solid fa-minus"></i>
+                    <i className="fa-solid fa-minus"></i>
                     {risque}
                   </li>
                 ))}
@@ -200,10 +199,9 @@ export default function Mission() {
 
         <div className={styles.securityRules}>
           <div className={styles.icons}>
-            {" "}
-            <img src="/assets/pharmacy.png" alt="" />{" "}
-            <img src="/assets/panic.png" alt="" />{" "}
-            <img src="/assets/help.png" alt="" />{" "}
+            <img src="/assets/pharmacy.png" alt="" />
+            <img src="/assets/panic.png" alt="" />
+            <img src="/assets/help.png" alt="" />
             <img src="/assets/call.png" alt="" />
           </div>
           <div className={styles.text}>
@@ -226,14 +224,20 @@ export default function Mission() {
           </div>
         </div>
 
-        <h3>Numéros d’urgences :</h3>
+     
+          
+<h3>Numéros d’urgences :</h3>
 
-        <img
-          src="/assets/numerosUrgence.jpg"
-          className={styles.numUrgence}
-          alt=""
-        />
+<img
+  src="/assets/numerosUrgence.jpg"
+  className={styles.numUrgence}
+  alt=""
+/>
+        </div>
       </div>
-    </div>
+   
   );
 }
+      
+
+
