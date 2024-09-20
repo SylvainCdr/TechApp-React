@@ -4,7 +4,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import styles from "./style.module.scss";
-import { createOrUpdateIncidentReport } from "../../automation/incidentAutomation";
+import { createIncidentReport } from "../../automation/incidentAutomation";
+import Signature from "../../utils/signature/signature";
 
 export default function ReportForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
@@ -18,30 +19,49 @@ export default function ReportForm({ initialData, onSubmit }) {
     fonctionContact: "",
     telContact: "",
   });
-  const [intervenants, setIntervenants] = useState("");
+  const [intervenants, setIntervenants] = useState([]);
   const [intervenantsList, setIntervenantsList] = useState([]);
-  const [actionsDone, setActionsDone] = useState([{ description: "", photos: [] }]); // Photos est un tableau
+  const [actionsDone, setActionsDone] = useState([
+    { description: "", photos: [] },
+  ]); // Photos est un tableau
   const [remarques, setRemarques] = useState([{ remarque: "", photos: [] }]); // Photos est un tableau
   const [risques, setRisques] = useState(false);
-  const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
-  const [dateStartIntervention, setDateStartIntervention] = useState(new Date().toISOString().substring(0, 10));
-  const [dateEndIntervention, setDateEndIntervention] = useState(new Date().toISOString().substring(0, 10));
+  // const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
+  const [dateStartIntervention, setDateStartIntervention] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
+  const [dateEndIntervention, setDateEndIntervention] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
+  const [signataireNom, setSignataireNom] = useState(""); // Nom du signataire
+  const [signatureUrl, setSignatureUrl] = useState(""); // URL de la signature uploadée
+  const [isSigned, setIsSigned] = useState(false); // Indique si le rapport a été signé
 
   useEffect(() => {
     if (initialData) {
       setClient(initialData.client || {});
       setSite(initialData.site || {});
-      setIntervenants(initialData.intervenants || "");
-      setActionsDone(initialData.actionsDone || [{ description: "", photos: [] }]);
+      setIntervenants(initialData.intervenants || []);
+      setActionsDone(
+        initialData.actionsDone || [{ description: "", photos: [] }]
+      );
       setRemarques(initialData.remarques || [{ remarque: "", photos: [] }]);
       setRisques(initialData.risques || false);
-      setMissionsDangereuses(initialData.missionsDangereuses || [""]);
-      setDateStartIntervention(initialData.interventionStartDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
-      setDateEndIntervention(initialData.interventionEndDate?.substring(0, 10) || new Date().toISOString().substring(0, 10));
+      // setMissionsDangereuses(initialData.missionsDangereuses || [""]);
+      setDateStartIntervention(
+        initialData.interventionStartDate?.substring(0, 10) ||
+          new Date().toISOString().substring(0, 10)
+      );
+      setDateEndIntervention(
+        initialData.interventionEndDate?.substring(0, 10) ||
+          new Date().toISOString().substring(0, 10)
+      );
+      setSignataireNom(initialData.signataireNom || "");
+      setSignatureUrl(initialData.signatureUrl || "");
+      setIsSigned(initialData.isSigned || false);
     }
   }, [initialData]);
 
-  // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "technicians"));
@@ -60,90 +80,95 @@ export default function ReportForm({ initialData, onSubmit }) {
     fetchTechnicians();
   }, []);
 
-// Gérer l'ajout de photos pour chaque action
-const handleActionPhotoChange = (index, e) => {
-  const files = Array.from(e.target.files);
-  const newActionsDone = [...actionsDone];
-  
-  // Conserver les anciennes photos et ajouter les nouvelles
-  newActionsDone[index].photos = [...newActionsDone[index].photos, ...files];
-  setActionsDone(newActionsDone);
-};
+  // Gérer l'ajout de photos pour chaque action
+  const handleActionPhotoChange = (index, e) => {
+    const files = Array.from(e.target.files);
+    const newActionsDone = [...actionsDone];
 
-// Gérer l'ajout de photos pour chaque remarque
-const handleRemarquePhotoChange = (index, e) => {
-  const files = Array.from(e.target.files);
-  const newRemarques = [...remarques];
-  
-  // Conserver les anciennes photos et ajouter les nouvelles
-  newRemarques[index].photos = [...newRemarques[index].photos, ...files];
-  setRemarques(newRemarques);
-};
+    // Conserver les anciennes photos et ajouter les nouvelles
+    newActionsDone[index].photos = [...newActionsDone[index].photos, ...files];
+    setActionsDone(newActionsDone);
+  };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  // Gérer l'ajout de photos pour chaque remarque
+  const handleRemarquePhotoChange = (index, e) => {
+    const files = Array.from(e.target.files);
+    const newRemarques = [...remarques];
 
-  try {
-    // Gérer les photos pour chaque action
-    for (const [index, action] of actionsDone.entries()) {
-      const uploadedActionPhotos = [];
+    // Conserver les anciennes photos et ajouter les nouvelles
+    newRemarques[index].photos = [...newRemarques[index].photos, ...files];
+    setRemarques(newRemarques);
+  };
 
-      // Parcours des photos associées à l'action
-      for (const file of action.photos) {
-        if (file instanceof File) { // Si c'est un nouveau fichier (pas une URL)
-          const storageRef = ref(storage, `interventionPhotos/actions/${file.name}`);
-          await uploadBytes(storageRef, file); // Téléchargement du fichier
-          const downloadURL = await getDownloadURL(storageRef); // Obtenir l'URL de téléchargement
-          uploadedActionPhotos.push(downloadURL); // Ajouter l'URL aux photos uploadées
-        } else {
-          uploadedActionPhotos.push(file); // Si c'est déjà une URL, la garder
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Gérer les photos pour chaque action
+      for (const [index, action] of actionsDone.entries()) {
+        const uploadedActionPhotos = [];
+        for (const file of action.photos) {
+          if (file instanceof File) {
+            const storageRef = ref(
+              storage,
+              `interventionPhotos/actions/${file.name}`
+            );
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            uploadedActionPhotos.push(downloadURL);
+          } else {
+            uploadedActionPhotos.push(file);
+          }
         }
+        actionsDone[index].photos = uploadedActionPhotos;
       }
-      actionsDone[index].photos = uploadedActionPhotos; // Conserver les URLs (anciennes et nouvelles)
-    }
 
-    // Gérer les photos pour chaque remarque
-    for (const [index, remarque] of remarques.entries()) {
-      const uploadedRemarquePhotos = [];
-
-      // Parcours des photos associées à la remarque
-      for (const file of remarque.photos) {
-        if (file instanceof File) { // Si c'est un nouveau fichier (pas une URL)
-          const storageRef = ref(storage, `interventionPhotos/remarques/${file.name}`);
-          await uploadBytes(storageRef, file); // Téléchargement du fichier
-          const downloadURL = await getDownloadURL(storageRef); // Obtenir l'URL de téléchargement
-          uploadedRemarquePhotos.push(downloadURL); // Ajouter l'URL aux photos uploadées
-        } else {
-          uploadedRemarquePhotos.push(file); // Si c'est déjà une URL, la garder
+      // Gérer les photos pour chaque remarque
+      for (const [index, remarque] of remarques.entries()) {
+        const uploadedRemarquePhotos = [];
+        for (const file of remarque.photos) {
+          if (file instanceof File) {
+            const storageRef = ref(
+              storage,
+              `interventionPhotos/remarques/${file.name}`
+            );
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            uploadedRemarquePhotos.push(downloadURL);
+          } else {
+            uploadedRemarquePhotos.push(file);
+          }
         }
+        remarques[index].photos = uploadedRemarquePhotos;
       }
-      remarques[index].photos = uploadedRemarquePhotos; // Conserver les URLs (anciennes et nouvelles)
+
+      // Données du rapport à envoyer
+      const reportData = {
+        client,
+        site,
+        intervenants,
+        actionsDone,
+        remarques,
+        risques,
+        createdAt: initialData?.createdAt || new Date(),
+        updatedAt: new Date(),
+        interventionStartDate: dateStartIntervention,
+        interventionEndDate: dateEndIntervention,
+        signataireNom,
+        signatureUrl,
+        isSigned,
+      };
+
+      // Appel de la fonction onSubmit pour envoyer les données à Firestore
+      await onSubmit(reportData);
+
+      // Si vous devez rediriger, vous pouvez utiliser `window.location.href` ou `useNavigate` pour la redirection
+      // Exemple : window.location.href = '/path-to-redirect';
+    } catch (error) {
+      console.error("Erreur lors de la soumission du rapport : ", error);
+      alert("Une erreur est survenue lors de la soumission du rapport.");
     }
-
-    // Données du rapport à envoyer
-    const reportData = {
-      client,
-      site,
-      intervenants,
-      actionsDone,  // Ne contient plus que des URLs pour les photos
-      remarques,    // Ne contient plus que des URLs pour les photos
-      risques,
-      createdAt: initialData?.createdAt || new Date(),
-      updatedAt: new Date(),
-      interventionStartDate: dateStartIntervention,
-      interventionEndDate: dateEndIntervention,
-    };
-
-    // Appel de la fonction onSubmit pour envoyer les données à Firestore
-    await onSubmit(reportData);
-
-  
-  } catch (error) {
-    console.error("Erreur lors de la soumission du rapport : ", error);
-    alert("Une erreur est survenue lors de la soumission du rapport.");
-  }
-};
-
+  };
 
   const addActionField = () => {
     setActionsDone([...actionsDone, { description: "", photos: [] }]);
@@ -160,7 +185,6 @@ const handleSubmit = async (e) => {
   const removeRemarqueField = (index) => {
     setRemarques(remarques.filter((_, i) => i !== index));
   };
-
 
   return (
     <div className={styles.reportFormContainer}>
@@ -254,34 +278,31 @@ const handleSubmit = async (e) => {
           />
         </div>
 
-
-        <h3>Intervenant</h3>
+        <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
-  <label>Choisir les intervenants :</label>
+          <label>Choisir les intervenants :</label>
+          {intervenantsList.map((tech) => (
+            <div key={tech.id}>
+              <input
+                type="checkbox"
+                id={`intervenant-${tech.id}`}
+                checked={intervenants.includes(tech.id)} // Cocher la case si le technicien est déjà sélectionné
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setIntervenants((prev) => [...prev, tech.id]);
+                  } else {
+                    setIntervenants((prev) =>
+                      prev.filter((id) => id !== tech.id)
+                    );
+                  }
+                }}
+              />
+              <label htmlFor={`intervenant-${tech.id}`}>{tech.name}</label>
+            </div>
+          ))}
+        </div>
 
-  {/* Afficher la liste des techniciens sous forme de checkbox */}
-  {intervenantsList.map((tech) => (
-    <div key={tech.id}>
-      <input
-        type="checkbox"
-        id={`intervenant-${tech.id}`}
-        checked={intervenants.includes(tech.name)} // Cocher la case si le technicien est déjà sélectionné
-        onChange={(e) => {
-          if (e.target.checked) {
-            setIntervenants((prev) => [...prev, tech.name]);
-          } else {
-            setIntervenants((prev) =>
-              prev.filter((name) => name !== tech.name)
-            );
-          }
-        }}
-      />
-      <label htmlFor={`intervenant-${tech.id}`}>{tech.name}</label>
-    </div>
-  ))}
-</div>
-
-<h3>Actions menées</h3>
+        <h3>Actions menées</h3>
         {actionsDone.map((action, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Description des actions menées :</label>
@@ -300,17 +321,21 @@ const handleSubmit = async (e) => {
               type="file"
               multiple
               onChange={(e) => handleActionPhotoChange(index, e)}
+              className={styles.uploadBtn}
             />
-            <button type="button" onClick={() => removeActionField(index)}>
+            <button type="button" onClick={() => removeActionField(index)}
+              className={styles.removeBtn}
+              >
               Supprimer cette action
             </button>
           </div>
         ))}
-        <button type="button" onClick={addActionField}>
+        <button type="button" onClick={addActionField}
+        className={styles.addBtn}>
           Ajouter une action
         </button>
 
-        <h3>Remarques</h3>
+        <h3>Remarques </h3>
         {remarques.map((remarque, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Remarques :</label>
@@ -328,23 +353,46 @@ const handleSubmit = async (e) => {
               type="file"
               multiple
               onChange={(e) => handleRemarquePhotoChange(index, e)}
+              className={styles.uploadBtn}
             />
-            <button type="button" onClick={() => removeRemarqueField(index)}>
+            <button type="button" onClick={() => removeRemarqueField(index)}
+              className={styles.removeBtn}>
               Supprimer cette remarque
             </button>
           </div>
         ))}
-        <button type="button" onClick={addRemarqueField}>
+        <button type="button" onClick={addRemarqueField}
+        className={styles.addBtn}>
           Ajouter une remarque
         </button>
 
-        <h3>Risques / EPI</h3>
+        <h3>Risque(s) / Danger(s)</h3>
         <div className={styles.formGroup}>
           <label>
-            <input type="checkbox" checked={risques} onChange={() => setRisques(!risques)} />
+            <input
+              type="checkbox"
+              checked={risques}
+              onChange={() => setRisques(!risques)}
+            />
             Intervention comportant des risques
           </label>
         </div>
+
+        <h3>Signature</h3>
+        <div className={styles.formGroup}>
+          <label>Nom du signataire :</label>
+          <input
+            type="text"
+            value={signataireNom}
+            onChange={(e) => setSignataireNom(e.target.value)}
+          />
+        </div>
+
+        <Signature
+          signatureUrl={signatureUrl}
+          setSignatureUrl={setSignatureUrl}
+          setIsSigned={setIsSigned}
+        />
 
         <button className={styles.submitButton} type="submit">
           Créer le rapport

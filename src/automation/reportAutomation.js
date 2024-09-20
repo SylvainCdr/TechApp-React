@@ -6,7 +6,7 @@ import { sendEmail } from "../utils/emailService"; // Importation du service d'e
 const getTechnicianInfoById = async (technicianId) => {
   console.log(`Recherche des infos pour l'ID : ${technicianId}`);
   try {
-    const technicianRef = doc(db, 'technicians', technicianId);
+    const technicianRef = doc(db, "technicians", technicianId);
     const docSnapshot = await getDoc(technicianRef);
 
     if (!docSnapshot.exists()) {
@@ -14,24 +14,23 @@ const getTechnicianInfoById = async (technicianId) => {
       return null;
     } else {
       const data = docSnapshot.data();
-      console.log('Technicien trouvé :', data);
-      
+      console.log("Technicien trouvé :", data);
+
       // Combiner le prénom et le nom de famille
-      const fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim(); 
+      const fullName = `${data.firstName || ""} ${data.lastName || ""}`.trim();
 
       return {
         email: data.email || null,
-        fullName: fullName || 'Technicien'
+        fullName: fullName || "Technicien",
       };
     }
   } catch (error) {
-    console.error('Erreur lors de la récupération des infos :', error);
+    console.error("Erreur lors de la récupération des infos :", error);
     return null;
   }
 };
 
-
-// Fonction pour créer un rapport d'intervention
+// Fonction pour créer un rapport d'intervention à la soumission d'une mission
 export const createInterventionReport = async (missionId, missionData) => {
   try {
     const interventionReportData = {
@@ -46,6 +45,9 @@ export const createInterventionReport = async (missionId, missionData) => {
       createdAt: new Date(),
       interventionStartDate: missionData.interventionStartDate,
       interventionEndDate: missionData.interventionEndDate,
+      signataireNom: "",
+      signatureUrl: "",
+      isSigned: false,
     };
 
     // Ajout du rapport d'intervention à Firestore
@@ -74,23 +76,25 @@ export const createInterventionReport = async (missionId, missionData) => {
     const validInfos = intervenantsInfos.filter((info) => info !== null);
 
     // Envoi des emails
-validInfos.forEach(async (info) => {
-  try {
-    await sendEmail({
-      to: info.email,
-      to_name: info.fullName,  // Utiliser le nom complet du technicien
-      missionId: missionId,
-      reportId: reportRef.id,
-      startDate: missionData.interventionStartDate,
-      endDate: missionData.interventionEndDate,
-      clientName: missionData.client.nomEntreprise,
+    validInfos.forEach(async (info) => {
+      try {
+        await sendEmail({
+          to: info.email,
+          to_name: info.fullName, // Utiliser le nom complet du technicien
+          missionId: missionId,
+          reportId: reportRef.id,
+          startDate: missionData.interventionStartDate,
+          endDate: missionData.interventionEndDate,
+          clientName: missionData.client.nomEntreprise,
+        });
+        console.log(`Email envoyé avec succès à ${info.email}`);
+      } catch (error) {
+        console.error(
+          `Erreur lors de l'envoi de l'email à ${info.email} :`,
+          error
+        );
+      }
     });
-    console.log(`Email envoyé avec succès à ${info.email}`);
-  } catch (error) {
-    console.error(`Erreur lors de l'envoi de l'email à ${info.email} :`, error);
-  }
-});
-
   } catch (error) {
     console.error(
       "Erreur lors de la création du rapport d'intervention :",

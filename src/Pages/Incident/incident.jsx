@@ -2,16 +2,18 @@ import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection,  } from "firebase/firestore";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { use } from "framer-motion/client";
 
 export default function Incident() {
   const { incidentId } = useParams();
   const [incident, setIncident] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [technicians, setTechnicians] = useState([]);
 
   const fetchIncident = async () => {
     try {
@@ -31,8 +33,25 @@ export default function Incident() {
     }
   };
 
+  // Fonction pour récupérer les techniciens depuis Firestore
+  const fetchTechnicians = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "technicians"));
+      const techniciansList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        name: doc.data().firstName + " " + doc.data().lastName,
+        urlPhoto: doc.data().urlPhoto, // Assurez-vous que le champ urlPhoto existe
+      }));
+      setTechnicians(techniciansList); // Stocker les techniciens dans l'état
+    } catch (error) {
+      console.error("Erreur lors de la récupération des techniciens : ", error);
+    }
+  };
+
+
   useEffect(() => {
     fetchIncident();
+    fetchTechnicians();
   }, [incidentId]);
 
   const generatePdf = () => {
@@ -84,7 +103,8 @@ export default function Incident() {
                 {incident.client.tel}
               </p>
               <p>
-                <i className="fa-solid fa-at"></i>Email : {incident.client.email}
+                <i className="fa-solid fa-at"></i>Email :{" "}
+                {incident.client.email}
               </p>
               <p>
                 <i className="fa-solid fa-location-dot"></i>Adresse du site :{" "}
@@ -95,8 +115,8 @@ export default function Incident() {
                 {incident.site.nomContact}
               </p>
               <p>
-                <i className="fa-regular fa-address-card"></i>Fonction du contact :{" "}
-                {incident.site.fonctionContact}
+                <i className="fa-regular fa-address-card"></i>Fonction du
+                contact : {incident.site.fonctionContact}
               </p>
               <p>
                 <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
@@ -105,17 +125,30 @@ export default function Incident() {
             </ul>
             <div className={styles.section1Right}>
               <h3>Intervenant(s)</h3>
-              <div className={styles.technicians}>
-                {incident.intervenants && incident.intervenants.length > 0 ? (
-                  incident.intervenants.map((intervenant, index) => (
-                    <div key={index} className={styles.technicianItem}>
-                      <p> <i class="fa-solid fa-user"></i>{intervenant}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p>Aucun intervenant</p>
-                )}
-              </div>
+              <ul className={styles.technicians}>
+                  {incident.intervenants &&
+                  Array.isArray(incident.intervenants) &&
+                  incident.intervenants.length > 0 ? (
+                    incident.intervenants.map((intervenantId, index) => {
+                      // Trouver le technicien correspondant à l'ID de l'intervenant
+                      const technician = technicians.find(
+                        (tech) => tech.id === intervenantId
+                      );
+                      return technician ? (
+                        <li key={index}>
+                          <i className="fa-solid fa-user"></i> {technician.name}
+                        </li>
+                      ) : (
+                        <li key={index}>
+                          <i className="fa-solid fa-user"></i> Intervenant
+                          inconnu
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <li>Aucun intervenant spécifié</li>
+                  )}
+                </ul>
             </div>
           </div>
           <div className={styles.section2}>
@@ -149,7 +182,11 @@ export default function Incident() {
             {incident.remarques && incident.remarques.length > 0 ? (
               incident.remarques.map((remarqueObj, index) => (
                 <div key={index} className={styles.remarqueItem}>
-                  <p> <i class="fa-solid fa-chevron-right"></i>{remarqueObj.remarque}</p>
+                  <p>
+                    {" "}
+                    <i class="fa-solid fa-chevron-right"></i>
+                    {remarqueObj.remarque}
+                  </p>
                   {remarqueObj.photos &&
                     remarqueObj.photos.map((photoUrl, i) => (
                       <img
@@ -157,15 +194,14 @@ export default function Incident() {
                         src={photoUrl}
                         alt={`Remarque photo ${i + 1}`}
                         className={styles.photo}
-                        />
+                      />
                     ))}
                 </div>
               ))
             ) : (
               <p>Aucune remarque</p>
             )}
-            </div>
-          
+          </div>
         </div>
       )}
     </div>

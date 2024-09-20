@@ -1,7 +1,14 @@
 import styles from "./style.module.scss";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs, doc, deleteDoc, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  deleteDoc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
@@ -12,12 +19,16 @@ export default function IncidentReports() {
   const [incidents, setIncidents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
   const incidentsPerPage = 5; // Nombre d'incidents par page
+  const [technicians, setTechnicians] = useState([]);
 
   const fetchIncidents = async () => {
     setLoading(true);
     try {
       // Requête pour récupérer les incidents triés par date de création décroissante
-      const q = query(collection(db, "incidentReports"), orderBy("createdAt", "desc"));
+      const q = query(
+        collection(db, "incidentReports"),
+        orderBy("createdAt", "desc")
+      );
       const querySnapshot = await getDocs(q);
       const incidentsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -32,8 +43,24 @@ export default function IncidentReports() {
     }
   };
 
+  // Fonction pour récupérer les techniciens depuis Firestore
+  const fetchTechnicians = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "technicians"));
+      const techniciansList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        name: doc.data().firstName + " " + doc.data().lastName,
+        urlPhoto: doc.data().urlPhoto, // Assurez-vous que le champ urlPhoto existe
+      }));
+      setTechnicians(techniciansList); // Stocker les techniciens dans l'état
+    } catch (error) {
+      console.error("Erreur lors de la récupération des techniciens : ", error);
+    }
+  };
+
   useEffect(() => {
-    fetchIncidents();
+    fetchIncidents(); // Récupère les incidents
+    fetchTechnicians(); // Récupère les techniciens
   }, []);
 
   // Fonction pour supprimer un incident avec alerte de confirmation
@@ -79,7 +106,10 @@ export default function IncidentReports() {
   // Incidents à afficher pour la page actuelle
   const indexOfLastIncident = currentPage * incidentsPerPage;
   const indexOfFirstIncident = indexOfLastIncident - incidentsPerPage;
-  const currentIncidents = incidents.slice(indexOfFirstIncident, indexOfLastIncident);
+  const currentIncidents = incidents.slice(
+    indexOfFirstIncident,
+    indexOfLastIncident
+  );
 
   return (
     <div className={styles.incidentsContainer}>
@@ -107,7 +137,7 @@ export default function IncidentReports() {
                 ? typeof incident.createdAt.toDate === "function"
                   ? incident.createdAt.toDate().toLocaleDateString()
                   : new Date(incident.createdAt).toLocaleDateString()
-                : "Date inconnue"}
+                : "Date inconnue"}{" "}
               - {incident.client.nomEntreprise}
             </h2>
 
@@ -144,8 +174,8 @@ export default function IncidentReports() {
                     {incident.client.email}
                   </li>
                   <li>
-                    <i className="fa-solid fa-location-dot"></i>Adresse du site :{" "}
-                    {incident.site.adresse}
+                    <i className="fa-solid fa-location-dot"></i>Adresse du site
+                    : {incident.site.adresse}
                   </li>
                   <li>
                     <i className="fa-regular fa-user"></i>Contact sur site :{" "}
@@ -156,8 +186,8 @@ export default function IncidentReports() {
                     contact : {incident.site.fonctionContact}
                   </li>
                   <li>
-                    <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
-                    {incident.site.telContact}
+                    <i className="fa-solid fa-mobile-screen-button"></i>{" "}
+                    Téléphone : {incident.site.telContact}
                   </li>
                 </ul>
               </div>
@@ -165,13 +195,25 @@ export default function IncidentReports() {
               <div className={styles.section1Right}>
                 <h4>Intervenant(s)</h4>
                 <ul>
-                  {incident.intervenants && Array.isArray(incident.intervenants) ? (
-                    incident.intervenants.map((intervenant, index) => (
-                      <li key={index}>
-                        <i className="fa-solid fa-user"></i>
-                        {intervenant}
-                      </li>
-                    ))
+                  {incident.intervenants &&
+                  Array.isArray(incident.intervenants) &&
+                  incident.intervenants.length > 0 ? (
+                    incident.intervenants.map((intervenantId, index) => {
+                      // Trouver le technicien correspondant à l'ID de l'intervenant
+                      const technician = technicians.find(
+                        (tech) => tech.id === intervenantId
+                      );
+                      return technician ? (
+                        <li key={index}>
+                          <i className="fa-solid fa-user"></i> {technician.name}
+                        </li>
+                      ) : (
+                        <li key={index}>
+                          <i className="fa-solid fa-user"></i> Intervenant
+                          inconnu
+                        </li>
+                      );
+                    })
                   ) : (
                     <li>Aucun intervenant spécifié</li>
                   )}
@@ -201,7 +243,7 @@ export default function IncidentReports() {
               </div>
 
               <div className={styles.section2Right}>
-                <h4>Photo(s) :</h4>
+                <h4>Photo(s) liée(s) au rapport :</h4>
                 <ul>
                   {incident.remarques.map((remarque, index) => (
                     <li key={index}>

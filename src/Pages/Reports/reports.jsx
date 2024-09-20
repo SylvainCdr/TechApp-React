@@ -218,7 +218,7 @@ const Reports = () => {
               </div>
 
               <div className={styles.section2Right}>
-                <h4>Remarques :</h4>
+                <h4>Remarques / Risques:</h4>
                 <ul>
                   {report.remarques?.map((remarque, index) => (
                     <li key={index}>
@@ -243,22 +243,37 @@ const Reports = () => {
             </div>
 
             <div className={styles.section3}>
-              <Link to={`/report/${report.id}`} className={styles.viewButton}>
-                <i className="fa-solid fa-eye"></i>
-              </Link>
-              <Link
-                to={`/reports/edit/${report.id}`}
-                className={styles.editButton}
-              >
-                <i className="fa-solid fa-pen-to-square"></i>
-              </Link>
-              <Link
-                className={styles.deleteButton}
-                onClick={() => deleteReport(report.id)}
-              >
-                <i className="fa-solid fa-trash"></i>
-              </Link>
-            </div>
+  <Link to={`/report/${report.id}`} className={styles.viewButton}>
+    <i className="fa-solid fa-eye"></i>
+  </Link>
+
+  {report.isSigned && ( // badge signé 
+    <span className={styles.badgeSigned}>
+     
+     <i class="fa-solid fa-circle-check"></i> Signé par le client (non modifiable)
+    </span>
+  )}
+
+
+  {/* Affichage conditionnel des boutons edit et delete si isSigned est false */}
+  {!report.isSigned && (
+    <>
+      <Link
+        to={`/reports/edit/${report.id}`}
+        className={styles.editButton}
+      >
+        <i className="fa-solid fa-pen-to-square"></i>
+      </Link>
+      <Link
+        className={styles.deleteButton}
+        onClick={() => deleteReport(report.id)}
+      >
+        <i className="fa-solid fa-trash"></i>
+      </Link>
+    </>
+  )}
+</div>
+
           </motion.li>
         ))}
       </ul>

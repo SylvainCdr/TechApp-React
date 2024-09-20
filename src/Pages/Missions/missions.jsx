@@ -118,7 +118,7 @@ export default function Missions() {
               {mission.client.nomEntreprise}
             </h2>
             <p>
-            <i class="fa-solid fa-calendar-days"></i>Date(s) d'intervention : 
+            <i class="fa-solid fa-calendar-days"></i>Date(s) d'intervention :{" "} 
   {new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') === new Date(mission.interventionEndDate).toLocaleDateString('fr-FR') 
     ? new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
     : `${new Date(mission.interventionStartDate).toLocaleDateString('fr-FR')} - ${new Date(mission.interventionEndDate).toLocaleDateString('fr-FR')}`} {/* Sinon afficher les deux */}

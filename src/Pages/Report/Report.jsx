@@ -5,6 +5,7 @@ import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { Link } from "react-router-dom";
 
 export default function InterventionReport() {
   const { reportId } = useParams(); // Récupérer l'ID du rapport depuis l'URL
@@ -105,13 +106,25 @@ export default function InterventionReport() {
 
       {report ? (
         <div className={styles.reportItem}>
-      <h2>
-  {new Date(report.interventionStartDate).toLocaleDateString('fr-FR') === new Date(report.interventionEndDate).toLocaleDateString('fr-FR') 
-    ? new Date(report.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
-    : `${new Date(report.interventionStartDate).toLocaleDateString('fr-FR')} / ${new Date(report.interventionEndDate).toLocaleDateString('fr-FR')}`}{" "}
-  - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
-</h2>
+          <h2>
+            {new Date(report.interventionStartDate).toLocaleDateString(
+              "fr-FR"
+            ) ===
+            new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
+              ? new Date(report.interventionStartDate).toLocaleDateString(
+                  "fr-FR"
+                ) // Si les dates sont identiques
+              : `${new Date(report.interventionStartDate).toLocaleDateString(
+                  "fr-FR"
+                )} / ${new Date(report.interventionEndDate).toLocaleDateString(
+                  "fr-FR"
+                )}`}{" "}
+            - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+          </h2>
 
+          {!report.isSigned && (
+          <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>Remplir / Modifier </Link>
+        )}
 
           <div className={styles.section1}>
             <div className={styles.section1Left}>
@@ -148,25 +161,25 @@ export default function InterventionReport() {
             </div>
 
             <div className={styles.section1Right}>
-            <h4>Intervenant(s)</h4>
-                <div className={styles.technicians}>
-                  {report.intervenants && report.intervenants.length > 0 ? (
-                    report.intervenants.map((intervenantId, index) => (
-                      <div key={index} className={styles.technicianItem}>
-                        <p>
-                          {technicians.find((tech) => tech.id === intervenantId)
-                            ?.name || "Nom inconnu"}
-                        </p>
-                        <img
-                          src={getTechnicianPhotoURL(intervenantId)}
-                          alt={`Photo de technicien`}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <p>Aucun intervenant</p>
-                  )}
-                </div>
+              <h4>Intervenant(s)</h4>
+              <div className={styles.technicians}>
+                {report.intervenants && report.intervenants.length > 0 ? (
+                  report.intervenants.map((intervenantId, index) => (
+                    <div key={index} className={styles.technicianItem}>
+                      <p>
+                        {technicians.find((tech) => tech.id === intervenantId)
+                          ?.name || "Nom inconnu"}
+                      </p>
+                      <img
+                        src={getTechnicianPhotoURL(intervenantId)}
+                        alt={`Photo de technicien`}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p>Aucun intervenant</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -251,12 +264,16 @@ export default function InterventionReport() {
           </div>
 
           <div>
-            <h4>AUTRES :</h4>
-            {/* <div>
-  {report.remarques && report.remarques[0].photos && report.remarques[0].photos.map((photo, i) => (
-    <img key={i} src={photo} alt={`Photo ${i + 1}`}  />
-  ))}
-</div> */}
+            <h4>SIGNATURE DU CLIENT :</h4>
+
+            <div className={styles.signature}>
+              <p> Rapport signé : {report.isSigned ? "Oui" : "Non"} </p>
+
+              <img src={report.signatureUrl} alt="Signature" className={styles.signatureImg} />
+              <h5>Signataire :</h5>
+              <p>{report.signataireNom} </p>
+
+            </div>
           </div>
         </div>
       ) : (

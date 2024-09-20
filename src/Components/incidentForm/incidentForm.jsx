@@ -18,7 +18,6 @@ export default function IncidentForm({ initialData, onSubmit }) {
   });
   const [technicians, setTechnicians] = useState([]);
   const [selectedIntervenant, setSelectedIntervenant] = useState([]); // Intervenant sélectionné
-  const [customIntervenant, setCustomIntervenant] = useState([]); // Intervenant personnalisé
   const [intervenantType, setIntervenantType] = useState(""); // "sélection" ou "autre"
   const [photos, setPhotos] = useState([]);
   const [remarques, setRemarques] = useState([{ remarque: "", photos: [] }]);
@@ -27,19 +26,27 @@ export default function IncidentForm({ initialData, onSubmit }) {
   const [createdAt, setCreatedAt] = useState(new Date().toISOString());
   const [missionsDangereuses, setMissionsDangereuses] = useState([""]);
   const [interventionReportId, setInterventionReportId] = useState("");
+  const [isOtherIntervenantChecked, setIsOtherIntervenantChecked] =
+    useState(false);
+  const [selectedIntervenants, setSelectedIntervenants] = useState([]);
+  const [customIntervenant, setCustomIntervenant] = useState("");
 
   useEffect(() => {
     if (initialData) {
       setClient(initialData.client || {});
       setSite(initialData.site || {});
-      setTechnicians(initialData.intervenants || []);
       setPhotos(initialData.photos || []);
       setRemarques(initialData.remarques || [{ remarque: "", photos: [] }]);
       setRisques(initialData.risques || false);
       setActions(initialData.actions || [""]);
       setCreatedAt(initialData.createdAt || new Date().toISOString());
-      setMissionsDangereuses(initialData.missionsDangereuses || [""]);
+      setMissionsDangereuses(initialData.missionsDangereuses || []);
       setInterventionReportId(initialData.interventionReportId || "");
+
+      // Initialisation des intervenants sélectionnés
+      if (initialData.intervenants) {
+        setSelectedIntervenants(initialData.intervenants); // S'assurer que ce soit un tableau d'ID
+      }
     }
   }, [initialData]);
 
@@ -49,11 +56,11 @@ export default function IncidentForm({ initialData, onSubmit }) {
       const querySnapshot = await getDocs(collection(db, "technicians"));
       const techniciansList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data(),
+        name: doc.data().firstName + " " + doc.data().lastName,
       }));
       setTechnicians(techniciansList);
     } catch (error) {
-      console.error("Erreur lors de la récupération des techniciens : ", error);
+      console.error("Error getting documents: ", error);
     }
   };
 
@@ -73,38 +80,61 @@ export default function IncidentForm({ initialData, onSubmit }) {
       createdAt,
       missionsDangereuses,
       interventionReportId,
-      intervenants: intervenantType === "autre" ? [customIntervenant] : selectedIntervenant,
+      intervenants:
+        intervenantType === "autre"
+          ? [customIntervenant]
+          : selectedIntervenants,
     };
-    console.log('Données de la fiche incident:', incidentData);
+
+    console.log("Données de la fiche incident:", incidentData);
+
+    // Appelez la fonction onSubmit pour mettre à jour l'incident
     onSubmit(incidentData);
-    const incidentRef = collection(db, "incidentReports");
-    addDoc(incidentRef, incidentData);
-  
-    Swal.fire({
-      title: "Fiche incident créée ou mise à jour !",
-      icon: "success",
-      showConfirmButton: false,
-      timer: 1500,
-    });
+
+    // Ne pas créer un nouveau document si on est en mode de modification
+    if (!initialData) {
+      const incidentRef = collection(db, "incidentReports");
+      addDoc(incidentRef, incidentData);
+
+      Swal.fire({
+        title: "Fiche incident créée !",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        title: "Fiche incident mise à jour !",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+
     setTimeout(() => {
       window.location.href = "/incidents";
     }, 1500);
   };
-  
-  
 
   const handleIntervenantChange = (e) => {
-    const value = e.target.value;
-    if (value === "autre") {
-      setIntervenantType("autre");
+    const selectedId = e.target.value;
+    if (selectedIntervenants.includes(selectedId)) {
+      setSelectedIntervenants(
+        selectedIntervenants.filter((id) => id !== selectedId)
+      );
     } else {
-      setIntervenantType("selection");
-      setSelectedIntervenant(value);
+      setSelectedIntervenants([...selectedIntervenants, selectedId]);
     }
   };
 
-  const handleCustomIntervenantChange = (e) => {
+  console.log("Intervenants sélectionnés:", selectedIntervenants);
+
+  const handleOtherIntervenantChange = (e) => {
     setCustomIntervenant(e.target.value);
+  };
+
+  const handleOtherIntervenantCheckbox = (e) => {
+    setIsOtherIntervenantChecked(e.target.checked);
   };
 
   const addRemarqueField = () => {
@@ -223,25 +253,39 @@ export default function IncidentForm({ initialData, onSubmit }) {
           />
         </div>
 
-        <h3>Intervenant</h3>
+        <h3>Intervenant(s)</h3>
+        {technicians.map((technician) => (
+          <div key={technician.id} className={styles.formGroup}>
+            <label>
+              <input
+                type="checkbox"
+                value={technician.id}
+                onChange={handleIntervenantChange}
+                checked={selectedIntervenants.includes(technician.id)}
+              />
+              {technician.name}
+            </label>
+          </div>
+        ))}
         <div className={styles.formGroup}>
-          <label>Choisir un intervenant :</label>
-          <select onChange={handleIntervenantChange} value={intervenantType}>
-            <option value="">Sélectionner un intervenant</option>
-            {technicians.map((technician, index) => (
-              <option key={index} value={technician.id}>{technician.nom}</option>
-            ))}
-            <option value="autre">Autre intervenant...</option>
-          </select>
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleOtherIntervenantCheckbox}
+              checked={isOtherIntervenantChecked}
+            />
+            Autre intervenant...
+          </label>
         </div>
 
-        {intervenantType === "autre" && (
+        {isOtherIntervenantChecked && (
           <div className={styles.formGroup}>
             <label>Nom de l'autre intervenant :</label>
             <input
               type="text"
               value={customIntervenant}
-              onChange={handleCustomIntervenantChange}
+              onChange={handleOtherIntervenantChange}
+              required
             />
           </div>
         )}
@@ -260,84 +304,82 @@ export default function IncidentForm({ initialData, onSubmit }) {
 
         <h3>Remarque(s) de l'intervenant :</h3>
         {remarques.map((remarque, index) => (
-          <div key={index} className={styles.remarqueField}>
+          <div key={index} className={styles.formGroup}>
             <input
               type="text"
               value={remarque.remarque}
               onChange={(e) => handleRemarqueChange(index, e.target.value)}
               placeholder="Ajouter une remarque"
             />
-            <button
-              type="button"
-              onClick={() => removeRemarqueField(index)}
-            >
+            <button type="button" onClick={() => removeRemarqueField(index)}
+              className={styles.removeBtn}>
               Supprimer remarque
             </button>
           </div>
         ))}
-        <button
-          type="button"
-          onClick={addRemarqueField}
-        >
+        <button type="button" onClick={addRemarqueField}
+        className={styles.addBtn} >
           Ajouter remarque
         </button>
 
         <h3>Actions :</h3>
         {actions.map((action, index) => (
-          <div key={index} className={styles.actionField}>
+          <div key={index} className={styles.formGroup}>
             <input
               type="text"
               value={action}
               onChange={(e) => handleActionChange(index, e.target.value)}
               placeholder="Ajouter une action"
             />
-            <button
-              type="button"
-              onClick={() => removeActionField(index)}
-            >
+            <button type="button" onClick={() => removeActionField(index)}
+              className={styles.removeBtn}>
               Supprimer action
             </button>
           </div>
         ))}
-        <button
-          type="button"
-          onClick={addActionField}
-        >
+        <button type="button" onClick={addActionField}
+        className={styles.addBtn}>
           Ajouter action
         </button>
 
         <h3>Missions Dangereuses :</h3>
         {missionsDangereuses.map((mission, index) => (
-          <div key={index} className={styles.missionField}>
+          <div key={index} className={styles.formGroup}>
             <input
               type="text"
               value={mission}
-              onChange={(e) => handleMissionDangereuseChange(index, e.target.value)}
+              onChange={(e) =>
+                handleMissionDangereuseChange(index, e.target.value)
+              }
               placeholder="Ajouter une mission dangereuse"
             />
             <button
               type="button"
               onClick={() => removeMissionDangereuseField(index)}
+              className={styles.removeBtn}
             >
               Supprimer mission dangereuse
             </button>
           </div>
         ))}
-        <button
-          type="button"
-          onClick={addMissionDangereuseField}
-        >
+        <button type="button" onClick={addMissionDangereuseField}
+        className={styles.addBtn}>
           Ajouter mission dangereuse
         </button>
 
         <h3>Photos :</h3>
         <div>
           {photos.map((photo, index) => (
-            <img key={index} src={photo} alt={`photo-${index}`} className={styles.photo} />
+            <img
+              key={index}
+              src={photo}
+              alt={`photo-${index}`}
+              className={styles.photo}
+            />
           ))}
         </div>
 
-        <button type="submit">Soumettre</button>
+        <button type="submit" className={styles.submitBtn}>Soumettre</button>
       </form>
     </div>
   );

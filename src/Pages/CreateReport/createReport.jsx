@@ -2,7 +2,7 @@ import styles from "./style.module.scss";
 import ReportForm from "../../Components/reportForm/reportForm";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { createOrUpdateIncidentReport } from "../../automation/incidentAutomation";
+import { createIncidentReport } from "../../automation/incidentAutomation";
 import Swal from "sweetalert2";
 
 export default function CreateReport() {
@@ -16,7 +16,7 @@ export default function CreateReport() {
       if (reportData.risques) {
         console.log("La case 'risques' est cochée. Création de la fiche d'incident...");
         // Créer la fiche d'incident si la case "risques" est cochée
-        await createOrUpdateIncidentReport({
+        await createIncidentReport({
           ...reportData,
           interventionReportId: reportRef.id, // Passer l'ID du rapport créé
         });

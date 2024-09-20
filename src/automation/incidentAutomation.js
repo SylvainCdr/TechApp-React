@@ -1,7 +1,7 @@
 import { db } from "../firebase/firebase";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 
-export const createOrUpdateIncidentReport = async (incidentData) => {
+export const createIncidentReport = async (incidentData) => {
   try {
     const {
       client,
@@ -71,3 +71,8 @@ export const createOrUpdateIncidentReport = async (incidentData) => {
     );
   }
 };
+
+
+
+
+

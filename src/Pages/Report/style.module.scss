@@ -9,7 +9,7 @@
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
-  padding-top :6rem;
+  padding-top: 6rem;
 
   h1 {
     font-size: 2rem;
@@ -60,6 +60,21 @@
       margin-right: 8px;
       font-size: 1.2rem;
       color: rgb(133, 133, 133);
+    }
+
+    .editBtn {
+      background-color: #039c38;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      float: right;
+      text-decoration: none;
     }
 
     .section1 {
@@ -183,18 +198,27 @@
         }
       }
     }
+    .signatureImg {
+      width: 40%;
+
+      margin-bottom: -5rem;
+      object-fit: cover;
+      border-radius: 8px;
+      -webkit-border-radius: 8px;
+      -moz-border-radius: 8px;
+      -ms-border-radius: 8px;
+      -o-border-radius: 8px;
+    }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     .reportContainer {
       padding: 10px;
-
     }
     h1 {
       font-size: 1.5rem;
       margin-bottom: 10px;
-  }
-
+    }
 
     .reportItem {
       h2 {

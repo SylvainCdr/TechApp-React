@@ -49,7 +49,6 @@ export default function MissionForm() {
       console.error("Erreur lors de la récupération des techniciens : ", error);
     }
   };
-  
 
   // Fonction pour récupérer les données de la mission existante
   const fetchMission = async () => {
@@ -86,10 +85,9 @@ export default function MissionForm() {
     fetchMission();
   }, [missionId]);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       // Créer ou mettre à jour la mission
       const missionData = {
@@ -103,30 +101,36 @@ export default function MissionForm() {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-  
+
       if (missionId) {
         // Mettre à jour la mission existante
         const missionRef = doc(db, "missions", missionId);
         await updateDoc(missionRef, missionData);
       } else {
         // Créer une nouvelle mission
-        const missionRef = await addDoc(collection(db, "missions"), missionData);
+        const missionRef = await addDoc(
+          collection(db, "missions"),
+          missionData
+        );
         const missionId = missionRef.id; // Récupérer l'ID de la mission créée
-  
+
         // Appel à la fonction d'automatisation pour créer le rapport d'intervention
         await createInterventionReport(missionId, missionData);
       }
-  
+
       Swal.fire({
         title: "Mission enregistrée",
         text: "Un rapport d'intervention a été créé automatiquement et le(s) technicien(s) a/ont été notifié(s) par email",
         icon: "success",
         confirmButtonText: "Ok",
-      }) .then(() => {
+      }).then(() => {
         window.location.href = "/missions";
       });
     } catch (error) {
-      console.error("Erreur lors de la création/mise à jour de la mission :", error);
+      console.error(
+        "Erreur lors de la création/mise à jour de la mission :",
+        error
+      );
       Swal.fire({
         title: "Erreur",
         text: "Une erreur est survenue lors de la création/mise à jour de la mission",
@@ -134,13 +138,7 @@ export default function MissionForm() {
         confirmButtonText: "Ok",
       });
     }
-
-     
- 
-    
   };
-  
-  
 
   // Ajouter un nouveau champ pour les missions
   const addMissionField = () => {
@@ -255,29 +253,28 @@ export default function MissionForm() {
         </div>
 
         <h3>Intervenant(s)</h3>
-<div className={styles.formGroup}>
-  <label>Sélectionnez un ou plusieurs intervenants :</label>
-  {intervenantsExistants.map((intervenant) => (
-    <div key={intervenant.id}>
-      <input
-        type="checkbox"
-        value={intervenant.id}
-        checked={intervenants.includes(intervenant.id)}
-        onChange={(e) => {
-          if (e.target.checked) {
-            setIntervenants([...intervenants, e.target.value]);
-          } else {
-            setIntervenants(
-              intervenants.filter((id) => id !== e.target.value)
-            );
-          }
-        }}
-      />
-      <label>{intervenant.name}</label>
-    </div>
-  ))}
-</div>
-
+        <div className={styles.formGroup}>
+          <label>Sélectionnez un ou plusieurs intervenants :</label>
+          {intervenantsExistants.map((intervenant) => (
+            <div key={intervenant.id}>
+              <input
+                type="checkbox"
+                value={intervenant.id}
+                checked={intervenants.includes(intervenant.id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setIntervenants([...intervenants, e.target.value]);
+                  } else {
+                    setIntervenants(
+                      intervenants.filter((id) => id !== e.target.value)
+                    );
+                  }
+                }}
+              />
+              <label>{intervenant.name}</label>
+            </div>
+          ))}
+        </div>
 
         <h3>Missions</h3>
         {missions.map((mission, index) => (
@@ -297,12 +294,17 @@ export default function MissionForm() {
               type="button"
               onClick={() => removeMissionField(index)}
               disabled={missions.length <= 1}
+              className={styles.removetBtn}
             >
               Supprimer
             </button>
           </div>
         ))}
-        <button type="button" onClick={addMissionField}>
+        <button
+          type="button"
+          onClick={addMissionField}
+          className={styles.addtBtn}
+        >
           Ajouter une mission
         </button>
 
@@ -324,16 +326,23 @@ export default function MissionForm() {
               type="button"
               onClick={() => removeRisqueField(index)}
               disabled={risqueEPI.length <= 1}
+              className={styles.removetBtn}
             >
               Supprimer
             </button>
           </div>
         ))}
-        <button type="button" onClick={addRisqueField}>
+        <button
+          type="button"
+          onClick={addRisqueField}
+          className={styles.addtBtn}
+        >
           Ajouter un risque/EPI
         </button>
 
-        <button type="submit">Enregistrer la mission</button>
+        <button type="submit" className={styles.submitBtn}>
+          Enregistrer la mission
+        </button>
       </form>
     </div>
   );

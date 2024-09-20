@@ -4,7 +4,8 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import styles from "./style.module.scss";
 import ReportForm from "../../Components/reportForm/reportForm";
-import { createOrUpdateIncidentReport } from "../../automation/incidentAutomation";
+import { createIncidentReport } from "../../automation/incidentAutomation";
+import Swal from "sweetalert2";
 
 export default function EditReport() {
   const { reportId } = useParams();
@@ -52,16 +53,21 @@ const handleUpdate = async (updatedReport) => {
     if (!oldReportData.risques && updatedReport.risques) {
       console.log("La case 'risques' est maintenant cochée. Création ou mise à jour de la fiche d'incident...");
       // Créer ou mettre à jour la fiche d'incident si la case "risques" a été cochée
-      await createOrUpdateIncidentReport({
+      await createIncidentReport({
         ...updatedReport,
         interventionReportId: reportId, // Passer l'ID du rapport d'intervention
       });
     }
 
-    alert("Rapport mis à jour avec succès !");
+    Swal.fire({
+      icon: "success",
+      title: "Rapport mis à jour avec succès !",
+      showConfirmButton: false,
+      timer: 1500,
+    });
     
     // Rediriger l'utilisateur vers la page de détails du rapport
-    window.location.href = `/reports/view/${reportId}`;
+    window.location.href = `/report/${reportId}`;
   } catch (error) {
     console.error("Erreur lors de la mise à jour du rapport :", error);
     alert("Une erreur est survenue lors de la mise à jour du rapport.");
