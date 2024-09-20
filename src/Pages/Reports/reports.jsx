@@ -250,7 +250,7 @@ const Reports = () => {
   {report.isSigned && ( // badge signé 
     <span className={styles.badgeSigned}>
      
-     <i class="fa-solid fa-circle-check"></i> Signé par le client (non modifiable)
+     <i class="fa-solid fa-circle-check"></i> Signé par le client
     </span>
   )}
 

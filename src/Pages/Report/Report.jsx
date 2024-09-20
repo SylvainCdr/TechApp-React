@@ -270,7 +270,6 @@ export default function InterventionReport() {
               <p> Rapport signé : {report.isSigned ? "Oui" : "Non"} </p>
 
               <img src={report.signatureUrl} alt="Signature" className={styles.signatureImg} />
-              <h5>Signataire :</h5>
               <p>{report.signataireNom} </p>
 
             </div>

@@ -298,13 +298,13 @@ export default function MissionForm() {
             >
               Supprimer
             </button>
-          </div>
+        </div>
         ))}
         <button
           type="button"
           onClick={addMissionField}
           className={styles.addtBtn}
-        >
+          >
           Ajouter une mission
         </button>
 
