@@ -37,6 +37,7 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [signataireNom, setSignataireNom] = useState(""); // Nom du signataire
   const [signatureUrl, setSignatureUrl] = useState(""); // URL de la signature uploadée
   const [isSigned, setIsSigned] = useState(false); // Indique si le rapport a été signé
+  const [isLoading, setIsLoading] = useState(false); // Indique si le formulaire est en cours de soumission
 
   useEffect(() => {
     if (initialData) {
@@ -93,7 +94,7 @@ export default function ReportForm({ initialData, onSubmit }) {
           800, // largeur
           800, // hauteur
           'JPEG', // format
-          70, // qualité
+          50, // qualité
           0, // rotation
           uri => {
             resolve(uri); // Renvoie le fichier Blob
@@ -125,7 +126,7 @@ export default function ReportForm({ initialData, onSubmit }) {
           800, // largeur
           800, // hauteur
           'JPEG', // format
-          70, // qualité
+          50, // qualité
           0, // rotation
           uri => {
             resolve(uri); // Renvoie le fichier Blob
@@ -149,7 +150,9 @@ export default function ReportForm({ initialData, onSubmit }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+    setIsLoading(true); // Démarrer le chargement
+  
     try {
       // Gérer les photos pour chaque action
       for (const [index, action] of actionsDone.entries()) {
@@ -169,7 +172,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         }
         actionsDone[index].photos = uploadedActionPhotos;
       }
-
+  
       // Gérer les photos pour chaque remarque
       for (const [index, remarque] of remarques.entries()) {
         const uploadedRemarquePhotos = [];
@@ -188,7 +191,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         }
         remarques[index].photos = uploadedRemarquePhotos;
       }
-
+  
       // Données du rapport à envoyer
       const reportData = {
         client,
@@ -205,17 +208,19 @@ export default function ReportForm({ initialData, onSubmit }) {
         signatureUrl,
         isSigned,
       };
-
+  
       // Appel de la fonction onSubmit pour envoyer les données à Firestore
       await onSubmit(reportData);
-
-      // Si vous devez rediriger, vous pouvez utiliser `window.location.href` ou `useNavigate` pour la redirection
-      // Exemple : window.location.href = '/path-to-redirect';
+  
+      // Réinitialiser le formulaire ou rediriger si nécessaire
     } catch (error) {
       console.error("Erreur lors de la soumission du rapport : ", error);
       alert("Une erreur est survenue lors de la soumission du rapport.");
+    } finally {
+      setIsLoading(false); // Arrêter le chargement
     }
   };
+  
 
   const addActionField = () => {
     setActionsDone([...actionsDone, { description: "", photos: [] }]);
@@ -235,6 +240,7 @@ export default function ReportForm({ initialData, onSubmit }) {
 
   return (
     <div className={styles.reportFormContainer}>
+          {isLoading && <div className={styles.loading}>Chargement en cours...</div>}
       <form onSubmit={handleSubmit}>
         <h3>Client</h3>
         <div className={styles.formGroup}>
