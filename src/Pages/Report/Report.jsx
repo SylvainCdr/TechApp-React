@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import { db } from "../../firebase/firebase";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import { Link } from "react-router-dom";
+import generateReportPdf from "../../utils/pdfGenerator"; 
 
 export default function InterventionReport() {
   const { reportId } = useParams(); // Récupérer l'ID du rapport depuis l'URL
@@ -75,34 +74,20 @@ export default function InterventionReport() {
     return technician ? technician.urlPhoto : null;
   };
 
-  const generatePdf = () => {
-    const input = document.getElementById("report-content");
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
 
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-      pdf.save(`Mission_${reportId}.pdf`);
-    });
+  const handleDownloadPdf = () => {
+    generateReportPdf(report, technicians);
   };
+
+  
+
 
   return (
     <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
-      <button onClick={generatePdf}>Télécharger en PDF</button>
+      <button onClick={handleDownloadPdf}>Télécharger le rapport PDF</button>
+
+
 
       {report ? (
         <div className={styles.reportItem}>
