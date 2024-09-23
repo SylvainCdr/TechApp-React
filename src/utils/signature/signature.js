@@ -70,8 +70,13 @@ export default function Signature({ signatureUrl, setSignatureUrl, setIsSigned }
       <div className={styles.signaturePad}>
         <SignaturePad ref={signatureRef} penColor="black"  canvasProps={{width: 350, height: 300, className: 'sigCanvas'}} />
       </div>
-      <button type="button" onClick={clear} className={styles.clearButton}>Réinitialiser le champ</button>
-      <button type="button" onClick={save} className={styles.saveButton}>Valider la signature</button>
+
+      <div className={styles.buttonsSignature}> 
+
+
+      <button type="button" onClick={clear} className={styles.clearButton}>Nettoyer signature</button>
+      <button type="button" onClick={save} className={styles.saveButton}>Valider signature</button>
+      </div>
       {/* {signatureUrl && (
         <div className={styles.signaturePreview}>
           <img src={signatureUrl} alt="Signature Preview" />

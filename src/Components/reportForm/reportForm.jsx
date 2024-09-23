@@ -8,6 +8,7 @@ import { createIncidentReport } from "../../automation/incidentAutomation";
 import Signature from "../../utils/signature/signature";
 import Resizer from 'react-image-file-resizer';
 
+
 export default function ReportForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
     nomEntreprise: "",
@@ -38,6 +39,8 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [signatureUrl, setSignatureUrl] = useState(""); // URL de la signature uploadée
   const [isSigned, setIsSigned] = useState(false); // Indique si le rapport a été signé
   const [isLoading, setIsLoading] = useState(false); // Indique si le formulaire est en cours de soumission
+  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+
 
   useEffect(() => {
     if (initialData) {
