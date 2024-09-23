@@ -6,6 +6,7 @@ import { storage } from "../../firebase/firebase";
 import styles from "./style.module.scss";
 import { createIncidentReport } from "../../automation/incidentAutomation";
 import Signature from "../../utils/signature/signature";
+import Resizer from 'react-image-file-resizer';
 
 export default function ReportForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
@@ -80,25 +81,71 @@ export default function ReportForm({ initialData, onSubmit }) {
     fetchTechnicians();
   }, []);
 
-  // Gérer l'ajout de photos pour chaque action
-  const handleActionPhotoChange = (index, e) => {
+
+  const handleActionPhotoChange = async (index, e) => {
     const files = Array.from(e.target.files);
     const newActionsDone = [...actionsDone];
-
-    // Conserver les anciennes photos et ajouter les nouvelles
-    newActionsDone[index].photos = [...newActionsDone[index].photos, ...files];
+  
+    const resizedFiles = await Promise.all(files.map(file => 
+      new Promise((resolve) => {
+        Resizer.imageFileResizer(
+          file,
+          800, // largeur
+          800, // hauteur
+          'JPEG', // format
+          70, // qualité
+          0, // rotation
+          uri => {
+            resolve(uri); // Renvoie le fichier Blob
+          },
+          'file' // type de retour
+        );
+      })
+    ));
+  
+    // Upload des fichiers dans Firebase Storage
+    for (const resizedFile of resizedFiles) {
+      const storageRef = ref(storage, `interventionPhotos/actions/${resizedFile.name}`);
+      await uploadBytes(storageRef, resizedFile);
+      const downloadURL = await getDownloadURL(storageRef);
+      newActionsDone[index].photos.push(downloadURL);
+    }
+  
     setActionsDone(newActionsDone);
   };
-
-  // Gérer l'ajout de photos pour chaque remarque
-  const handleRemarquePhotoChange = (index, e) => {
+  
+  const handleRemarquePhotoChange = async (index, e) => {
     const files = Array.from(e.target.files);
     const newRemarques = [...remarques];
-
-    // Conserver les anciennes photos et ajouter les nouvelles
-    newRemarques[index].photos = [...newRemarques[index].photos, ...files];
+  
+    const resizedFiles = await Promise.all(files.map(file => 
+      new Promise((resolve) => {
+        Resizer.imageFileResizer(
+          file,
+          800, // largeur
+          800, // hauteur
+          'JPEG', // format
+          70, // qualité
+          0, // rotation
+          uri => {
+            resolve(uri); // Renvoie le fichier Blob
+          },
+          'file' // type de retour
+        );
+      })
+    ));
+  
+    // Upload des fichiers dans Firebase Storage
+    for (const resizedFile of resizedFiles) {
+      const storageRef = ref(storage, `interventionPhotos/remarques/${resizedFile.name}`);
+      await uploadBytes(storageRef, resizedFile);
+      const downloadURL = await getDownloadURL(storageRef);
+      newRemarques[index].photos.push(downloadURL);
+    }
+  
     setRemarques(newRemarques);
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
