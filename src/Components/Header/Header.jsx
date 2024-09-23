@@ -49,7 +49,7 @@ function Header() {
     <div className={styles.headerContainer}>
       <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
         <NavLink to="/" onClick={handleLinkClick}>
-          <img src="assets/techapp-logo3.png" alt="ACCUEIL" className={styles.logo} />
+          <img src="assets/techapp-logo3.png" alt="ACCUEIL" className={styles.logo} loading="lazy" />
         </NavLink>
         <ul className={styles.navUl}>
           <li className={styles.navLi}>
