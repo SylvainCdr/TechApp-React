@@ -85,7 +85,7 @@ export default function InterventionReport() {
   return (
     <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
-      <button onClick={handleDownloadPdf}>Télécharger le rapport PDF</button>
+      <button onClick={handleDownloadPdf} className={styles.downloadPdf}><i class="fa-solid fa-file-pdf"></i> Télécharger </button>
 
 
 

@@ -12,6 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
+import generateReportPdf from "../../utils/pdfGenerator"; 
 
 const Reports = () => {
   const [reports, setReports] = useState([]);
@@ -93,6 +94,7 @@ const Reports = () => {
     currentPage * reportsPerPage
   );
   const totalPages = Math.ceil(reports.length / reportsPerPage);
+  
 
   return (
     <div className={styles.reportsContainer}>

@@ -11,6 +11,8 @@
   -o-border-radius: 8px;
   padding-top: 6rem;
 
+
+
   h1 {
     font-size: 2rem;
     margin-bottom: 20px;
@@ -18,6 +20,29 @@
     color: var(--col2);
     text-transform: uppercase;
     font-weight: 600;
+  }
+
+
+  .downloadPdf {
+    background-color: rgb(255, 65, 32);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border : none;
+    text-decoration: none;
+
+    i {
+      margin-right: 3px;
+      font-size: 1.5rem;
+    }
+    
   }
 
   .reportItem {
