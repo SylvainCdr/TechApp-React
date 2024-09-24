@@ -89,8 +89,11 @@ export default function Search() {
                 </td>
                 <td>
                   <Link to={`/report/${report.id}`} className={styles.viewBtn}><i class="fa-solid fa-eye"></i></Link>
+
+                  {!report.isSigned && (
                   <Link to ={`/reports/edit/${report.id}`}  className={styles.editBtn}><i class="fa-solid fa-edit"></i></Link>
                  
+                  )}
                 </td>
               </tr>
             ))}
