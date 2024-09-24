@@ -48,9 +48,18 @@ function Header() {
   return (
     <div className={styles.headerContainer}>
       <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
-        <NavLink to="/" onClick={handleLinkClick}>
-          <img src="assets/techapp-logo3.png" alt="ACCUEIL" className={styles.logo} loading="lazy" />
-        </NavLink>
+      <NavLink to="/" onClick={handleLinkClick}>
+  <img
+    src="assets/techapp-logo3.png"
+    alt="ACCUEIL"
+    className={styles.logo}
+    loading="lazy"
+    onError={(e) => {
+      e.target.onerror = null; // Pour éviter une boucle infinie
+      e.target.src = 'assets/default-logo.png'; // Chemin vers une image de secours
+    }}
+  />
+</NavLink>
         <ul className={styles.navUl}>
           <li className={styles.navLi}>
             <NavLink

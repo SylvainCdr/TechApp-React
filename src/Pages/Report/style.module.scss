@@ -11,8 +11,6 @@
   -o-border-radius: 8px;
   padding-top: 6rem;
 
-
-
   h1 {
     font-size: 2rem;
     margin-bottom: 20px;
@@ -22,9 +20,8 @@
     font-weight: 600;
   }
 
-
   .downloadPdf {
-    background-color: rgb(255, 65, 32);
+    background-color: rgb(253, 95, 67);
     color: white;
     padding: 10px;
     font-size: 1rem;
@@ -35,14 +32,18 @@
     -o-border-radius: 5px;
     margin-bottom: 20px;
     cursor: pointer;
-    border : none;
+    border: none;
     text-decoration: none;
-
+   
+    &:hover 
+{
+      background-color: rgb(251, 74, 43);
+      scale: 1.02;
+    }
     i {
       margin-right: 3px;
       font-size: 1.5rem;
     }
-    
   }
 
   .reportItem {
