@@ -79,7 +79,16 @@ export default function Search() {
             {filteredReports.map((report) => (
               <tr key={report.id}>
                 <td>{report.client.nomEntreprise}</td>
-                <td>{report.interventionStartDate} / {report.interventionEndDate}</td>
+                <td>
+
+
+                {new Date(report.interventionStartDate).toLocaleDateString('fr-FR') === new Date(report.interventionEndDate).toLocaleDateString('fr-FR') 
+    ? new Date(report.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
+    : `${new Date(report.interventionStartDate).toLocaleDateString('fr-FR')} / ${new Date(report.interventionEndDate).toLocaleDateString('fr-FR')}`}{" "}
+  
+
+
+                </td>
               
                 <td>
                   {report.intervenants.map((intervenant) => {
