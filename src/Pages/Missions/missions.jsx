@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
+
 import {
   collection,
   getDocs,
   deleteDoc,
+  getDoc,
   doc,
   orderBy,
   query,
@@ -13,6 +15,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 import Loader from "../../utils/loader/loader";
+import { auth } from "../../firebase/firebase";
 
 export default function Missions() {
   const [missions, setMissions] = useState([]);
@@ -20,6 +23,7 @@ export default function Missions() {
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 6; // Nombre de missions par page
   const [loading, setLoading] = useState(true);
+  const [createdBy, setCreatedBy] = useState("");
 
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
@@ -51,9 +55,22 @@ export default function Missions() {
     }
   };
 
+ // fonction pour récupérer l email du createdBy depuis le uid de Authentification
+ const fetchCreatedBy = async () => {
+  try {
+    const user = auth.currentUser;
+    setCreatedBy(user.email);
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'utilisateur : ", error);
+  }
+};
+
+
+
   useEffect(() => {
     fetchMissions();
     fetchTechnicians();
+    fetchCreatedBy();
     const timer = setTimeout(() => {
       setLoading(false); 
     }, 1600);
@@ -149,6 +166,8 @@ export default function Missions() {
                   ).toLocaleDateString("fr-FR")}`}{" "}
               {/* Sinon afficher les deux */}
             </p>
+<br />
+            <p> <i class="fa-solid fa-folder-plus"></i>Mission créée par : {createdBy}</p>
 
             <div className={styles.section1}>
               <div className={styles.section1Left}>

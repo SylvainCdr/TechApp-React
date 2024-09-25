@@ -12,6 +12,7 @@ import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { createInterventionReport } from "../../automation/reportAutomation";
+import { auth } from "../../firebase/firebase";
 
 export default function MissionForm() {
   const { missionId } = useParams(); // Récupération de l'ID de la mission
@@ -26,6 +27,7 @@ export default function MissionForm() {
     fonctionContact: "",
     telContact: "",
   });
+  const [createdBy, setCreatedBy] = useState(""); // ID de l'utilisateur qui a créé la mission
   const [intervenants, setIntervenants] = useState([]); // Tableau pour stocker plusieurs intervenants
   const [missions, setMissions] = useState([""]);
   const [risqueEPI, setRisqueEPI] = useState([""]);
@@ -36,6 +38,22 @@ export default function MissionForm() {
   const [dateEndIntervention, setDateEndIntervention] = useState(
     new Date().toISOString().substring(0, 10)
   ); // Format YYYY-MM-DD
+
+
+  // Fonction pour récupérer l id de l'utilisateur connecté
+  const fetchUser = async () => {
+    try {
+      const user = auth.currentUser;
+      setCreatedBy(user.uid);
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'utilisateur : ", error);
+    }
+  };
+
+ 
+
+  
+
 
   const fetchIntervenants = async () => {
     try {
@@ -83,7 +101,10 @@ export default function MissionForm() {
   useEffect(() => {
     fetchIntervenants();
     fetchMission();
+    fetchUser();
   }, [missionId]);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,6 +121,8 @@ export default function MissionForm() {
         interventionEndDate: dateEndIntervention,
         createdAt: new Date(),
         updatedAt: new Date(),
+        createdBy,
+        
       };
 
       if (missionId) {
