@@ -391,7 +391,7 @@ export default function ReportForm({ initialData, onSubmit }) {
           <i class="fa-solid fa-plus"></i> Ajouter une action
         </button>
 
-        <h3>Remarques </h3>
+        <h3>Remarques / Risques</h3>
         {remarques.map((remarque, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Remarques :</label>

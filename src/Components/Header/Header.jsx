@@ -52,7 +52,7 @@ function Header() {
       <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
       <NavLink to="/" onClick={handleLinkClick}>
   <img
-    src="assets/pix-techapp2.png"
+    src="assets/pix-techapp.png"
     alt="ACCUEIL"
     className={styles.logo}
     loading="lazy"
