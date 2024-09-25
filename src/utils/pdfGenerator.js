@@ -2,25 +2,13 @@ import jsPDF from 'jspdf';
 
 const coverImg = '/assets/pix-bg.png';
 const footerImg = '/assets/pix-footer.png';
-const headerImg = '/assets/pix-header4.png';
+const headerImg = '/assets/pix-header.png';
 
 const interventionDates = (report) => {
   const startDate = new Date(report.interventionStartDate).toLocaleDateString("fr-FR");
   const endDate = new Date(report.interventionEndDate).toLocaleDateString("fr-FR");
   return startDate === endDate ? startDate : `${startDate} - ${endDate}`;
 }
-
-// const loadImages = async (photos) => {
-//   return Promise.all(photos.map(photo => {
-//     return new Promise((resolve, reject) => {
-//       const img = new Image();
-//       img.crossOrigin = 'Anonymous'; // Important pour les images CORS
-//       img.src = photo;
-//       img.onload = () => resolve(img);
-//       img.onerror = () => reject(new Error(`Image load error for ${photo}`));
-//     });
-//   }));
-// };
 
 const getDataUri = (url) => {
   return new Promise((resolve) => {
@@ -96,7 +84,7 @@ const generateReportPdf = async (report, technicians) => {
     { key: "Nom du contact sur site", value: report.site?.nomContact || "Nom du contact" },
     { key: "Fonction du contact", value: report.site?.fonctionContact || "Fonction du contact" },
     { key: "Téléphone du contact", value: report.site?.telContact || "Téléphone du contact" },
-    { key: "Intervenant(s) Pixecurity", value: technicians.map(tech => tech.name).join(", ") },
+    { key: "Intervenant(s) Pixecurity", value: report.intervenants ? report.intervenants.map(id => technicians.find(tech => tech.id === id)?.name).join(", ") : "Aucun" },
     { key: "Risques identifiés", value: report.risques ? "Oui" : "Non" }
   ];
 
@@ -265,6 +253,11 @@ doc.addImage(footerImg, 'PNG', 0, 255, 220, 0);
   // SIGNATURE DU CLIENT
   doc.addPage(); // Ajoute la page suivante
   doc.addImage(headerImg, 'PNG', 0, 0, 220, 0); 
+  doc.setFontSize(12);
+  doc.setTextColor(255, 255, 255); 
+  doc.text(`Date(s) : ${interventionDates(report)}`, 130, 10);
+  doc.text(`Client : ${report.client?.nomEntreprise || "Nom du client"}`, 130, 20);
+  doc.setTextColor(0, 0, 0); // Couleur noire pour le texte suivant
 
   doc.setFillColor(240, 240, 240); // Arrière-plan gris clair
 doc.rect(0, 30, 250, 15, 'F'); // Rectangle rempli pour l'arrière-plan

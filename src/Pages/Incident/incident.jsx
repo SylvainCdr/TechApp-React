@@ -81,9 +81,7 @@ export default function Incident() {
   return (
     <div className={styles.incidentContainer} id="incident-content">
       <h1>Fiche Incident N° {incidentId}</h1>
-      {loading && <p>Chargement en cours...</p>}
-      {error && <p>{error}</p>}
-      <button onClick={generatePdf}>Télécharger en PDF</button>
+     
 
       {incident && (
         <div className={styles.incidentItem}>
