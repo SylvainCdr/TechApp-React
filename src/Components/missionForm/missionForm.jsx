@@ -294,7 +294,7 @@ export default function MissionForm() {
               type="button"
               onClick={() => removeMissionField(index)}
               disabled={missions.length <= 1}
-              className={styles.removetBtn}
+              className={styles.removeBtn}
             >
               Supprimer
             </button>
@@ -303,9 +303,9 @@ export default function MissionForm() {
         <button
           type="button"
           onClick={addMissionField}
-          className={styles.addtBtn}
+          className={styles.addBtn}
           >
-          Ajouter une mission
+          <i class="fa-solid fa-plus"></i> Ajouter une mission
         </button>
 
         <h3>Risques / EPI</h3>
@@ -326,7 +326,7 @@ export default function MissionForm() {
               type="button"
               onClick={() => removeRisqueField(index)}
               disabled={risqueEPI.length <= 1}
-              className={styles.removetBtn}
+              className={styles.removeBtn}
             >
               Supprimer
             </button>
@@ -335,9 +335,9 @@ export default function MissionForm() {
         <button
           type="button"
           onClick={addRisqueField}
-          className={styles.addtBtn}
+          className={styles.addBtn}
         >
-          Ajouter un risque/EPI
+          <i class="fa-solid fa-plus"></i> Ajouter un risque/EPI
         </button>
 
         <button type="submit" className={styles.submitBtn}>

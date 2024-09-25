@@ -4,10 +4,12 @@ import { NavLink } from "react-router-dom";
 import Logout from "../logout/logout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
+import Loader from "../../utils/loader/loader";
 
 function Header() {
   const [user, setUser] = useState(null); // État pour suivre si un utilisateur est connecté
   const [menuOpen, setMenuOpen] = useState(false); // État pour contrôler le menu burger
+
 
   // Surveille l'état de connexion de l'utilisateur
   useEffect(() => {
@@ -50,14 +52,11 @@ function Header() {
       <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
       <NavLink to="/" onClick={handleLinkClick}>
   <img
-    src="assets/techapp-logo3.png"
+    src="assets/pix-techapp2.png"
     alt="ACCUEIL"
     className={styles.logo}
     loading="lazy"
-    onError={(e) => {
-      e.target.onerror = null; // Pour éviter une boucle infinie
-      e.target.src = 'assets/default-logo.png'; // Chemin vers une image de secours
-    }}
+    
   />
 </NavLink>
         <ul className={styles.navUl}>

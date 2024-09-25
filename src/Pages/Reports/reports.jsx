@@ -12,7 +12,8 @@ import {
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import generateReportPdf from "../../utils/pdfGenerator"; 
+import Loader from "../../utils/loader/loader";
+
 
 const Reports = () => {
   const [reports, setReports] = useState([]);
@@ -20,7 +21,20 @@ const Reports = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 6; // Nombre de rapports par page
 
+  const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setLoading(false); // Termine le chargement après 2 secondes
+  //   }, 2000);
+  //   return () => clearTimeout(timer);
+  // }, []);
+  // if (loading) {
+  //   return <Loader loading={loading} />; // Affiche le loader pendant le chargement
+  // }
+
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const reportsQuery = query(
@@ -51,10 +65,17 @@ const Reports = () => {
           "error"
         );
       }
+      const timer = setTimeout(() => {
+        setLoading(false); // Termine le chargement après 2 secondes
+      }, 1600);
+      return () => clearTimeout(timer);
     };
 
     fetchData();
   }, []);
+  if (loading) {
+    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
+  }
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -88,12 +109,12 @@ const Reports = () => {
       }
     }
   };
+  const totalPages = Math.ceil(reports.length / reportsPerPage);
 
   const currentReports = reports.slice(
     (currentPage - 1) * reportsPerPage,
     currentPage * reportsPerPage
   );
-  const totalPages = Math.ceil(reports.length / reportsPerPage);
   
 
   return (
@@ -281,15 +302,29 @@ const Reports = () => {
       </ul>
 
       <div className={styles.pagination}>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index}
-            className={index + 1 === currentPage ? styles.activePage : ""}
-            onClick={() => setCurrentPage(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
+        <button
+          onClick={() =>
+            setCurrentPage((prevPage) =>
+              prevPage > 1 ? prevPage - 1 : prevPage
+            )
+          }
+          disabled={currentPage === 1}
+        >
+          <i className="fa-solid fa-chevron-left"></i>
+        </button>
+        <p>
+          Page {currentPage} / {totalPages}
+        </p>
+        <button
+          onClick={() =>
+            setCurrentPage((prevPage) =>
+              prevPage < totalPages ? prevPage + 1 : prevPage
+            )
+          }
+          disabled={currentPage === totalPages}
+        >
+          <i className="fa-solid fa-chevron-right"></i>
+        </button>
       </div>
     </div>
   );

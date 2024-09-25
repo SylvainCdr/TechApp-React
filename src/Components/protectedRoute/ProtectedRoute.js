@@ -22,9 +22,7 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [user, loading]);
 
-  if (loading) {
-    return <div>Chargement...</div>;
-  }
+
 
   if (error) {
     return <div>Erreur : {error.message}</div>;

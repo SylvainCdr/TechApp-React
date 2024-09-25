@@ -17,6 +17,7 @@ import {
 } from "firebase/storage";
 import styles from "./style.module.scss";
 import { motion } from "framer-motion";
+import Loader from "../../utils/loader/loader";
 
 export default function TechniciansPage() {
   const [technicians, setTechnicians] = useState([]);
@@ -31,6 +32,19 @@ export default function TechniciansPage() {
   const [editId, setEditId] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [showForm, setShowForm] = useState(false); // État pour afficher ou non le formulaire
+  const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setLoading(false); // Termine le chargement après 2 secondes
+  //   }, 2000);
+  //   return () => clearTimeout(timer);
+  // }, []);
+  // if (loading) {
+  //   return <Loader loading={loading} />; // Affiche le loader pendant le chargement
+  // }
+
+
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
@@ -48,7 +62,14 @@ export default function TechniciansPage() {
 
   useEffect(() => {
     fetchTechnicians();
+    const timer = setTimeout(() => {
+      setLoading(false); // Termine le chargement après 2 secondes
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
+  if (loading) {
+    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
+  }
 
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e) => {

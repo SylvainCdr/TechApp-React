@@ -1,16 +1,25 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
-import { collection, getDocs, deleteDoc, doc, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
+import Loader from "../../utils/loader/loader";
 
 export default function Missions() {
   const [missions, setMissions] = useState([]);
   const [technicians, setTechnicians] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 6; // Nombre de missions par page
+  const [loading, setLoading] = useState(true);
 
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
@@ -45,7 +54,14 @@ export default function Missions() {
   useEffect(() => {
     fetchMissions();
     fetchTechnicians();
+    const timer = setTimeout(() => {
+      setLoading(false); 
+    }, 1600);
+    return () => clearTimeout(timer);
   }, []);
+  if (loading) {
+    return <Loader loading={loading} />; 
+  }
 
   // Fonction pour obtenir l'URL de la photo du technicien par ID
   const getTechnicianPhotoURL = (id) => {
@@ -118,13 +134,21 @@ export default function Missions() {
               {mission.client.nomEntreprise}
             </h2>
             <p>
-            <i class="fa-solid fa-calendar-days"></i>Date(s) d'intervention :{" "} 
-  {new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') === new Date(mission.interventionEndDate).toLocaleDateString('fr-FR') 
-    ? new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
-    : `${new Date(mission.interventionStartDate).toLocaleDateString('fr-FR')} - ${new Date(mission.interventionEndDate).toLocaleDateString('fr-FR')}`} {/* Sinon afficher les deux */}
-</p>
-
-
+              <i class="fa-solid fa-calendar-days"></i>Date(s) d'intervention :{" "}
+              {new Date(mission.interventionStartDate).toLocaleDateString(
+                "fr-FR"
+              ) ===
+              new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
+                ? new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  ) // Si les dates sont identiques
+                : `${new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )} - ${new Date(
+                    mission.interventionEndDate
+                  ).toLocaleDateString("fr-FR")}`}{" "}
+              {/* Sinon afficher les deux */}
+            </p>
 
             <div className={styles.section1}>
               <div className={styles.section1Left}>
@@ -143,20 +167,20 @@ export default function Missions() {
                     {mission.client.email}
                   </li>
                   <li>
-                    <i className="fa-solid fa-location-dot"></i> Adresse du site :{" "}
-                    {mission.site.adresse}
+                    <i className="fa-solid fa-location-dot"></i> Adresse du site
+                    : {mission.site.adresse}
                   </li>
                   <li>
                     <i className="fa-regular fa-user"></i> Contact sur site :{" "}
                     {mission.site.nomContact}
                   </li>
                   <li>
-                    <i className="fa-regular fa-address-card"></i> Fonction du contact :{" "}
-                    {mission.site.fonctionContact}
+                    <i className="fa-regular fa-address-card"></i> Fonction du
+                    contact : {mission.site.fonctionContact}
                   </li>
                   <li>
-                    <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
-                    {mission.site.telContact}
+                    <i className="fa-solid fa-mobile-screen-button"></i>{" "}
+                    Téléphone : {mission.site.telContact}
                   </li>
                 </ul>
               </div>
@@ -166,7 +190,10 @@ export default function Missions() {
                   {mission.intervenants && mission.intervenants.length > 0 ? (
                     mission.intervenants.map((intervenantId, index) => (
                       <div key={index} className={styles.technicianItem}>
-                        <p>{technicians.find(tech => tech.id === intervenantId)?.name || "Nom inconnu"}</p>
+                        <p>
+                          {technicians.find((tech) => tech.id === intervenantId)
+                            ?.name || "Nom inconnu"}
+                        </p>
                         <img
                           src={getTechnicianPhotoURL(intervenantId)}
                           alt={`Photo de technicien`}
@@ -233,20 +260,14 @@ export default function Missions() {
 
       {/* Pagination */}
       <div className={styles.pagination}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Précédent
+        <button onClick={() => handlePageChange(currentPage - 1)}>
+          <i className="fa-solid fa-chevron-left"></i>
         </button>
-        <span>
-          Page {currentPage} sur {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Suivant
+        <p>
+          Page {currentPage} / {totalPages}
+        </p>
+        <button onClick={() => handlePageChange(currentPage + 1)}>
+          <i className="fa-solid fa-chevron-right"></i>
         </button>
       </div>
     </div>

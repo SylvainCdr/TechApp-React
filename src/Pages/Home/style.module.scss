@@ -6,18 +6,18 @@
   min-height: 90vh;
   max-width: 1280px;
   margin: auto;
-  padding-top: 4rem;
+  padding-top: 3rem;
+
 
   img {
-    width: 80%;
-    max-width: 30rem;
-    margin-bottom: 15px;
-    margin-top: 5%;
+    width: 100%;
+    max-width: 33rem;
+    margin-top: 3%;
+    margin-bottom: 5%;
   }
 
   h1 {
     font-size: 2rem;
-    margin-bottom: 40px;
     font-family: "barlow-condensed", sans-serif;
     letter-spacing: 2px;
     color: white;
@@ -30,7 +30,7 @@
     justify-content: center;
     gap: 30px;
     background-color: rgba(255, 255, 255, 0.103);
-    padding: 30px;
+    padding: 20px;
     border-radius: 3rem;
     -webkit-border-radius: 3rem;
     -moz-border-radius: 3rem;
@@ -51,8 +51,8 @@
       text-align: center;
       background-color: var(--col1);
       padding: 20px;
-      border-radius: 50%;
       transition: all 0.3s ease;
+      border-radius: 50%;
       -webkit-border-radius: 50%;
       -moz-border-radius: 50%;
       -ms-border-radius: 50%;
@@ -69,7 +69,7 @@
 @media screen and (max-width: 768px) {
   .homepageContainer {
     img {
-      width: 70%;
+      width: 90%;
     }
 
     h1 {

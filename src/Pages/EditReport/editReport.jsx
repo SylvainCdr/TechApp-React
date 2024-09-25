@@ -75,9 +75,7 @@ const handleUpdate = async (updatedReport) => {
 };
 
 
-  if (loading) {
-    return <p>Chargement...</p>;
-  }
+
 
   return (
     <div className={styles.editReportContainer}>

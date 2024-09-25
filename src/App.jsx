@@ -24,20 +24,20 @@ import Login from "./Components/login/login";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+
+
+ 
 
   useEffect(() => {
     // Suivre l'état de l'utilisateur connecté
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  if (loading) {
-    return <div>Chargement...</div>; // Affiche un état de chargement tant que l'authentification est vérifiée
-  }
+ 
 
   return (
     <BrowserRouter>

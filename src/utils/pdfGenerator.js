@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 
 const coverImg = '/assets/pix-bg.png';
 const footerImg = '/assets/pix-footer.png';
-const headerImg = '/assets/pix-header.png';
+const headerImg = '/assets/pix-header4.png';
 
 const interventionDates = (report) => {
   const startDate = new Date(report.interventionStartDate).toLocaleDateString("fr-FR");
@@ -292,6 +292,7 @@ doc.setTextColor(0, 0, 0); // Couleur du texte noire
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
     doc.setFontSize(10);
+    doc.setTextColor (  171, 171, 171  );
     doc.text(`Page ${i} / ${totalPages}`, pageWidth - 23, pageHeight - 10); // Positionne au bas de la page à droite
   }
 

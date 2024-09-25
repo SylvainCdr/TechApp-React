@@ -382,13 +382,13 @@ export default function ReportForm({ initialData, onSubmit }) {
             <button type="button" onClick={() => removeActionField(index)}
               className={styles.removeBtn}
               >
-              Supprimer cette action
+              Supprimer
             </button>
           </div>
         ))}
         <button type="button" onClick={addActionField}
         className={styles.addBtn}>
-          Ajouter une action
+          <i class="fa-solid fa-plus"></i> Ajouter une action
         </button>
 
         <h3>Remarques </h3>
@@ -413,13 +413,13 @@ export default function ReportForm({ initialData, onSubmit }) {
             />
             <button type="button" onClick={() => removeRemarqueField(index)}
               className={styles.removeBtn}>
-              Supprimer cette remarque
+              Supprimer
             </button>
           </div>
         ))}
         <button type="button" onClick={addRemarqueField}
         className={styles.addBtn}>
-          Ajouter une remarque
+          <i class="fa-solid fa-plus"></i> Ajouter une remarque
         </button>
 
         <h3>Risque(s) / Danger(s)</h3>

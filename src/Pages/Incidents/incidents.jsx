@@ -12,17 +12,21 @@ import {
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
+import Loader from "../../utils/loader/loader";
 
 export default function IncidentReports() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [incidents, setIncidents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
-  const incidentsPerPage = 5; // Nombre d'incidents par page
+  const incidentsPerPage = 6; // Nombre d'incidents par page
   const [technicians, setTechnicians] = useState([]);
 
+
+
+
   const fetchIncidents = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       // Requête pour récupérer les incidents triés par date de création décroissante
       const q = query(
@@ -38,9 +42,7 @@ export default function IncidentReports() {
     } catch (error) {
       setError(error);
       console.error("Erreur lors de la récupération des rapports : ", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   // Fonction pour récupérer les techniciens depuis Firestore
@@ -61,7 +63,14 @@ export default function IncidentReports() {
   useEffect(() => {
     fetchIncidents(); // Récupère les incidents
     fetchTechnicians(); // Récupère les techniciens
+    const timer = setTimeout(() => {
+      setLoading(false); // Termine le chargement après 2 secondes
+    }, 1600);
+    return () => clearTimeout(timer);
   }, []);
+  if (loading) {
+    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
+  }
 
   // Fonction pour supprimer un incident avec alerte de confirmation
   const deleteIncident = async (id) => {
@@ -96,21 +105,24 @@ export default function IncidentReports() {
     deleteIncident(id);
   };
 
-  // Fonction pour changer de page
-  const handlePageChange = (page) => {
+  
+const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  // Calcul du nombre total de pages
   const totalPages = Math.ceil(incidents.length / incidentsPerPage);
 
-  // Incidents à afficher pour la page actuelle
+  // Calcul de l'index de début et de fin de la pagination
   const indexOfLastIncident = currentPage * incidentsPerPage;
   const indexOfFirstIncident = indexOfLastIncident - incidentsPerPage;
+
+  // Extraire les incidents pour la page actuelle
   const currentIncidents = incidents.slice(
     indexOfFirstIncident,
     indexOfLastIncident
   );
-
+  
   return (
     <div className={styles.incidentsContainer}>
       <h1>Fiches d'incidents</h1>
@@ -310,21 +322,17 @@ export default function IncidentReports() {
 
       {/* Pagination */}
       <div className={styles.pagination}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Précédent
-        </button>
-        <span>
-          Page {currentPage} sur {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Suivant
-        </button>
+       
+          <button onClick={() => handlePageChange(currentPage - 1)}>
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+          <p>
+            Page {currentPage} / {totalPages}
+          </p>
+          <button onClick={() => handlePageChange(currentPage + 1)}>
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+
       </div>
     </div>
   );

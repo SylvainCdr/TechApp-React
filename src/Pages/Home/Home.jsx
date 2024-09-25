@@ -1,6 +1,9 @@
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import styles from "./style.module.scss";
 import { Link } from "react-router-dom";
+import Loader from "../../utils/loader/loader";
+import styles from "./style.module.scss";
+
 
 const container = {
   hidden: { opacity: 0, scale: 0 },
@@ -23,8 +26,26 @@ const item = {
 };
 
 function Homepage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false); // Termine le chargement après 2 secondes
+    }, 1700);
+    return () => clearTimeout(timer);
+  }, []);
+  if (loading) {
+    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
+  }
+
   return (
-    <motion.div
+   
+
+
+
+
+
+<motion.div
       className={styles.homepageContainer}
       variants={container}
       initial="hidden"
@@ -32,7 +53,7 @@ function Homepage() {
     >
       {/* Animation spéciale pour l'image */}
       <motion.img
-        src="assets/logo-pix-dark.png"
+        src="assets/pix-techapp3.png"
         alt=""
         initial={{ scale: 0 }}
         animate={{ rotate: 360, scale: 1 }}
@@ -42,11 +63,11 @@ function Homepage() {
           damping: 20
         }}
       />
-      
-      {/* Animation normale pour le titre */}
-      <motion.h1 variants={item}>Tech-App</motion.h1>
 
-      {/* Animation des liens */}
+
+
+
+
       <motion.div className={styles.categories} variants={container}>
         <motion.div variants={item}>
           <Link to="/missions">Fiches missions</Link>

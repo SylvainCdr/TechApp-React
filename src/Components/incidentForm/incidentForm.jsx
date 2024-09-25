@@ -298,11 +298,11 @@ export default function IncidentForm({ initialData, onSubmit }) {
               checked={risques}
               onChange={() => setRisques(!risques)}
             />
-            Risque identifié
+            Intervention comportant un risque
           </label>
         </div>
 
-        <h3>Remarque(s) de l'intervenant :</h3>
+        <h3>Remarque(s) du salarié :</h3>
         {remarques.map((remarque, index) => (
           <div key={index} className={styles.formGroup}>
             <input
@@ -313,16 +313,16 @@ export default function IncidentForm({ initialData, onSubmit }) {
             />
             <button type="button" onClick={() => removeRemarqueField(index)}
               className={styles.removeBtn}>
-              Supprimer remarque
+              Supprimer
             </button>
           </div>
         ))}
         <button type="button" onClick={addRemarqueField}
         className={styles.addBtn} >
-          Ajouter remarque
+          <i class="fa-solid fa-plus"></i> Ajouter remarque
         </button>
 
-        <h3>Actions :</h3>
+        <h3>Action(s) :</h3>
         {actions.map((action, index) => (
           <div key={index} className={styles.formGroup}>
             <input
@@ -333,16 +333,16 @@ export default function IncidentForm({ initialData, onSubmit }) {
             />
             <button type="button" onClick={() => removeActionField(index)}
               className={styles.removeBtn}>
-              Supprimer action
+              Supprimer
             </button>
           </div>
         ))}
         <button type="button" onClick={addActionField}
         className={styles.addBtn}>
-          Ajouter action
+          <i class="fa-solid fa-plus"></i> Ajouter action
         </button>
 
-        <h3>Missions Dangereuses :</h3>
+        <h3>Nature du danger :</h3>
         {missionsDangereuses.map((mission, index) => (
           <div key={index} className={styles.formGroup}>
             <input
@@ -351,33 +351,41 @@ export default function IncidentForm({ initialData, onSubmit }) {
               onChange={(e) =>
                 handleMissionDangereuseChange(index, e.target.value)
               }
-              placeholder="Ajouter une mission dangereuse"
+              placeholder=" ex : danger électrique"
             />
             <button
               type="button"
               onClick={() => removeMissionDangereuseField(index)}
               className={styles.removeBtn}
             >
-              Supprimer mission dangereuse
+              Supprimer
             </button>
           </div>
         ))}
         <button type="button" onClick={addMissionDangereuseField}
         className={styles.addBtn}>
-          Ajouter mission dangereuse
+          <i class="fa-solid fa-plus"></i> Ajouter mission dangereuse
         </button>
 
-        <h3>Photos :</h3>
-        <div>
-          {photos.map((photo, index) => (
-            <img
-              key={index}
-              src={photo}
-              alt={`photo-${index}`}
-              className={styles.photo}
-            />
-          ))}
-        </div>
+        <h3>Photo(s) liée(s) au rappport d'intervention</h3>
+<div>
+  {remarques.map((remarque, index) => (
+    remarque.photos && remarque.photos.length > 0 && (
+      <div key={index} className={styles.photoItem}>
+       
+        {remarque.photos.map((photo, photoIndex) => (
+          <img
+            key={photoIndex}
+            src={photo}
+            alt={`remarque-photo-${index}-${photoIndex}`}
+            
+          />
+        ))}
+      </div>
+    )
+  ))}
+</div>
+
 
         <button type="submit" className={styles.submitBtn}>Soumettre</button>
       </form>

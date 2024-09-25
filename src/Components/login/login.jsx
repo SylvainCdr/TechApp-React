@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
-import Swal from "sweetalert2";
 import styles from "./style.module.scss";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import Loader from "../../utils/loader/loader";
 
 const container = {
   hidden: { opacity: 0, scale: 0 },
@@ -30,6 +31,17 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false); 
+    }, 1600);
+    return () => clearTimeout(timer);
+  }, []);
+  if (loading) {
+    return <Loader loading={loading} />; 
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,19 +64,19 @@ export default function Login() {
     >
       {/* Animation spéciale pour l'image */}
       <motion.img
-        src="assets/logo-pix-dark.png"
+        src="assets/pix-techapp3.png"
         alt=""
         initial={{ scale: 0 }}
         animate={{ rotate: 360, scale: 1 }}
         transition={{
           type: "spring",
-          stiffness: 260,
-          damping: 20,
+          stiffness: 150,
+          damping: 30
         }}
       />
 
-      {/* Animation normale pour le titre */}
-      <motion.h1 variants={item}>Tech-App</motion.h1>
+      {/* Animation normale pour le titre
+      <motion.h1 variants={item}>Tech-App</motion.h1> */}
 
       <motion.h2 variants={item}>Connexion</motion.h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
