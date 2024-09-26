@@ -21,21 +21,31 @@ import Search from "./Pages/Search/search";
 import CreateIncident from "./Pages/CreateIncident/createIncident";
 import ProtectedRoute from "./Components/protectedRoute/ProtectedRoute";
 import Login from "./Components/login/login";
+import Loader from "./utils/loader/loader";
 
 function App() {
   const [user, setUser] = useState(null);
 
 
-
- 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false); // Termine le chargement après 2 secondes
+    }, 1700);
     // Suivre l'état de l'utilisateur connecté
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-    return () => unsubscribe();
-  }, []);
+    return () => { // Nettoyer l'effet
+      unsubscribe();
+      clearTimeout(timer);
+    }
+  }
+  , []);
+  if (loading) {
+    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
+  }
 
  
 

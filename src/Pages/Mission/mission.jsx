@@ -57,18 +57,16 @@ export default function Mission() {
     fetchTechnicians();
   }, [missionId]);
 
-  
-
   // Fonction pour copier les informations du site dans le presse-papiers
   const handleCopy = () => {
     const siteInfo = `${mission.site.adresse}`;
     navigator.clipboard.writeText(siteInfo).then(() => {
-      Swal.fire ({
+      Swal.fire({
         title: "Adresse copiée !",
         text: "L'adresse du site a été copiée dans le presse-papiers",
         icon: "success",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
     });
   };
@@ -78,7 +76,6 @@ export default function Mission() {
       <h1>Fiche Mission N° {missionId}</h1>
       {loading && <p>Chargement en cours...</p>}
       {error && <p>{error}</p>}
-     
 
       {mission && (
         <div className={styles.missionItem}>
@@ -87,11 +84,28 @@ export default function Mission() {
             {mission.client.nomEntreprise}
           </h2>
           <p>
-  Date(s) d'intervention : 
-  {new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') === new Date(mission.interventionEndDate).toLocaleDateString('fr-FR') 
-    ? new Date(mission.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
-    : `${new Date(mission.interventionStartDate).toLocaleDateString('fr-FR')} - ${new Date(mission.interventionEndDate).toLocaleDateString('fr-FR')}`} {/* Sinon afficher les deux */}
+            Date(s) d'intervention : {""}
+            {new Date(mission.interventionStartDate).toLocaleDateString(
+              "fr-FR"
+            ) ===
+            new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
+              ? new Date(mission.interventionStartDate).toLocaleDateString(
+                  "fr-FR" 
+                )  
+              : `${new Date(mission.interventionStartDate).toLocaleDateString(
+                  "fr-FR"
+                )} - ${new Date(mission.interventionEndDate).toLocaleDateString(
+                  "fr-FR"
+                )}`}{" "}
 </p>
+<br />
+    
+            
+            
+           
+          <p>Commercial référent : {mission.commercial}</p>
+          <br />
+          <p> Devis N° : {mission.devis}</p>
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
@@ -115,8 +129,8 @@ export default function Mission() {
                 {mission.site.nomContact}
               </p>
               <p>
-                <i className="fa-regular fa-address-card"></i>Fonction du contact :{" "}
-                {mission.site.fonctionContact}
+                <i className="fa-regular fa-address-card"></i>Fonction du
+                contact : {mission.site.fonctionContact}
               </p>
               <p>
                 <i className="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
@@ -171,6 +185,29 @@ export default function Mission() {
               </ul>
             </div>
           </div>
+
+      <div className={styles.section3}>
+        <div className={styles.section3Left}>
+          <h3>Commentaire / Indication supplémentaire :</h3>
+          <p><i class="fa-solid fa-circle-info"></i> {mission.comments || "Aucun commentaire"}</p>
+        </div>
+
+        <div className={styles.section3Right}>
+          <h3>Plan de prévention :</h3>
+          {mission.planPrevention ? (
+            <a
+              href={mission.planPrevention}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.planPreventionLink}
+            >
+              <i className="fa-solid fa-file-pdf"></i> Voir le plan de prévention
+            </a>
+          ) : (
+            <p>Aucun plan de prévention</p>
+          )}
+        </div>
+      </div>
         </div>
       )}
 
@@ -206,20 +243,14 @@ export default function Mission() {
           </div>
         </div>
 
-     
-          
-<h3>Numéros d’urgences :</h3>
+        <h3>Numéros d’urgences :</h3>
 
-<img
-  src="/assets/numerosUrgence.jpg"
-  className={styles.numUrgence}
-  alt=""
-/>
-        </div>
+        <img
+          src="/assets/numerosUrgence.jpg"
+          className={styles.numUrgence}
+          alt=""
+        />
       </div>
-   
+    </div>
   );
 }
-      
-
-

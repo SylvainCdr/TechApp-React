@@ -64,10 +64,10 @@ const handleUpdate = async (updatedReport) => {
       title: "Rapport mis à jour avec succès !",
       showConfirmButton: false,
       timer: 1500,
+     
+    }).then (() => {
+      window.location.href = "/reports";
     });
-    
-    // Rediriger l'utilisateur vers la page de détails du rapport
-    window.location.href = `/report/${reportId}`;
   } catch (error) {
     console.error("Erreur lors de la mise à jour du rapport :", error);
     alert("Une erreur est survenue lors de la mise à jour du rapport.");

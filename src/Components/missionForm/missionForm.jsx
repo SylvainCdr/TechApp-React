@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { db } from "../../firebase/firebase";
+import { db, storage } from "../../firebase/firebase";
 import {
   doc,
   getDocs,
   getDoc,
   updateDoc,
   addDoc,
-  collection,
+  collection, 
+
 } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -38,7 +40,10 @@ export default function MissionForm() {
   const [dateEndIntervention, setDateEndIntervention] = useState(
     new Date().toISOString().substring(0, 10)
   ); // Format YYYY-MM-DD
-
+  const [commercial, setCommercial] = useState("");
+  const [devis, setDevis] = useState("");
+const [planPrevention, setPlanPrevention] = useState("");
+const [comments, setComments] = useState("");
 
   // Fonction pour récupérer l id de l'utilisateur connecté
   const fetchUser = async () => {
@@ -90,6 +95,12 @@ export default function MissionForm() {
           missionData.interventionEndDate?.substring(0, 10) ||
             new Date().toISOString().substring(0, 10)
         );
+        setCreatedBy(missionData.createdBy);
+        setCommercial(missionData.commercial);
+        setDevis(missionData.devis);
+        setPlanPrevention(missionData.planPrevention);
+        setComments(missionData.comments);
+
       } else {
         console.log("Mission non trouvée");
       }
@@ -122,6 +133,11 @@ export default function MissionForm() {
         createdAt: new Date(),
         updatedAt: new Date(),
         createdBy,
+        commercial,
+        devis,
+        planPrevention,
+        comments,
+
         
       };
 
@@ -183,9 +199,42 @@ export default function MissionForm() {
     setRisqueEPI(risqueEPI.filter((_, i) => i !== index));
   };
 
+  // planPrevention est un uplaod de fichier
+const handlePlanPrevention = async (e) => {
+  const file = e.target.files[0];
+  const storageRef = ref(storage, `plansPrevention/${file.name}`);
+  await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(storageRef);
+  setPlanPrevention(url);
+}
+
+
   return (
     <div className={styles.missionFormContainer}>
       <form onSubmit={handleSubmit}>
+
+      <h3>Devis associé à l'intervention</h3>
+        <div className={styles.formGroup}>
+          <label>N° de devis :</label>
+          <input
+            type="text"
+            value={devis}
+            onChange={(e) => setDevis(e.target.value)}
+          />
+        </div>
+
+        <h3>Commercial(e) en charge du dossier</h3>
+        <div className={styles.formGroup}>
+          <label>Nom du commercial :</label>
+          <input
+            type="text"
+            value={commercial}
+            onChange={(e) => setCommercial(e.target.value)}
+        
+          />
+        </div>
+
+
         <h3>Client</h3>
         <div className={styles.formGroup}>
           <label>Nom de l'entreprise :</label>
@@ -275,6 +324,8 @@ export default function MissionForm() {
           />
         </div>
 
+      
+
         <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
           <label>Sélectionnez un ou plusieurs intervenants :</label>
@@ -362,6 +413,25 @@ export default function MissionForm() {
         >
           <i class="fa-solid fa-plus"></i> Ajouter un risque/EPI
         </button>
+
+        <h3>Plan de prévention</h3>
+        <div className={styles.formGroup}>
+          <label>Uploader le plan de prévention :</label>
+          <input
+            type="file"
+            onChange={handlePlanPrevention}
+          />
+        </div>
+
+        <h3>Commentaire(s) / indication(s) supplémentaire(s)</h3>
+        <div className={styles.formGroup}>
+          <label>Commentaire(s) :</label>
+          <textarea
+            value={comments}
+            onChange={(e) => setComments(e.target.value)}
+          ></textarea>
+        </div>
+
 
         <button type="submit" className={styles.submitBtn}>
           Enregistrer la mission

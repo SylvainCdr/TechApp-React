@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Loader from "../../utils/loader/loader";
 import styles from "./style.module.scss";
 
-
 const container = {
   hidden: { opacity: 0, scale: 0 },
   visible: {
@@ -12,40 +11,26 @@ const container = {
     scale: 1,
     transition: {
       delayChildren: 0.4,
-      staggerChildren: 0.3
-    }
-  }
+      staggerChildren: 0.3,
+    },
+  },
 };
 
 const item = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
-    opacity: 1
-  }
+    opacity: 1,
+  },
 };
 
 function Homepage() {
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false); // Termine le chargement après 2 secondes
-    }, 1700);
-    return () => clearTimeout(timer);
-  }, []);
-  if (loading) {
-    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
-  }
+
 
   return (
-   
-
-
-
-
-
-<motion.div
+    <motion.div
       className={styles.homepageContainer}
       variants={container}
       initial="hidden"
@@ -60,13 +45,9 @@ function Homepage() {
         transition={{
           type: "spring",
           stiffness: 260,
-          damping: 20
+          damping: 20,
         }}
       />
-
-
-
-
 
       <motion.div className={styles.categories} variants={container}>
         <motion.div variants={item}>

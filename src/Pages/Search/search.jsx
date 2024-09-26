@@ -4,14 +4,14 @@ import styles from "./style.module.scss";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { motion } from "framer-motion";
-import Loader from "../../utils/loader/loader";
+
 
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
-  const [loading, setLoading] = useState(true);
+
 
   // Fonction de filtrage des rapports sur le champ nomEntreprise uniquement
     const filteredReports = reports.filter((report) =>
@@ -46,15 +46,10 @@ export default function Search() {
 
     useEffect(() => {
         fetchReports();
-        const timer = setTimeout(() => {
-          setLoading(false); // Termine le chargement après 2 secondes
-        }, 1600);
-        return () => clearTimeout(timer);
+       
     }
     , []);
-    if (loading) {
-        return <Loader loading={loading} />; // Affiche le loader pendant le chargement
-    }
+  
 
   return (
     <div className={styles.searchContainer}>

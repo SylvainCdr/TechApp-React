@@ -12,10 +12,9 @@ import {
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import Loader from "../../utils/loader/loader";
 
 export default function IncidentReports() {
-  const [loading, setLoading] = useState(true);
+ 
   const [error, setError] = useState(null);
   const [incidents, setIncidents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
@@ -63,14 +62,9 @@ export default function IncidentReports() {
   useEffect(() => {
     fetchIncidents(); // Récupère les incidents
     fetchTechnicians(); // Récupère les techniciens
-    const timer = setTimeout(() => {
-      setLoading(false); // Termine le chargement après 2 secondes
-    }, 1600);
-    return () => clearTimeout(timer);
+    
   }, []);
-  if (loading) {
-    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
-  }
+ 
 
   // Fonction pour supprimer un incident avec alerte de confirmation
   const deleteIncident = async (id) => {
@@ -131,8 +125,7 @@ const handlePageChange = (page) => {
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche incident
       </Link>
 
-      {loading && <p>Chargement...</p>}
-      {error && <p>Une erreur est survenue : {error.message}</p>}
+     
 
       <ul className={styles.incidentsList}>
         {currentIncidents.map((incident) => (

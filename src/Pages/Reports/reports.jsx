@@ -12,7 +12,8 @@ import {
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import Loader from "../../utils/loader/loader";
+
+
 
 
 const Reports = () => {
@@ -21,17 +22,8 @@ const Reports = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 6; // Nombre de rapports par page
 
-  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setLoading(false); // Termine le chargement après 2 secondes
-  //   }, 2000);
-  //   return () => clearTimeout(timer);
-  // }, []);
-  // if (loading) {
-  //   return <Loader loading={loading} />; // Affiche le loader pendant le chargement
-  // }
+
 
   useEffect(() => {
     
@@ -65,17 +57,11 @@ const Reports = () => {
           "error"
         );
       }
-      const timer = setTimeout(() => {
-        setLoading(false); // Termine le chargement après 2 secondes
-      }, 1600);
-      return () => clearTimeout(timer);
     };
 
     fetchData();
   }, []);
-  if (loading) {
-    return <Loader loading={loading} />; // Affiche le loader pendant le chargement
-  }
+
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -126,6 +112,7 @@ const Reports = () => {
         d'intervention
       </Link>
 
+   
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
           <motion.li
@@ -300,6 +287,7 @@ const Reports = () => {
           </motion.li>
         ))}
       </ul>
+    
 
       <div className={styles.pagination}>
         <button

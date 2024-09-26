@@ -14,7 +14,7 @@ import {
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import Loader from "../../utils/loader/loader";
+
 import { auth } from "../../firebase/firebase";
 
 export default function Missions() {
@@ -22,7 +22,7 @@ export default function Missions() {
   const [technicians, setTechnicians] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 6; // Nombre de missions par page
-  const [loading, setLoading] = useState(true);
+
   const [createdBy, setCreatedBy] = useState("");
 
   // Fonction pour récupérer les fiches missions depuis Firestore
@@ -71,14 +71,10 @@ export default function Missions() {
     fetchMissions();
     fetchTechnicians();
     fetchCreatedBy();
-    const timer = setTimeout(() => {
-      setLoading(false); 
-    }, 1600);
-    return () => clearTimeout(timer);
+  
+   
   }, []);
-  if (loading) {
-    return <Loader loading={loading} />; 
-  }
+ 
 
   // Fonction pour obtenir l'URL de la photo du technicien par ID
   const getTechnicianPhotoURL = (id) => {
@@ -249,6 +245,8 @@ export default function Missions() {
                 </ul>
               </div>
             </div>
+            
+          
 
             <div className={styles.section3}>
               <Link
