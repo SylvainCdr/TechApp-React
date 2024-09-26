@@ -5,6 +5,7 @@ import { db } from "../../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import Swal from "sweetalert2";
+import { auth } from "../../firebase/firebase";
 
 export default function Mission() {
   const { missionId } = useParams();
@@ -12,6 +13,7 @@ export default function Mission() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [technicians, setTechnicians] = useState([]);
+  const [createdBy, setCreatedBy] = useState(null);
 
   const fetchMission = async () => {
     try {
@@ -38,7 +40,7 @@ export default function Mission() {
       const techniciansList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().firstName + " " + doc.data().lastName,
-        urlPhoto: doc.data().urlPhoto,
+        urlPhoto: doc.data().urlPhoto, // Assurez-vous que le champ urlPhoto existe
       }));
       setTechnicians(techniciansList);
     } catch (error) {
@@ -52,11 +54,7 @@ export default function Mission() {
     return technician ? technician.urlPhoto : "/assets/default-avatar.jpg"; // Avatar par défaut si pas de photo
   };
 
-  useEffect(() => {
-    fetchMission();
-    fetchTechnicians();
-  }, [missionId]);
-
+  
   // Fonction pour copier les informations du site dans le presse-papiers
   const handleCopy = () => {
     const siteInfo = `${mission.site.adresse}`;
@@ -70,7 +68,23 @@ export default function Mission() {
       });
     });
   };
-
+  
+  // fonction pour récupérer l email du createdBy depuis le uid de Authentification
+  const fetchCreatedBy = async () => {
+    try {
+      const user = auth.currentUser;
+      setCreatedBy(user.email);
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'utilisateur : ", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchMission();
+    fetchTechnicians();
+    fetchCreatedBy();
+  }, [missionId]);
+  
   return (
     <div className={styles.missionContainer} id="mission-content">
       <h1>Fiche Mission N° {missionId}</h1>
@@ -102,9 +116,11 @@ export default function Mission() {
     
             
             
-           
+          <p>Missions créé(e) par : {createdBy}</p>
+          <br />
           <p>Commercial référent : {mission.commercial}</p>
           <br />
+           
           <p> Devis N° : {mission.devis}</p>
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
@@ -144,15 +160,17 @@ export default function Mission() {
             <div className={styles.section1Right}>
               <h3>Intervenant(s)</h3>
               <div className={styles.technicians}>
-                {mission.intervenants && mission.intervenants.length > 0 ? (
-                  mission.intervenants.map((technicianId, index) => (
-                    <div key={index} className={styles.technicianItem}>
-                      <p>{technicianId}</p>
-                      <img
-                        src={getTechnicianPhotoURL(technicianId)}
-                        alt={`Photo de ${technicianId}`}
-                        className={styles.technicianPhoto}
-                      />
+              {mission.intervenants && mission.intervenants.length > 0 ? (
+                    mission.intervenants.map((intervenantId, index) => (
+                      <div key={index} className={styles.technicianItem}>
+                        <p>
+                          {technicians.find((tech) => tech.id === intervenantId)
+                            ?.name || "Nom inconnu"}
+                        </p>
+                        <img
+                          src={getTechnicianPhotoURL(intervenantId)}
+                          alt={`Photo de technicien`}
+                        />
                     </div>
                   ))
                 ) : (
@@ -188,7 +206,7 @@ export default function Mission() {
 
       <div className={styles.section3}>
         <div className={styles.section3Left}>
-          <h3>Commentaire / Indication supplémentaire :</h3>
+          <h3>Commentaire(s) :</h3>
           <p><i class="fa-solid fa-circle-info"></i> {mission.comments || "Aucun commentaire"}</p>
         </div>
 

@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false); // Termine le chargement après 2 secondes
-    }, 1700);
+    }, 2000);
     // Suivre l'état de l'utilisateur connecté
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
