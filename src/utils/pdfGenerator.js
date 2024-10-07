@@ -104,7 +104,7 @@ const generateReportPdf = async (report, technicians) => {
  // -------------------------------------------------------------------------------------------------------
 // PAGE 3 : ACTIONS MENÉES AVEC PHOTOS EN TABLEAU
 const imgWidth = 80; // 30% de la page
-const imgHeight = 60;
+const imgHeight = 50;
 const descriptionWidth = 100; // 70% de la page
 
 doc.addPage(); // Ajoute la page 3
