@@ -6,8 +6,7 @@ import {
   getDoc,
   updateDoc,
   addDoc,
-  collection, 
-
+  collection,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import styles from "./style.module.scss";
@@ -42,8 +41,8 @@ export default function MissionForm() {
   ); // Format YYYY-MM-DD
   const [commercial, setCommercial] = useState("");
   const [devis, setDevis] = useState("");
-const [planPrevention, setPlanPrevention] = useState("");
-const [comments, setComments] = useState("");
+  const [planPrevention, setPlanPrevention] = useState("");
+  const [comments, setComments] = useState("");
 
   // Fonction pour récupérer l id de l'utilisateur connecté
   const fetchUser = async () => {
@@ -51,14 +50,12 @@ const [comments, setComments] = useState("");
       const user = auth.currentUser;
       setCreatedBy(user.uid);
     } catch (error) {
-      console.error("Erreur lors de la récupération de l'utilisateur : ", error);
+      console.error(
+        "Erreur lors de la récupération de l'utilisateur : ",
+        error
+      );
     }
   };
-
- 
-
-  
-
 
   const fetchIntervenants = async () => {
     try {
@@ -100,7 +97,6 @@ const [comments, setComments] = useState("");
         setDevis(missionData.devis);
         setPlanPrevention(missionData.planPrevention);
         setComments(missionData.comments);
-
       } else {
         console.log("Mission non trouvée");
       }
@@ -114,8 +110,6 @@ const [comments, setComments] = useState("");
     fetchMission();
     fetchUser();
   }, [missionId]);
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,8 +131,6 @@ const [comments, setComments] = useState("");
         devis,
         planPrevention,
         comments,
-
-        
       };
 
       if (missionId) {
@@ -200,20 +192,18 @@ const [comments, setComments] = useState("");
   };
 
   // planPrevention est un uplaod de fichier
-const handlePlanPrevention = async (e) => {
-  const file = e.target.files[0];
-  const storageRef = ref(storage, `plansPrevention/${file.name}`);
-  await uploadBytes(storageRef, file);
-  const url = await getDownloadURL(storageRef);
-  setPlanPrevention(url);
-}
-
+  const handlePlanPrevention = async (e) => {
+    const file = e.target.files[0];
+    const storageRef = ref(storage, `plansPrevention/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    setPlanPrevention(url);
+  };
 
   return (
     <div className={styles.missionFormContainer}>
       <form onSubmit={handleSubmit}>
-
-      <h3>Devis associé à l'intervention</h3>
+        <h3>Devis associé à l'intervention</h3>
         <div className={styles.formGroup}>
           <label>N° de devis :</label>
           <input
@@ -230,10 +220,8 @@ const handlePlanPrevention = async (e) => {
             type="text"
             value={commercial}
             onChange={(e) => setCommercial(e.target.value)}
-        
           />
         </div>
-
 
         <h3>Client</h3>
         <div className={styles.formGroup}>
@@ -324,8 +312,6 @@ const handlePlanPrevention = async (e) => {
           />
         </div>
 
-      
-
         <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
           <label>Sélectionnez un ou plusieurs intervenants :</label>
@@ -372,13 +358,13 @@ const handlePlanPrevention = async (e) => {
             >
               Supprimer
             </button>
-        </div>
+          </div>
         ))}
         <button
           type="button"
           onClick={addMissionField}
           className={styles.addBtn}
-          >
+        >
           <i class="fa-solid fa-plus"></i> Ajouter une mission
         </button>
 
@@ -394,7 +380,6 @@ const handlePlanPrevention = async (e) => {
                 updatedRisqueEPI[index] = e.target.value;
                 setRisqueEPI(updatedRisqueEPI);
               }}
-              required
             />
             <button
               type="button"
@@ -417,10 +402,7 @@ const handlePlanPrevention = async (e) => {
         <h3>Plan de prévention</h3>
         <div className={styles.formGroup}>
           <label>Uploader le plan de prévention :</label>
-          <input
-            type="file"
-            onChange={handlePlanPrevention}
-          />
+          <input type="file" onChange={handlePlanPrevention} />
         </div>
 
         <h3>Commentaire(s) / indication(s) supplémentaire(s)</h3>
@@ -431,7 +413,6 @@ const handlePlanPrevention = async (e) => {
             onChange={(e) => setComments(e.target.value)}
           ></textarea>
         </div>
-
 
         <button type="submit" className={styles.submitBtn}>
           Enregistrer la mission
