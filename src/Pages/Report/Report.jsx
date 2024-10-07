@@ -188,7 +188,7 @@ export default function InterventionReport() {
                           <img
                             key={i}
                             src={photo}
-                            alt={`Photo ${i + 1} de l'action ${index + 1}`}
+                            // alt={`Photo ${i + 1} de l'action ${index + 1}`}
                           />
                         ))}
                       </td>
@@ -221,7 +221,7 @@ export default function InterventionReport() {
                           <img
                             key={i}
                             src={photo}
-                            alt={`Photo ${i + 1} de la remarque ${index + 1}`}
+                            // alt={`Photo ${i + 1} de la remarque ${index + 1}`}
                           />
                         ))}
                       </td>
