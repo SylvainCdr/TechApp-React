@@ -9,23 +9,28 @@ Cette application web est développée pour faciliter le travail des techniciens
 
 ## Fonctionnalités
 
-L'application permet aux techniciens de :
-- Créer et gérer des fiches missions pour les chantiers.
+L'application permet à l'entreprise de :
+- Gérer les profils techniciens.
+- Créer et gérer des fiches missions pour les chantiers/interventions.
 - Ajouter des actions menées, remarques et photos au rapport d'intervention.
-- Signer les rapports d'intervention sur place ou envoyer un lien au client pour signature à distance.
+- Faire signer les rapports d'intervention.
 - Générer automatiquement des fiches d'incidents si des risques sont identifiés.
 - Voir et rechercher les rapports d'intervention existants.
-- Intégrer les photos directement dans les rapports PDF générés.
+- Intégrer les commentaires & photos directement dans les rapports PDF générés.
 
 ## Technologies utilisées
 
 L'application utilise les technologies suivantes :
 - **Frontend** : React, SCSS
-- **Envoi d'emails** : EmailJS
 - **Base de données et stockage** : Firebase Firestore, Firebase Storage
 - **Authentification** : Google OAuth (pour les utilisateurs Outlook)
-- **Déploiement** : Google Hosting (pour l'application frontend)
-- **Déploiement** : Google Hosting (pour l'application frontend)
+- **Déploiement** : Google Hosting 
+- **Envoi d'emails** : EmailJS
+- **Signature électronique** : react-signature-canvas
+- **Compression/optimisation des photos** : react-image-file-resizer
+- **Génération de document PDF** : jspdf
+- **Animations** : framer-motion & sweetalert2
+
 
 ## Screenshots
 
