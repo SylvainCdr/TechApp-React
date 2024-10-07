@@ -6,8 +6,7 @@ import { storage } from "../../firebase/firebase";
 import styles from "./style.module.scss";
 import { createIncidentReport } from "../../automation/incidentAutomation";
 import Signature from "../../utils/signature/signature";
-import Resizer from 'react-image-file-resizer';
-
+import Resizer from "react-image-file-resizer";
 
 export default function ReportForm({ initialData, onSubmit }) {
   const [client, setClient] = useState({
@@ -40,7 +39,7 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [isSigned, setIsSigned] = useState(false); // Indique si le rapport a été signé
   const [isLoading, setIsLoading] = useState(false); // Indique si le formulaire est en cours de soumission
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
-
+  const [interventionDuration, setInterventionDuration] = useState(0);
 
   useEffect(() => {
     if (initialData) {
@@ -64,6 +63,7 @@ export default function ReportForm({ initialData, onSubmit }) {
       setSignataireNom(initialData.signataireNom || "");
       setSignatureUrl(initialData.signatureUrl || "");
       setIsSigned(initialData.isSigned || false);
+      setInterventionDuration(initialData.interventionDuration || 0);
     }
   }, [initialData]);
 
@@ -85,77 +85,87 @@ export default function ReportForm({ initialData, onSubmit }) {
     fetchTechnicians();
   }, []);
 
-
   const handleActionPhotoChange = async (index, e) => {
     const files = Array.from(e.target.files);
     const newActionsDone = [...actionsDone];
-  
-    const resizedFiles = await Promise.all(files.map(file => 
-      new Promise((resolve) => {
-        Resizer.imageFileResizer(
-          file,
-          800, // largeur
-          800, // hauteur
-          'JPEG', // format
-          30, // qualité
-          0, // rotation
-          uri => {
-            resolve(uri); // Renvoie le fichier Blob
-          },
-          'file' // type de retour
-        );
-      })
-    ));
-  
+
+    const resizedFiles = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise((resolve) => {
+            Resizer.imageFileResizer(
+              file,
+              800, // largeur
+              800, // hauteur
+              "JPEG", // format
+              30, // qualité
+              0, // rotation
+              (uri) => {
+                resolve(uri); // Renvoie le fichier Blob
+              },
+              "file" // type de retour
+            );
+          })
+      )
+    );
+
     // Upload des fichiers dans Firebase Storage
     for (const resizedFile of resizedFiles) {
-      const storageRef = ref(storage, `interventionPhotos/actions/${resizedFile.name}`);
+      const storageRef = ref(
+        storage,
+        `interventionPhotos/actions/${resizedFile.name}`
+      );
       await uploadBytes(storageRef, resizedFile);
       const downloadURL = await getDownloadURL(storageRef);
       newActionsDone[index].photos.push(downloadURL);
     }
-  
+
     setActionsDone(newActionsDone);
   };
-  
+
   const handleRemarquePhotoChange = async (index, e) => {
     const files = Array.from(e.target.files);
     const newRemarques = [...remarques];
-  
-    const resizedFiles = await Promise.all(files.map(file => 
-      new Promise((resolve) => {
-        Resizer.imageFileResizer(
-          file,
-          800, // largeur
-          800, // hauteur
-          'JPEG', // format
-          50, // qualité
-          0, // rotation
-          uri => {
-            resolve(uri); // Renvoie le fichier Blob
-          },
-          'file' // type de retour
-        );
-      })
-    ));
-  
+
+    const resizedFiles = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise((resolve) => {
+            Resizer.imageFileResizer(
+              file,
+              800, // largeur
+              800, // hauteur
+              "JPEG", // format
+              50, // qualité
+              0, // rotation
+              (uri) => {
+                resolve(uri); // Renvoie le fichier Blob
+              },
+              "file" // type de retour
+            );
+          })
+      )
+    );
+
     // Upload des fichiers dans Firebase Storage
     for (const resizedFile of resizedFiles) {
-      const storageRef = ref(storage, `interventionPhotos/remarques/${resizedFile.name}`);
+      const storageRef = ref(
+        storage,
+        `interventionPhotos/remarques/${resizedFile.name}`
+      );
       await uploadBytes(storageRef, resizedFile);
       const downloadURL = await getDownloadURL(storageRef);
       newRemarques[index].photos.push(downloadURL);
     }
-  
+
     setRemarques(newRemarques);
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setIsLoading(true); // Démarrer le chargement
-  
+
     try {
       // Gérer les photos pour chaque action
       for (const [index, action] of actionsDone.entries()) {
@@ -175,7 +185,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         }
         actionsDone[index].photos = uploadedActionPhotos;
       }
-  
+
       // Gérer les photos pour chaque remarque
       for (const [index, remarque] of remarques.entries()) {
         const uploadedRemarquePhotos = [];
@@ -194,7 +204,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         }
         remarques[index].photos = uploadedRemarquePhotos;
       }
-  
+
       // Données du rapport à envoyer
       const reportData = {
         client,
@@ -210,11 +220,12 @@ export default function ReportForm({ initialData, onSubmit }) {
         signataireNom,
         signatureUrl,
         isSigned,
+        interventionDuration,
       };
-  
+
       // Appel de la fonction onSubmit pour envoyer les données à Firestore
       await onSubmit(reportData);
-  
+
       // Réinitialiser le formulaire ou rediriger si nécessaire
     } catch (error) {
       console.error("Erreur lors de la soumission du rapport : ", error);
@@ -223,7 +234,6 @@ export default function ReportForm({ initialData, onSubmit }) {
       setIsLoading(false); // Arrêter le chargement
     }
   };
-  
 
   const addActionField = () => {
     setActionsDone([...actionsDone, { description: "", photos: [] }]);
@@ -243,11 +253,15 @@ export default function ReportForm({ initialData, onSubmit }) {
 
   return (
     <div className={styles.reportFormContainer}>
-          {isLoading && <div className={styles.loading}>Chargement en cours...</div>}
+      {isLoading && (
+        <div className={styles.loading}>Chargement en cours...</div>
+      )}
       <form onSubmit={handleSubmit}>
         <h3>Client</h3>
         <div className={styles.formGroup}>
-          <label>Nom de l'entreprise :</label>
+          <label>
+            Nom de l'entreprise <span>*</span>
+          </label>
           <input
             type="text"
             value={client.nomEntreprise}
@@ -258,7 +272,9 @@ export default function ReportForm({ initialData, onSubmit }) {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Adresse mail :</label>
+          <label>
+            Adresse mail <span>*</span>
+          </label>
           <input
             type="email"
             value={client.email}
@@ -267,7 +283,9 @@ export default function ReportForm({ initialData, onSubmit }) {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Téléphone :</label>
+          <label>
+            Téléphone <span>*</span>
+          </label>
           <input
             type="tel"
             value={client.tel}
@@ -278,7 +296,9 @@ export default function ReportForm({ initialData, onSubmit }) {
 
         <h3>Site d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Adresse du site :</label>
+          <label>
+            Adresse du site <span>*</span>
+          </label>
           <input
             type="text"
             value={site.adresse}
@@ -287,7 +307,9 @@ export default function ReportForm({ initialData, onSubmit }) {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Nom du contact sur site :</label>
+          <label>
+            Nom du contact sur site <span>*</span>
+          </label>
           <input
             type="text"
             value={site.nomContact}
@@ -296,7 +318,9 @@ export default function ReportForm({ initialData, onSubmit }) {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Fonction du contact sur site :</label>
+          <label>
+            Fonction du contact sur site <span>*</span>
+          </label>
           <input
             type="text"
             value={site.fonctionContact}
@@ -307,7 +331,9 @@ export default function ReportForm({ initialData, onSubmit }) {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Téléphone du contact :</label>
+          <label>
+            Téléphone du contact <span>*</span>
+          </label>
           <input
             type="tel"
             value={site.telContact}
@@ -318,14 +344,18 @@ export default function ReportForm({ initialData, onSubmit }) {
 
         <h3>Date(s) d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Date de début :</label>
+          <label>
+            Date de début <span>*</span>
+          </label>
           <input
             type="date"
             value={dateStartIntervention}
             onChange={(e) => setDateStartIntervention(e.target.value)}
             required
           />
-          <label>Date de fin :</label>
+          <label>
+            Date de fin <span>*</span>
+          </label>
           <input
             type="date"
             value={dateEndIntervention}
@@ -358,10 +388,12 @@ export default function ReportForm({ initialData, onSubmit }) {
           ))}
         </div>
 
-        <h3>Actions menées</h3>
+        <h3>Actions menées </h3>
         {actionsDone.map((action, index) => (
           <div key={index} className={styles.formGroup}>
-            <label>Description des actions menées :</label>
+            <label>
+              Description des actions menées <span>*</span>
+            </label>
             <input
               type="text"
               value={action.description}
@@ -379,15 +411,20 @@ export default function ReportForm({ initialData, onSubmit }) {
               onChange={(e) => handleActionPhotoChange(index, e)}
               className={styles.uploadBtn}
             />
-            <button type="button" onClick={() => removeActionField(index)}
+            <button
+              type="button"
+              onClick={() => removeActionField(index)}
               className={styles.removeBtn}
-              >
+            >
               Supprimer
             </button>
           </div>
         ))}
-        <button type="button" onClick={addActionField}
-        className={styles.addBtn}>
+        <button
+          type="button"
+          onClick={addActionField}
+          className={styles.addBtn}
+        >
           <i class="fa-solid fa-plus"></i> Ajouter une action
         </button>
 
@@ -411,14 +448,20 @@ export default function ReportForm({ initialData, onSubmit }) {
               onChange={(e) => handleRemarquePhotoChange(index, e)}
               className={styles.uploadBtn}
             />
-            <button type="button" onClick={() => removeRemarqueField(index)}
-              className={styles.removeBtn}>
+            <button
+              type="button"
+              onClick={() => removeRemarqueField(index)}
+              className={styles.removeBtn}
+            >
               Supprimer
             </button>
           </div>
         ))}
-        <button type="button" onClick={addRemarqueField}
-        className={styles.addBtn}>
+        <button
+          type="button"
+          onClick={addRemarqueField}
+          className={styles.addBtn}
+        >
           <i class="fa-solid fa-plus"></i> Ajouter une remarque
         </button>
 
@@ -432,6 +475,16 @@ export default function ReportForm({ initialData, onSubmit }) {
             />
             Intervention comportant des risques
           </label>
+        </div>
+
+        <h3>Durée totale de l'intervention (en heures)</h3>
+        <div className={styles.formGroup}>
+          <label>Début :</label>
+          <input
+            type="number"
+            value={interventionDuration}
+            onChange={(e) => setInterventionDuration(e.target.value)}
+          />
         </div>
 
         <h3>Signature</h3>

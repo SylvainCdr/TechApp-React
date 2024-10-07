@@ -245,6 +245,7 @@ const Reports = () => {
                     0
                   ) || 0}
                 </p>
+                <p> <i class="fa-solid fa-clock"></i> Durée de l'intervention (en heures) : {report.interventionDuration || "Non précisé" }   </p> 
                 <p>
                   <i className="fa-solid fa-triangle-exclamation"></i>{" "}
                   Intervention à risque : {report.risques ? "Oui" : "Non"}

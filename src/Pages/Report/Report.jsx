@@ -4,7 +4,7 @@ import { db } from "../../firebase/firebase";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
 import { Link } from "react-router-dom";
-import generateReportPdf from "../../utils/pdfGenerator"; 
+import generateReportPdf from "../../utils/pdfGenerator";
 
 export default function InterventionReport() {
   const { reportId } = useParams(); // Récupérer l'ID du rapport depuis l'URL
@@ -74,20 +74,16 @@ export default function InterventionReport() {
     return technician ? technician.urlPhoto : null;
   };
 
-
   const handleDownloadPdf = () => {
     generateReportPdf(report, technicians);
   };
 
-  
-
-
   return (
     <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
-      <button onClick={handleDownloadPdf} className={styles.downloadPdf}><i class="fa-solid fa-file-pdf"></i> Télécharger </button>
-
-
+      <button onClick={handleDownloadPdf} className={styles.downloadPdf}>
+        <i class="fa-solid fa-file-pdf"></i> Télécharger{" "}
+      </button>
 
       {report ? (
         <div className={styles.reportItem}>
@@ -108,8 +104,10 @@ export default function InterventionReport() {
           </h2>
 
           {!report.isSigned && (
-          <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>Remplir / Modifier </Link>
-        )}
+            <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>
+              Remplir / Modifier{" "}
+            </Link>
+          )}
 
           <div className={styles.section1}>
             <div className={styles.section1Left}>
@@ -245,6 +243,11 @@ export default function InterventionReport() {
                   {report.risques ? "Oui" : "Non"}
                 </span>
               </p>
+              <p>
+                {" "}
+                <i class="fa-solid fa-clock"></i> Durée de l'intervention (en heures) :{" "}
+                {report.interventionDuration}{" "}
+              </p>
             </div>
           </div>
 
@@ -254,9 +257,12 @@ export default function InterventionReport() {
             <div className={styles.signature}>
               <p> Rapport signé : {report.isSigned ? "Oui" : "Non"} </p>
 
-              <img src={report.signatureUrl} alt="Signature" className={styles.signatureImg} />
+              <img
+                src={report.signatureUrl}
+                alt="Signature"
+                className={styles.signatureImg}
+              />
               <p>{report.signataireNom} </p>
-
             </div>
           </div>
         </div>
