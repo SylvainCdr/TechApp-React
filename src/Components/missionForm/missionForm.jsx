@@ -205,7 +205,7 @@ export default function MissionForm() {
       <form onSubmit={handleSubmit}>
         <h3>Devis associé à l'intervention</h3>
         <div className={styles.formGroup}>
-          <label>N° de devis :</label>
+          <label>N° de devis </label>
           <input
             type="text"
             value={devis}
@@ -215,7 +215,7 @@ export default function MissionForm() {
 
         <h3>Commercial(e) en charge du dossier</h3>
         <div className={styles.formGroup}>
-          <label>Nom du commercial :</label>
+          <label>Nom du commercial </label>
           <input
             type="text"
             value={commercial}
@@ -225,7 +225,7 @@ export default function MissionForm() {
 
         <h3>Client</h3>
         <div className={styles.formGroup}>
-          <label>Nom de l'entreprise :</label>
+          <label>Nom de l'entreprise <span>*</span></label>
           <input
             type="text"
             value={client.nomEntreprise}
@@ -236,7 +236,7 @@ export default function MissionForm() {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Adresse mail :</label>
+          <label>Adresse mail <span>*</span></label>
           <input
             type="email"
             value={client.email}
@@ -245,7 +245,7 @@ export default function MissionForm() {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Téléphone :</label>
+          <label>Téléphone <span>*</span></label>
           <input
             type="tel"
             value={client.tel}
@@ -256,7 +256,7 @@ export default function MissionForm() {
 
         <h3>Site d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Adresse du site :</label>
+          <label>Adresse du site <span>*</span></label>
           <input
             type="text"
             value={site.adresse}
@@ -265,7 +265,7 @@ export default function MissionForm() {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Nom du contact sur site :</label>
+          <label>Nom du contact sur site <span>*</span></label>
           <input
             type="text"
             value={site.nomContact}
@@ -274,7 +274,7 @@ export default function MissionForm() {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Fonction du contact sur site :</label>
+          <label>Fonction du contact sur site <span>*</span></label>
           <input
             type="text"
             value={site.fonctionContact}
@@ -285,7 +285,7 @@ export default function MissionForm() {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Téléphone du contact :</label>
+          <label>Téléphone du contact <span>*</span></label>
           <input
             type="tel"
             value={site.telContact}
@@ -296,14 +296,14 @@ export default function MissionForm() {
 
         <h3>Date(s) d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Date de début :</label>
+          <label>Date de début <span>*</span></label>
           <input
             type="date"
             value={dateStartIntervention}
             onChange={(e) => setDateStartIntervention(e.target.value)}
             required
           />
-          <label>Date de fin :</label>
+          <label>Date de fin <span>*</span></label>
           <input
             type="date"
             value={dateEndIntervention}
@@ -314,7 +314,7 @@ export default function MissionForm() {
 
         <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
-          <label>Sélectionnez un ou plusieurs intervenants :</label>
+          <label>Sélectionnez un ou plusieurs intervenants <span>*</span></label>
           {intervenantsExistants.map((intervenant) => (
             <div key={intervenant.id}>
               <input
@@ -336,10 +336,10 @@ export default function MissionForm() {
           ))}
         </div>
 
-        <h3>Missions</h3>
+        <h3>Missions </h3>
         {missions.map((mission, index) => (
           <div key={index} className={styles.formGroup}>
-            <label>Mission {index + 1} :</label>
+            <label>Mission {index + 1} <span>*</span></label>
             <input
               type="text"
               value={mission}

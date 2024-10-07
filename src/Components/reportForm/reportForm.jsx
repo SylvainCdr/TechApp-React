@@ -366,7 +366,7 @@ export default function ReportForm({ initialData, onSubmit }) {
 
         <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
-          <label>Choisir les intervenants :</label>
+          <label>Choisir les intervenants <span>*</span></label>
           {intervenantsList.map((tech) => (
             <div key={tech.id}>
               <input
