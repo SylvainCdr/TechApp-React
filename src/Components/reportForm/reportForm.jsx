@@ -479,7 +479,7 @@ export default function ReportForm({ initialData, onSubmit }) {
 
         <h3>Durée totale de l'intervention (en heures)</h3>
         <div className={styles.formGroup}>
-          <label>Début :</label>
+          <label>Nombre d'heures</label>
           <input
             type="number"
             value={interventionDuration}
