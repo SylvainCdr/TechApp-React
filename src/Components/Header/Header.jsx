@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import Logout from "../logout/logout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
-import Loader from "../../utils/loader/loader";
+
 
 function Header() {
   const [user, setUser] = useState(null); // État pour suivre si un utilisateur est connecté
@@ -52,7 +52,7 @@ function Header() {
       <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
       <NavLink to="/" onClick={handleLinkClick}>
   <img
-    src="assets/pix-techapp.png"
+    src="http://files.pixecurity.com/wp-content/uploads/sites/2/2024/10/pix-techapp.png"
     alt="ACCUEIL"
     className={styles.logo}
     loading="lazy"
