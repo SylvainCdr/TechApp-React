@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import {getAuth} from "firebase/auth";
+
+
 
 
 
@@ -26,7 +28,20 @@ const storage = getStorage(app);
 const db = getFirestore(app);
 
 // Initialize Firebase Auth
-const auth = getAuth(app);
+const auth = getAuth();
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    try {
+      // Stocker ou mettre à jour l'utilisateur dans Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        displayName: user.displayName,
+      }, { merge: true });
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement de l'utilisateur dans Firestore : ", error);
+    }
+  }
+});
 
 export { db };
 
