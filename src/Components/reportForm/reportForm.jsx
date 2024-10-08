@@ -487,7 +487,7 @@ export default function ReportForm({ initialData, onSubmit }) {
           />
         </div>
 
-        <h3>Signature</h3>
+        <h3>Signature du client </h3>
         <div className={styles.formGroup}>
           <label>Nom du signataire :</label>
           <input
