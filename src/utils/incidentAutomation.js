@@ -3,11 +3,29 @@ import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 
 export const createOrUpdateIncidentReport = async (incidentData) => {
   try {
-    const { client, site, intervenants = [], missionsDangereuses = [], actions = [], remarques, risques, interventionReportId } = incidentData;
+    const {
+      client,
+      site,
+      intervenants = [],
+      missionsDangereuses = [],
+      actions = [],
+      remarques,
+      risques,
+      interventionReportId,
+    } = incidentData;
 
     // Validation des données
-    if (!client || !site || !Array.isArray(intervenants) || !Array.isArray(missionsDangereuses) || !Array.isArray(actions) || !Array.isArray(remarques)) {
-      throw new Error("Données invalides pour la création du rapport d'incident.");
+    if (
+      !client ||
+      !site ||
+      !Array.isArray(intervenants) ||
+      !Array.isArray(missionsDangereuses) ||
+      !Array.isArray(actions) ||
+      !Array.isArray(remarques)
+    ) {
+      throw new Error(
+        "Données invalides pour la création du rapport d'incident."
+      );
     }
 
     // Simplifier la requête pour vérifier uniquement certains champs clés (ex : nom du client et adresse du site)
@@ -47,6 +65,9 @@ export const createOrUpdateIncidentReport = async (incidentData) => {
       console.log("Fiche d'incident déjà existante.");
     }
   } catch (error) {
-    console.error("Erreur lors de la création ou de la mise à jour du rapport d'incident : ", error);
+    console.error(
+      "Erreur lors de la création ou de la mise à jour du rapport d'incident : ",
+      error
+    );
   }
 };

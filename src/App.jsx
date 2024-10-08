@@ -26,7 +26,6 @@ import Loader from "./utils/loader/loader";
 function App() {
   const [user, setUser] = useState(null);
 
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,17 +36,15 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-    return () => { // Nettoyer l'effet
+    return () => {
+      // Nettoyer l'effet
       unsubscribe();
       clearTimeout(timer);
-    }
-  }
-  , []);
+    };
+  }, []);
   if (loading) {
     return <Loader loading={loading} />; // Affiche le loader pendant le chargement
   }
-
- 
 
   return (
     <BrowserRouter>
@@ -55,24 +52,132 @@ function App() {
       <Routes>
         <Route element={<Template />}>
           {/* Si l'utilisateur est connecté, redirige vers /home, sinon vers /login */}
-          <Route path="/" element={user ? <Navigate to="/home" /> : <Login />} />
-          
+          <Route
+            path="/"
+            element={user ? <Navigate to="/home" /> : <Login />}
+          />
+
           {/* Pages protégées par l'authentification */}
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/missions" element={<ProtectedRoute><Missions /></ProtectedRoute>} />
-          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-          <Route path="/incidents" element={<ProtectedRoute><IncidentReports /></ProtectedRoute>} />
-          <Route path="/missions/create" element={<ProtectedRoute><CreateMission /></ProtectedRoute>} />
-          <Route path="/missions/edit/:missionId" element={<ProtectedRoute><EditMission /></ProtectedRoute>} />
-          <Route path="/mission/:missionId" element={<ProtectedRoute><Mission /></ProtectedRoute>} />
-          <Route path="/tech" element={<ProtectedRoute><Technicians /></ProtectedRoute>} />
-          <Route path="/reports/create" element={<ProtectedRoute><CreateReport /></ProtectedRoute>} />
-          <Route path="report/:reportId" element={<ProtectedRoute><InterventionReport /></ProtectedRoute>} />
-          <Route path="/reports/edit/:reportId" element={<ProtectedRoute><EditReport /></ProtectedRoute>} />
-          <Route path="/incidents/edit/:incidentId" element={<ProtectedRoute><EditIncident /></ProtectedRoute>} />
-          <Route path="/incident/:incidentId" element={<ProtectedRoute><Incident /></ProtectedRoute>} />
-          <Route path="/incidents/create" element={<ProtectedRoute><CreateIncident /></ProtectedRoute>} />
-          <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/missions"
+            element={
+              <ProtectedRoute>
+                <Missions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/incidents"
+            element={
+              <ProtectedRoute>
+                <IncidentReports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/missions/create"
+            element={
+              <ProtectedRoute>
+                <CreateMission />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/missions/edit/:missionId"
+            element={
+              <ProtectedRoute>
+                <EditMission />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mission/:missionId"
+            element={
+              <ProtectedRoute>
+                <Mission />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tech"
+            element={
+              <ProtectedRoute>
+                <Technicians />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports/create"
+            element={
+              <ProtectedRoute>
+                <CreateReport />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="report/:reportId"
+            element={
+              <ProtectedRoute>
+                <InterventionReport />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports/edit/:reportId"
+            element={
+              <ProtectedRoute>
+                <EditReport />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/incidents/edit/:incidentId"
+            element={
+              <ProtectedRoute>
+                <EditIncident />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/incident/:incidentId"
+            element={
+              <ProtectedRoute>
+                <Incident />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/incidents/create"
+            element={
+              <ProtectedRoute>
+                <CreateIncident />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <ProtectedRoute>
+                <Search />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -34,48 +34,46 @@ export default function EditReport() {
   }, [reportId]);
 
   // Fonction pour gérer la soumission du formulaire de modification
-const handleUpdate = async (updatedReport) => {
-  try {
-    const reportRef = doc(db, "interventionReports", reportId);
+  const handleUpdate = async (updatedReport) => {
+    try {
+      const reportRef = doc(db, "interventionReports", reportId);
 
-    // Récupérer les anciennes données avant la mise à jour
-    const oldReportSnap = await getDoc(reportRef);
-    const oldReportData = oldReportSnap.data();
+      // Récupérer les anciennes données avant la mise à jour
+      const oldReportSnap = await getDoc(reportRef);
+      const oldReportData = oldReportSnap.data();
 
-    // Mettre à jour le rapport d'intervention
-    await updateDoc(reportRef, updatedReport);
+      // Mettre à jour le rapport d'intervention
+      await updateDoc(reportRef, updatedReport);
 
-    // Log pour vérifier les anciennes et nouvelles valeurs de "risques"
-    console.log("Ancien rapport:", oldReportData);
-    console.log("Nouveau rapport:", updatedReport);
+      // Log pour vérifier les anciennes et nouvelles valeurs de "risques"
+      console.log("Ancien rapport:", oldReportData);
+      console.log("Nouveau rapport:", updatedReport);
 
-    // Comparer l'ancien et le nouveau statut de la case "risques"
-    if (!oldReportData.risques && updatedReport.risques) {
-      console.log("La case 'risques' est maintenant cochée. Création ou mise à jour de la fiche d'incident...");
-      // Créer ou mettre à jour la fiche d'incident si la case "risques" a été cochée
-      await createIncidentReport({
-        ...updatedReport,
-        interventionReportId: reportId, // Passer l'ID du rapport d'intervention
+      // Comparer l'ancien et le nouveau statut de la case "risques"
+      if (!oldReportData.risques && updatedReport.risques) {
+        console.log(
+          "La case 'risques' est maintenant cochée. Création ou mise à jour de la fiche d'incident..."
+        );
+        // Créer ou mettre à jour la fiche d'incident si la case "risques" a été cochée
+        await createIncidentReport({
+          ...updatedReport,
+          interventionReportId: reportId, // Passer l'ID du rapport d'intervention
+        });
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Rapport mis à jour avec succès !",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        window.location.href = "/reports";
       });
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du rapport :", error);
+      alert("Une erreur est survenue lors de la mise à jour du rapport.");
     }
-
-    Swal.fire({
-      icon: "success",
-      title: "Rapport mis à jour avec succès !",
-      showConfirmButton: false,
-      timer: 1500,
-     
-    }).then (() => {
-      window.location.href = "/reports";
-    });
-  } catch (error) {
-    console.error("Erreur lors de la mise à jour du rapport :", error);
-    alert("Une erreur est survenue lors de la mise à jour du rapport.");
-  }
-};
-
-
-
+  };
 
   return (
     <div className={styles.editReportContainer}>

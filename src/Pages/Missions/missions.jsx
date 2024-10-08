@@ -60,7 +60,10 @@ export default function Missions() {
       }));
       setUsers(usersList);
     } catch (error) {
-      console.error("Erreur lors de la récupération des utilisateurs : ", error);
+      console.error(
+        "Erreur lors de la récupération des utilisateurs : ",
+        error
+      );
     }
   };
 
@@ -147,15 +150,25 @@ export default function Missions() {
               {mission.client.nomEntreprise}
             </h2>
             <p>
-              <i className="fa-solid fa-calendar-days"></i>Date(s) d'intervention :{" "}
-              {new Date(mission.interventionStartDate).toLocaleDateString("fr-FR") ===
+              <i className="fa-solid fa-calendar-days"></i>Date(s)
+              d'intervention :{" "}
+              {new Date(mission.interventionStartDate).toLocaleDateString(
+                "fr-FR"
+              ) ===
               new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
-                ? new Date(mission.interventionStartDate).toLocaleDateString("fr-FR")
-                : `${new Date(mission.interventionStartDate).toLocaleDateString("fr-FR")} - ${new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")}`}
+                ? new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )
+                : `${new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )} - ${new Date(
+                    mission.interventionEndDate
+                  ).toLocaleDateString("fr-FR")}`}
             </p>
             <br />
             <p>
-              <i className="fa-solid fa-folder-plus"></i>Mission créée par : {getUserEmail(mission.createdBy)}
+              <i className="fa-solid fa-folder-plus"></i>Mission créée par :{" "}
+              {getUserEmail(mission.createdBy)}
             </p>
 
             <div className={styles.section1}>
@@ -238,8 +251,6 @@ export default function Missions() {
                 </ul>
               </div>
             </div>
-            
-          
 
             <div className={styles.section3}>
               <Link

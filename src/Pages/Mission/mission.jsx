@@ -1,10 +1,9 @@
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { db , auth } from "../../firebase/firebase";
+import React, { useState, useEffect } from "react";
+import { db } from "../../firebase/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
-
 
 export default function Mission() {
   const { missionId } = useParams();
@@ -12,9 +11,7 @@ export default function Mission() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [technicians, setTechnicians] = useState([]);
-  const [createdBy, setCreatedBy] = useState(null);
   const [users, setUsers] = useState([]); // État pour stocker les utilisateurs
-
 
   const fetchMission = async () => {
     try {
@@ -59,7 +56,10 @@ export default function Mission() {
       }));
       setUsers(usersList);
     } catch (error) {
-      console.error("Erreur lors de la récupération des utilisateurs : ", error);
+      console.error(
+        "Erreur lors de la récupération des utilisateurs : ",
+        error
+      );
     }
   };
 
@@ -69,7 +69,6 @@ export default function Mission() {
     return technician ? technician.urlPhoto : "/assets/default-avatar.jpg"; // Avatar par défaut si pas de photo
   };
 
-  
   // Fonction pour copier les informations du site dans le presse-papiers
   const handleCopy = () => {
     const siteInfo = `${mission.site.adresse}`;
@@ -83,19 +82,19 @@ export default function Mission() {
       });
     });
   };
-  
+
   // Fonction pour obtenir l'email du créateur de la mission à partir du uid
   const getUserEmail = (uid) => {
     const user = users.find((user) => user.uid === uid);
     return user ? user.email : "Email inconnu";
   };
-  
+
   useEffect(() => {
     fetchMission();
     fetchTechnicians();
     fetchUsers();
-  }, [missionId]);
-  
+  }, []);
+
   return (
     <div className={styles.missionContainer} id="mission-content">
       <h1>Fiche Mission N° {missionId}</h1>
@@ -115,23 +114,21 @@ export default function Mission() {
             ) ===
             new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
               ? new Date(mission.interventionStartDate).toLocaleDateString(
-                  "fr-FR" 
-                )  
+                  "fr-FR"
+                )
               : `${new Date(mission.interventionStartDate).toLocaleDateString(
                   "fr-FR"
                 )} - ${new Date(mission.interventionEndDate).toLocaleDateString(
                   "fr-FR"
                 )}`}{" "}
-</p>
-<br />
-    
-            
-            
+          </p>
+          <br />
+
           <p>Missions créé(e) par : {getUserEmail(mission.createdBy)}</p>
           <br />
           <p>Commercial référent : {mission.commercial}</p>
           <br />
-           
+
           <p> Devis N° : {mission.devis}</p>
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
@@ -171,17 +168,17 @@ export default function Mission() {
             <div className={styles.section1Right}>
               <h3>Intervenant(s)</h3>
               <div className={styles.technicians}>
-              {mission.intervenants && mission.intervenants.length > 0 ? (
-                    mission.intervenants.map((intervenantId, index) => (
-                      <div key={index} className={styles.technicianItem}>
-                        <p>
-                          {technicians.find((tech) => tech.id === intervenantId)
-                            ?.name || "Nom inconnu"}
-                        </p>
-                        <img
-                          src={getTechnicianPhotoURL(intervenantId)}
-                          alt={`Photo de technicien`}
-                        />
+                {mission.intervenants && mission.intervenants.length > 0 ? (
+                  mission.intervenants.map((intervenantId, index) => (
+                    <div key={index} className={styles.technicianItem}>
+                      <p>
+                        {technicians.find((tech) => tech.id === intervenantId)
+                          ?.name || "Nom inconnu"}
+                      </p>
+                      <img
+                        src={getTechnicianPhotoURL(intervenantId)}
+                        alt={`Technicien`}
+                      />
                     </div>
                   ))
                 ) : (
@@ -215,28 +212,32 @@ export default function Mission() {
             </div>
           </div>
 
-      <div className={styles.section3}>
-        <div className={styles.section3Left}>
-          <h3>Commentaire(s) :</h3>
-          <p><i class="fa-solid fa-circle-info"></i> {mission.comments || "Aucun commentaire"}</p>
-        </div>
+          <div className={styles.section3}>
+            <div className={styles.section3Left}>
+              <h3>Commentaire(s) :</h3>
+              <p>
+                <i className="fa-solid fa-circle-info"></i>{" "}
+                {mission.comments || "Aucun commentaire"}
+              </p>
+            </div>
 
-        <div className={styles.section3Right}>
-          <h3>Plan de prévention :</h3>
-          {mission.planPrevention ? (
-            <a
-              href={mission.planPrevention}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.planPreventionLink}
-            >
-              <i className="fa-solid fa-file-pdf"></i> Voir le plan de prévention
-            </a>
-          ) : (
-            <p>Aucun plan de prévention</p>
-          )}
-        </div>
-      </div>
+            <div className={styles.section3Right}>
+              <h3>Plan de prévention :</h3>
+              {mission.planPrevention ? (
+                <a
+                  href={mission.planPrevention}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.planPreventionLink}
+                >
+                  <i className="fa-solid fa-file-pdf"></i> Voir le plan de
+                  prévention
+                </a>
+              ) : (
+                <p>Aucun plan de prévention</p>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

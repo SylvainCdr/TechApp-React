@@ -2,11 +2,9 @@ import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
-import { doc, getDoc, getDocs, collection,  } from "firebase/firestore";
-import Swal from "sweetalert2";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { use } from "framer-motion/client";
 
 export default function Incident() {
   const { incidentId } = useParams();
@@ -48,7 +46,6 @@ export default function Incident() {
     }
   };
 
-
   useEffect(() => {
     fetchIncident();
     fetchTechnicians();
@@ -81,7 +78,6 @@ export default function Incident() {
   return (
     <div className={styles.incidentContainer} id="incident-content">
       <h1>Fiche Incident N° {incidentId}</h1>
-     
 
       {incident && (
         <div className={styles.incidentItem}>
@@ -124,29 +120,28 @@ export default function Incident() {
             <div className={styles.section1Right}>
               <h3>Intervenant(s)</h3>
               <ul className={styles.technicians}>
-                  {incident.intervenants &&
-                  Array.isArray(incident.intervenants) &&
-                  incident.intervenants.length > 0 ? (
-                    incident.intervenants.map((intervenantId, index) => {
-                      // Trouver le technicien correspondant à l'ID de l'intervenant
-                      const technician = technicians.find(
-                        (tech) => tech.id === intervenantId
-                      );
-                      return technician ? (
-                        <li key={index}>
-                          <i className="fa-solid fa-user"></i> {technician.name}
-                        </li>
-                      ) : (
-                        <li key={index}>
-                          <i className="fa-solid fa-user"></i> Intervenant
-                          inconnu
-                        </li>
-                      );
-                    })
-                  ) : (
-                    <li>Aucun intervenant spécifié</li>
-                  )}
-                </ul>
+                {incident.intervenants &&
+                Array.isArray(incident.intervenants) &&
+                incident.intervenants.length > 0 ? (
+                  incident.intervenants.map((intervenantId, index) => {
+                    // Trouver le technicien correspondant à l'ID de l'intervenant
+                    const technician = technicians.find(
+                      (tech) => tech.id === intervenantId
+                    );
+                    return technician ? (
+                      <li key={index}>
+                        <i className="fa-solid fa-user"></i> {technician.name}
+                      </li>
+                    ) : (
+                      <li key={index}>
+                        <i className="fa-solid fa-user"></i> Intervenant inconnu
+                      </li>
+                    );
+                  })
+                ) : (
+                  <li>Aucun intervenant spécifié</li>
+                )}
+              </ul>
             </div>
           </div>
           <div className={styles.section2}>

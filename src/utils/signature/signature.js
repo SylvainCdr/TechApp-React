@@ -1,12 +1,9 @@
-
-
 import { useRef, useState } from "react";
 import SignaturePad from "react-signature-canvas";
 import styles from "./style.module.scss";
 
 export default function Signature({ setSignatureUrl, setIsSigned }) {
   const signatureRef = useRef(null);
-
 
   const clear = () => {
     signatureRef.current.clear();
@@ -28,14 +25,20 @@ export default function Signature({ setSignatureUrl, setIsSigned }) {
   return (
     <div className={styles.signatureContainer}>
       <div className={styles.signaturePad}>
-        <SignaturePad ref={signatureRef} penColor="black"  canvasProps={{width: 350, height: 300, className: 'sigCanvas'}} />
+        <SignaturePad
+          ref={signatureRef}
+          penColor="black"
+          canvasProps={{ width: 350, height: 300, className: "sigCanvas" }}
+        />
       </div>
 
-      <div className={styles.buttonsSignature}> 
-
-
-      <button type="button" onClick={clear} className={styles.clearButton}>Nettoyer signature</button>
-      <button type="button" onClick={save} className={styles.saveButton}>Valider signature</button>
+      <div className={styles.buttonsSignature}>
+        <button type="button" onClick={clear} className={styles.clearButton}>
+          Nettoyer signature
+        </button>
+        <button type="button" onClick={save} className={styles.saveButton}>
+          Valider signature
+        </button>
       </div>
       {/* {signatureUrl && (
         <div className={styles.signaturePreview}>

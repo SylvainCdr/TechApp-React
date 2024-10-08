@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import Loader from "../../utils/loader/loader";
 import styles from "./style.module.scss";
 
 const container = {
@@ -26,8 +25,6 @@ const item = {
 
 function Homepage() {
   const [loading, setLoading] = useState(true);
-
-
 
   return (
     <motion.div

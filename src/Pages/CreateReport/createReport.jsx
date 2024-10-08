@@ -9,19 +9,24 @@ export default function CreateReport() {
   const handleSubmit = async (reportData) => {
     try {
       // Créer un document dans Firestore avec les données du rapport
-      const reportRef = await addDoc(collection(db, "interventionReports"), reportData);
+      const reportRef = await addDoc(
+        collection(db, "interventionReports"),
+        reportData
+      );
       console.log("Rapport soumis avec l'ID :", reportRef.id);
-    
+
       // Vérifier si la case "risques" est cochée
       if (reportData.risques) {
-        console.log("La case 'risques' est cochée. Création de la fiche d'incident...");
+        console.log(
+          "La case 'risques' est cochée. Création de la fiche d'incident..."
+        );
         // Créer la fiche d'incident si la case "risques" est cochée
         await createIncidentReport({
           ...reportData,
           interventionReportId: reportRef.id, // Passer l'ID du rapport créé
         });
       }
-    
+
       Swal.fire({
         title: "Rapport soumis avec succès !",
         text: "Vous allez être redirigé vers la liste des rapports.",
@@ -44,8 +49,6 @@ export default function CreateReport() {
       });
     }
   };
-  
-  
 
   return (
     <div className={styles.createReportContainer}>

@@ -1,200 +1,190 @@
 .incidentContainer {
+  padding: 20px;
+  max-width: 1280px;
+  background-color: #f9f9f9;
+  min-height: 90vh;
+  margin: 0 auto;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  color: black;
+  padding-top: 6rem;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--col2);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .incidentItem {
     padding: 20px;
-    max-width: 1280px;
-    background-color: #f9f9f9;
-    min-height: 90vh;
-    margin: 0 auto;
+    background-color: #fffffffa;
+    color: black;
+    margin-bottom: 20px;
     border-radius: 8px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     -ms-border-radius: 8px;
     -o-border-radius: 8px;
-    color: black;
-    padding-top :6rem;
-  
-    h1 {
-      font-size: 2rem;
+    min-height: 60vh;
+
+    h2 {
+      font-size: 1.5rem;
       margin-bottom: 20px;
       text-align: center;
-      color: var(--col2);
+      background-color: var(--col2);
+      text-transform: uppercase;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
       text-transform: uppercase;
       font-weight: 600;
+      background-color: var(--col3);
+      padding: 10px;
     }
-  
-    .incidentItem {
-      padding: 20px;
-      background-color: #fffffffa;
-      color: black;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      -webkit-border-radius: 8px;
-      -moz-border-radius: 8px;
-      -ms-border-radius: 8px;
-      -o-border-radius: 8px;
-      min-height: 60vh;
-  
-      h2 {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-        text-align: center;
-        background-color: var(--col2);
-        text-transform: uppercase;
-        color: white;
-        padding: 10px;
-        border-radius: 8px;
+
+    i {
+      margin-right: 8px;
+      font-size: 1.2rem;
+      color: rgb(133, 133, 133);
+    }
+
+    .section1 {
+      display: flex;
+      width: 100%;
+
+      .section1Left {
+        width: 50%;
+
+        p,
+        button {
+          margin-left: 15%;
+          margin-bottom: 0.5rem;
+        }
+
+        button {
+          width: 40%;
+          padding: 8px 8px;
+          background-color: var(--col5);
+          color: white;
+          font-size: 1em;
+          border: none;
+          border-radius: 4px;
+        }
       }
-  
-      h3 {
-        font-size: 1.2rem;
-        margin-top: 1rem;
+      .section1Right {
+        width: 50%;
+        text-align: center;
+
+        .technicians {
+          width: 100%;
+          display: flex;
+          justify-content: space-around;
+        }
+      }
+    }
+    .section2 {
+      display: flex;
+      justify-content: space-between;
+
+      .section2Left {
+        width: 50%;
+
+        li {
+          margin-left: 25%;
+          margin-bottom: 0.5rem;
+        }
+      }
+      .section2Right {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+
+        ul {
+          align-self: center;
+        }
+      }
+    }
+    .section3 {
+      justify-content: space-between;
+
+      .remarqueItem {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
         margin-bottom: 2rem;
-        text-align: center;
-        text-transform: uppercase;
-        font-weight: 600;
-        background-color: var(--col3);
-        padding: 10px;
+
+        p {
+          margin-bottom: 0.8rem;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-border-radius: 8px;
+          -ms-border-radius: 8px;
+          -o-border-radius: 8px;
+        }
       }
-  
-      i {
-        margin-right: 8px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .incidentContainer {
+    h1 {
+      font-size: 1.5rem;
+    }
+    .incidentItem {
+      padding: 10px;
+      h2 {
         font-size: 1.2rem;
-        color: rgb(133, 133, 133);
       }
-  
+      h3 {
+        font-size: 1rem;
+      }
+      i {
+        font-size: 1rem;
+      }
       .section1 {
         display: flex;
-        width: 100%;
-  
+        flex-direction: column;
         .section1Left {
-          width: 50%;
-  
-          p,
-          button {
-            margin-left: 15%;
-            margin-bottom: 0.5rem;
-          }
-  
-          button {
-            width: 40%;
-            padding: 8px 8px;
-            background-color: var(--col5);
-            color: white;
-            font-size: 1em;
-            border: none;
-            border-radius: 4px;
-          }
+          width: 100%;
         }
         .section1Right {
-          width: 50%;
-          text-align: center;
-  
-          .technicians {
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-  
-            
-          }
+          width: 100%;
         }
       }
       .section2 {
         display: flex;
-        justify-content: space-between;
-  
+        flex-direction: column;
         .section2Left {
-          width: 50%;
-  
+          width: 100%;
           li {
-            margin-left: 25%;
-            margin-bottom: 0.5rem;
+            margin-left: 20%;
           }
         }
         .section2Right {
-          width: 50%;
-          display: flex;
-          flex-direction: column;
-  
-          ul {
-            align-self: center;
-          }
-        }
-      }
-      .section3 {
-        justify-content: space-between;
-  
-        .remarqueItem {
           width: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-          margin-bottom: 2rem;
-
-          p {
-            
-            margin-bottom: 0.8rem;
-          }
-
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            -webkit-border-radius: 8px;
-            -moz-border-radius: 8px;
-            -ms-border-radius: 8px;
-            -o-border-radius: 8px;
-          }
-  
-        }
-      }
-
-    }
-  }
-
-
-  @media (max-width: 768px) {
-    .incidentContainer {
-      
-      h1 {
-        font-size: 1.5rem;
-      }
-      .incidentItem {
-        padding: 10px;
-        h2 {
-          font-size: 1.2rem;
-        }
-        h3 {
-          font-size: 1rem;
-        }
-        i {
-          font-size: 1rem;
-        }
-        .section1 {
-          display: flex;
-          flex-direction: column;
-          .section1Left {
-            width: 100%;
-            
-          }
-          .section1Right {
-            width: 100%;
-           
-          }
-        }
-        .section2 {
-          display: flex;
-          flex-direction: column;
-          .section2Left {
-            width: 100%;
-            li {
-              margin-left: 20%;
-            }
-          }
-          .section2Right {
-            width: 100%;
-           
-          }
         }
       }
     }
   }
+}

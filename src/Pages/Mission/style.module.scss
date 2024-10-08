@@ -10,7 +10,7 @@
   -ms-border-radius: 8px;
   -o-border-radius: 8px;
   color: black;
-  padding-top :6rem;
+  padding-top: 6rem;
 
   h1 {
     font-size: 2rem;
@@ -86,7 +86,7 @@
           cursor: pointer;
 
           &:hover {
-            scale : 1.03;
+            scale: 1.03;
           }
         }
       }
@@ -146,22 +146,16 @@
 
     .section3 {
       display: flex;
-     
 
       .section3Left {
         width: 50%;
-    text-align: center;
-      
+        text-align: center;
       }
       .section3Right {
         width: 50%;
         text-align: center;
-
-       
       }
     }
-
-
   }
 
   .bottom {
@@ -290,10 +284,7 @@
         .section2Left {
           width: 100%;
 
-        
-          
           li {
-            
           }
         }
         .section2Right {
@@ -309,7 +300,8 @@
         }
         .section3Right {
           width: 100%;
-      }}
+        }
+      }
     }
 
     .bottom {
@@ -320,7 +312,7 @@
       h3 {
         font-size: 1rem;
         margin-left: 0;
-        color : var(--col4);
+        color: var(--col4);
       }
 
       .securityRules {

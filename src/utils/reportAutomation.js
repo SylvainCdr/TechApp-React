@@ -5,7 +5,14 @@ import { collection, addDoc } from "firebase/firestore";
 export const createInterventionReport = async (missionData) => {
   try {
     // Récupération des informations à partir de la fiche de mission
-    const { client, site, intervenant, risqueEPI, interventionStartDate, interventionEndDate } = missionData;
+    const {
+      client,
+      site,
+      intervenant,
+      risqueEPI,
+      interventionStartDate,
+      interventionEndDate,
+    } = missionData;
 
     // Création du rapport d'intervention dans une nouvelle collection "interventionReports"
     const reportData = {
@@ -14,7 +21,7 @@ export const createInterventionReport = async (missionData) => {
       intervenant,
       actionsDone: [],
       remarques: [],
-      photos: [], 
+      photos: [],
       risques: risqueEPI.length > 0, // Détermine s'il y a des risques selon la présence de données
       createdAt: new Date(),
       interventionStartDate,
@@ -24,6 +31,9 @@ export const createInterventionReport = async (missionData) => {
     await addDoc(collection(db, "interventionReports"), reportData);
     console.log("Rapport d'intervention créé automatiquement");
   } catch (error) {
-    console.error("Erreur lors de la création du rapport d'intervention : ", error);
+    console.error(
+      "Erreur lors de la création du rapport d'intervention : ",
+      error
+    );
   }
 };

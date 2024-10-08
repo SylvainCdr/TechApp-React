@@ -13,20 +13,13 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
-
-
-
 const Reports = () => {
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 6; // Nombre de rapports par page
 
-
-
-
   useEffect(() => {
-    
     const fetchData = async () => {
       try {
         const reportsQuery = query(
@@ -61,7 +54,6 @@ const Reports = () => {
 
     fetchData();
   }, []);
-
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -101,7 +93,6 @@ const Reports = () => {
     (currentPage - 1) * reportsPerPage,
     currentPage * reportsPerPage
   );
-  
 
   return (
     <div className={styles.reportsContainer}>
@@ -112,7 +103,6 @@ const Reports = () => {
         d'intervention
       </Link>
 
-   
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
           <motion.li
@@ -123,12 +113,21 @@ const Reports = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-           <h2>
-  {new Date(report.interventionStartDate).toLocaleDateString('fr-FR') === new Date(report.interventionEndDate).toLocaleDateString('fr-FR') 
-    ? new Date(report.interventionStartDate).toLocaleDateString('fr-FR') // Si les dates sont identiques
-    : `${new Date(report.interventionStartDate).toLocaleDateString('fr-FR')} / ${new Date(report.interventionEndDate).toLocaleDateString('fr-FR')}`}{" "}
-  - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
-</h2>
+            <h2>
+              {new Date(report.interventionStartDate).toLocaleDateString(
+                "fr-FR"
+              ) ===
+              new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
+                ? new Date(report.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  ) // Si les dates sont identiques
+                : `${new Date(report.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )} / ${new Date(
+                    report.interventionEndDate
+                  ).toLocaleDateString("fr-FR")}`}{" "}
+              - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+            </h2>
 
             <span
               className={
@@ -245,7 +244,11 @@ const Reports = () => {
                     0
                   ) || 0}
                 </p>
-                <p> <i class="fa-solid fa-clock"></i> Durée de l'intervention (en heures) : {report.interventionDuration || "Non précisé" }   </p> 
+                <p>
+                  {" "}
+                  <i class="fa-solid fa-clock"></i> Durée de l'intervention (en
+                  heures) : {report.interventionDuration || "Non précisé"}{" "}
+                </p>
                 <p>
                   <i className="fa-solid fa-triangle-exclamation"></i>{" "}
                   Intervention à risque : {report.risques ? "Oui" : "Non"}
@@ -254,41 +257,37 @@ const Reports = () => {
             </div>
 
             <div className={styles.section3}>
-  <Link to={`/report/${report.id}`} className={styles.viewButton}>
-    <i className="fa-solid fa-eye"></i>
-  </Link>
+              <Link to={`/report/${report.id}`} className={styles.viewButton}>
+                <i className="fa-solid fa-eye"></i>
+              </Link>
 
-  {report.isSigned && ( // badge signé 
-    <span className={styles.badgeSigned}>
-     
-     <i class="fa-solid fa-circle-check"></i> Signé par le client
-    </span>
-  )}
+              {report.isSigned && ( // badge signé
+                <span className={styles.badgeSigned}>
+                  <i class="fa-solid fa-circle-check"></i> Signé par le client
+                </span>
+              )}
 
-
-  {/* Affichage conditionnel des boutons edit et delete si isSigned est false */}
-  {!report.isSigned && (
-    <>
-      <Link
-        to={`/reports/edit/${report.id}`}
-        className={styles.editButton}
-      >
-        <i className="fa-solid fa-pen-to-square"></i>
-      </Link>
-      <Link
-        className={styles.deleteButton}
-        onClick={() => deleteReport(report.id)}
-      >
-        <i className="fa-solid fa-trash"></i>
-      </Link>
-    </>
-  )}
-</div>
-
+              {/* Affichage conditionnel des boutons edit et delete si isSigned est false */}
+              {!report.isSigned && (
+                <>
+                  <Link
+                    to={`/reports/edit/${report.id}`}
+                    className={styles.editButton}
+                  >
+                    <i className="fa-solid fa-pen-to-square"></i>
+                  </Link>
+                  <Link
+                    className={styles.deleteButton}
+                    onClick={() => deleteReport(report.id)}
+                  >
+                    <i className="fa-solid fa-trash"></i>
+                  </Link>
+                </>
+              )}
+            </div>
           </motion.li>
         ))}
       </ul>
-    
 
       <div className={styles.pagination}>
         <button

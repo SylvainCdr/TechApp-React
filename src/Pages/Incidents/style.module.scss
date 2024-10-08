@@ -6,9 +6,8 @@
   background-color: #dddddd17;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding-top :6rem;
+  padding-top: 6rem;
 
- 
   .createIncident {
     display: inline-block;
     margin-bottom: 20px;
@@ -254,12 +253,11 @@
       -o-transition: background-color 0.3s ease;
 
       i {
-        color : white;
+        color: white;
         font-size: 1.5rem;
-        margin : 0 ;
-        padding : 0;
-
-       }
+        margin: 0;
+        padding: 0;
+      }
       &:hover {
         scale: 1.1;
       }
@@ -286,14 +284,12 @@
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
 
-   
-
     button {
-      display: flex ;
+      display: flex;
       justify-content: space-around;
       margin: 0 5px;
       color: rgb(93, 93, 93);
-      padding : 5px;
+      padding: 5px;
       font-size: 1.2em;
       background-color: white;
       border: none;
@@ -362,11 +358,10 @@
 
           .section2Left {
             width: 100%;
-
           }
-            .section2Right {
-              width: 100%;
-            }
+          .section2Right {
+            width: 100%;
+          }
         }
       }
     }

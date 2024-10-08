@@ -5,14 +5,12 @@
   min-height: 90vh;
   background-color: #dddddd17;
   border-radius: 8px;
-  padding-top :6rem;
-
+  padding-top: 6rem;
 
   .form {
-
     background-color: rgba(255, 255, 255, 0.182);
     margin: 0 auto;
-    margin-bottom : 3rem;
+    margin-bottom: 3rem;
     padding: 15px;
     border-radius: 8px;
     width: 90%;
@@ -97,7 +95,7 @@
       }
 
       i {
-        margin-left : 1rem;
+        margin-left: 1rem;
         margin-right: 8px;
         font-size: 1.2rem;
         color: rgb(133, 133, 133);
@@ -126,7 +124,7 @@
           cursor: pointer;
           border-radius: 3px;
           color: #fff;
-  
+
           width: 40%;
           &:hover {
             scale: 1.1;
@@ -141,7 +139,7 @@
           cursor: pointer;
           border-radius: 3px;
           color: #fff;
-       
+
           &:hover {
             scale: 1.1;
           }
@@ -150,13 +148,10 @@
     }
   }
 
-
   @media (max-width: 1080px) {
     .techniciansList {
       grid-template-columns: 1fr 1fr;
     }
-
-
   }
 
   @media (max-width: 700px) {
@@ -165,4 +160,3 @@
     }
   }
 }
-

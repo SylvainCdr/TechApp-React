@@ -32,7 +32,6 @@ export default function TechniciansPage() {
   const [photo, setPhoto] = useState(null);
   const [showForm, setShowForm] = useState(false); // État pour afficher ou non le formulaire
 
-
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
     try {
@@ -49,9 +48,7 @@ export default function TechniciansPage() {
 
   useEffect(() => {
     fetchTechnicians();
-    
   }, []);
-
 
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e) => {
@@ -268,9 +265,9 @@ export default function TechniciansPage() {
                 src={technician.urlPhoto}
                 alt={`${technician.firstName} ${technician.lastName}`}
                 initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
               />
             )}
             <p>
@@ -290,7 +287,7 @@ export default function TechniciansPage() {
                 className={styles.editButton}
                 onClick={() => handleEdit(technician)}
               >
-               <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-pen-to-square"></i>
               </button>
               <button
                 className={styles.deleteButton}

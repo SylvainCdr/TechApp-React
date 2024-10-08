@@ -14,15 +14,11 @@ import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
 export default function IncidentReports() {
- 
   const [error, setError] = useState(null);
   const [incidents, setIncidents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
   const incidentsPerPage = 6; // Nombre d'incidents par page
   const [technicians, setTechnicians] = useState([]);
-
-
-
 
   const fetchIncidents = async () => {
     // setLoading(true);
@@ -41,7 +37,7 @@ export default function IncidentReports() {
     } catch (error) {
       setError(error);
       console.error("Erreur lors de la récupération des rapports : ", error);
-    } 
+    }
   };
 
   // Fonction pour récupérer les techniciens depuis Firestore
@@ -62,9 +58,7 @@ export default function IncidentReports() {
   useEffect(() => {
     fetchIncidents(); // Récupère les incidents
     fetchTechnicians(); // Récupère les techniciens
-    
   }, []);
- 
 
   // Fonction pour supprimer un incident avec alerte de confirmation
   const deleteIncident = async (id) => {
@@ -99,8 +93,7 @@ export default function IncidentReports() {
     deleteIncident(id);
   };
 
-  
-const handlePageChange = (page) => {
+  const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
@@ -116,7 +109,7 @@ const handlePageChange = (page) => {
     indexOfFirstIncident,
     indexOfLastIncident
   );
-  
+
   return (
     <div className={styles.incidentsContainer}>
       <h1>Fiches d'incidents</h1>
@@ -124,8 +117,6 @@ const handlePageChange = (page) => {
       <Link to="/incidents/create" className={styles.createIncident}>
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche incident
       </Link>
-
-     
 
       <ul className={styles.incidentsList}>
         {currentIncidents.map((incident) => (
@@ -315,17 +306,15 @@ const handlePageChange = (page) => {
 
       {/* Pagination */}
       <div className={styles.pagination}>
-       
-          <button onClick={() => handlePageChange(currentPage - 1)}>
-            <i className="fa-solid fa-chevron-left"></i>
-          </button>
-          <p>
-            Page {currentPage} / {totalPages}
-          </p>
-          <button onClick={() => handlePageChange(currentPage + 1)}>
-            <i className="fa-solid fa-chevron-right"></i>
-          </button>
-
+        <button onClick={() => handlePageChange(currentPage - 1)}>
+          <i className="fa-solid fa-chevron-left"></i>
+        </button>
+        <p>
+          Page {currentPage} / {totalPages}
+        </p>
+        <button onClick={() => handlePageChange(currentPage + 1)}>
+          <i className="fa-solid fa-chevron-right"></i>
+        </button>
       </div>
     </div>
   );

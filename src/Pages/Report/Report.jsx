@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { db } from "../../firebase/firebase";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
-import { Link } from "react-router-dom";
 import generateReportPdf from "../../utils/pdfGenerator";
 
 export default function InterventionReport() {
@@ -245,8 +244,8 @@ export default function InterventionReport() {
               </p>
               <p>
                 {" "}
-                <i class="fa-solid fa-clock"></i> Durée de l'intervention (en heures) :{" "}
-                {report.interventionDuration}{" "}
+                <i class="fa-solid fa-clock"></i> Durée de l'intervention (en
+                heures) : {report.interventionDuration}{" "}
               </p>
             </div>
           </div>
