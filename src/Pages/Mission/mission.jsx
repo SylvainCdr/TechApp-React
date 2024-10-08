@@ -1,11 +1,10 @@
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { db } from "../../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore";
+import { db , auth } from "../../firebase/firebase";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
-import { auth } from "../../firebase/firebase";
+
 
 export default function Mission() {
   const { missionId } = useParams();
@@ -14,6 +13,8 @@ export default function Mission() {
   const [error, setError] = useState(null);
   const [technicians, setTechnicians] = useState([]);
   const [createdBy, setCreatedBy] = useState(null);
+  const [users, setUsers] = useState([]); // État pour stocker les utilisateurs
+
 
   const fetchMission = async () => {
     try {
@@ -48,6 +49,20 @@ export default function Mission() {
     }
   };
 
+  // Fonction pour récupérer les utilisateurs depuis Firestore
+  const fetchUsers = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const usersList = querySnapshot.docs.map((doc) => ({
+        uid: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(usersList);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des utilisateurs : ", error);
+    }
+  };
+
   // Fonction pour récupérer l'URL de la photo de l'intervenant
   const getTechnicianPhotoURL = (technicianId) => {
     const technician = technicians.find((tech) => tech.id === technicianId);
@@ -69,20 +84,16 @@ export default function Mission() {
     });
   };
   
-  // fonction pour récupérer l email du createdBy depuis le uid de Authentification
-  const fetchCreatedBy = async () => {
-    try {
-      const user = auth.currentUser;
-      setCreatedBy(user.email);
-    } catch (error) {
-      console.error("Erreur lors de la récupération de l'utilisateur : ", error);
-    }
+  // Fonction pour obtenir l'email du créateur de la mission à partir du uid
+  const getUserEmail = (uid) => {
+    const user = users.find((user) => user.uid === uid);
+    return user ? user.email : "Email inconnu";
   };
   
   useEffect(() => {
     fetchMission();
     fetchTechnicians();
-    fetchCreatedBy();
+    fetchUsers();
   }, [missionId]);
   
   return (
@@ -116,7 +127,7 @@ export default function Mission() {
     
             
             
-          <p>Missions créé(e) par : {createdBy}</p>
+          <p>Missions créé(e) par : {getUserEmail(mission.createdBy)}</p>
           <br />
           <p>Commercial référent : {mission.commercial}</p>
           <br />

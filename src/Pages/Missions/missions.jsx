@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
 import { db } from "../../firebase/firebase";
-
 import {
   collection,
   getDocs,
-  deleteDoc,
-  getDoc,
   doc,
+  deleteDoc,
   orderBy,
   query,
 } from "firebase/firestore";
@@ -15,15 +13,12 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
-import { auth } from "../../firebase/firebase";
-
 export default function Missions() {
   const [missions, setMissions] = useState([]);
   const [technicians, setTechnicians] = useState([]);
+  const [users, setUsers] = useState([]); // État pour stocker les utilisateurs
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 6; // Nombre de missions par page
-
-  const [createdBy, setCreatedBy] = useState("");
 
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
@@ -47,7 +42,7 @@ export default function Missions() {
       const techniciansList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().firstName + " " + doc.data().lastName,
-        urlPhoto: doc.data().urlPhoto, // Assurez-vous que le champ urlPhoto existe
+        urlPhoto: doc.data().urlPhoto,
       }));
       setTechnicians(techniciansList);
     } catch (error) {
@@ -55,26 +50,31 @@ export default function Missions() {
     }
   };
 
- // fonction pour récupérer l email du createdBy depuis le uid de Authentification
- const fetchCreatedBy = async () => {
-  try {
-    const user = auth.currentUser;
-    setCreatedBy(user.email);
-  } catch (error) {
-    console.error("Erreur lors de la récupération de l'utilisateur : ", error);
-  }
-};
-
-
+  // Fonction pour récupérer les utilisateurs depuis Firestore
+  const fetchUsers = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const usersList = querySnapshot.docs.map((doc) => ({
+        uid: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(usersList);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des utilisateurs : ", error);
+    }
+  };
 
   useEffect(() => {
     fetchMissions();
     fetchTechnicians();
-    fetchCreatedBy();
-  
-   
+    fetchUsers(); // Récupération des utilisateurs
   }, []);
- 
+
+  // Fonction pour obtenir l'email du créateur de la mission à partir du uid
+  const getUserEmail = (uid) => {
+    const user = users.find((user) => user.uid === uid);
+    return user ? user.email : "Email inconnu";
+  };
 
   // Fonction pour obtenir l'URL de la photo du technicien par ID
   const getTechnicianPhotoURL = (id) => {
@@ -147,23 +147,16 @@ export default function Missions() {
               {mission.client.nomEntreprise}
             </h2>
             <p>
-              <i class="fa-solid fa-calendar-days"></i>Date(s) d'intervention :{" "}
-              {new Date(mission.interventionStartDate).toLocaleDateString(
-                "fr-FR"
-              ) ===
+              <i className="fa-solid fa-calendar-days"></i>Date(s) d'intervention :{" "}
+              {new Date(mission.interventionStartDate).toLocaleDateString("fr-FR") ===
               new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
-                ? new Date(mission.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  ) // Si les dates sont identiques
-                : `${new Date(mission.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  )} - ${new Date(
-                    mission.interventionEndDate
-                  ).toLocaleDateString("fr-FR")}`}{" "}
-              {/* Sinon afficher les deux */}
+                ? new Date(mission.interventionStartDate).toLocaleDateString("fr-FR")
+                : `${new Date(mission.interventionStartDate).toLocaleDateString("fr-FR")} - ${new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")}`}
             </p>
-<br />
-            <p> <i class="fa-solid fa-folder-plus"></i>Mission créée par : {createdBy}</p>
+            <br />
+            <p>
+              <i className="fa-solid fa-folder-plus"></i>Mission créée par : {getUserEmail(mission.createdBy)}
+            </p>
 
             <div className={styles.section1}>
               <div className={styles.section1Left}>
