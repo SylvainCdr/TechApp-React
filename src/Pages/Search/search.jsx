@@ -114,11 +114,13 @@ export default function Search() {
                     })
                     .join(", ")}
                 </td>
-                <td>
+
+
+                <td className={styles.tableActions}>
                   <Link to={`/report/${report.id}`} className={styles.viewBtn}>
                     <i class="fa-solid fa-eye"></i>
                   </Link>
-
+{/* 
                   {!report.isSigned && (
                     <Link
                       to={`/reports/edit/${report.id}`}
@@ -126,8 +128,9 @@ export default function Search() {
                     >
                       <i class="fa-solid fa-edit"></i>
                     </Link>
-                  )}
+                  )} */}
                 </td>
+                
               </tr>
             ))}
           </tbody>
