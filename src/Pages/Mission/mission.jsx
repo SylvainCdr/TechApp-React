@@ -75,12 +75,17 @@ export default function Mission() {
     navigator.clipboard.writeText(siteInfo).then(() => {
       Swal.fire({
         title: "Adresse copiée !",
-        text: "L'adresse du site a été copiée dans le presse-papiers",
+        text: "Vous pouvez maintenant la reporter dans votre GPS",
         icon: "success",
         showConfirmButton: false,
         timer: 1500,
       });
     });
+  };
+
+  //Fonction pour pouvoir appeler le telContact du site
+  const callContact = () => {
+    window.open(`tel:${mission.site.telContact}`);
   };
 
   // Fonction pour obtenir l'email du créateur de la mission à partir du uid
@@ -163,6 +168,9 @@ export default function Mission() {
 
               <button onClick={handleCopy} className={styles.copyButton}>
                 Copier l'adresse du site
+              </button>
+              <button onClick={callContact} className={styles.callButton}>
+                Appeler le contact
               </button>
             </ul>
             <div className={styles.section1Right}>
