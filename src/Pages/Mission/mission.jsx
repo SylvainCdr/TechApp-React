@@ -167,7 +167,7 @@ export default function Mission() {
               </p>
 
               <button onClick={handleCopy} className={styles.copyButton}>
-                Copier l'adresse du site
+                Copier l'adresse
               </button>
               <button onClick={callContact} className={styles.callButton}>
                 Appeler le contact

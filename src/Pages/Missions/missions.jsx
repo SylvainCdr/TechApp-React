@@ -18,7 +18,7 @@ export default function Missions() {
   const [technicians, setTechnicians] = useState([]);
   const [users, setUsers] = useState([]); // État pour stocker les utilisateurs
   const [currentPage, setCurrentPage] = useState(1);
-  const missionsPerPage = 6; // Nombre de missions par page
+  const missionsPerPage = 10; // Nombre de missions par page
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
   ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(',')

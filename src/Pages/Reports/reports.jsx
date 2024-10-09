@@ -17,7 +17,7 @@ const Reports = () => {
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const reportsPerPage = 6; // Nombre de rapports par page
+  const reportsPerPage = 10; // Nombre de rapports par page
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
   ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(',')
@@ -142,6 +142,7 @@ const Reports = () => {
             >
               {report.actionsDone?.length ? "Complété" : "À compléter"}
             </span>
+            
 
             <p>
               {report.missionId ? (

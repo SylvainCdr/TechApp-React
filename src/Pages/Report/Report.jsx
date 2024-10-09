@@ -101,6 +101,15 @@ export default function InterventionReport() {
                 )}`}{" "}
             - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
           </h2>
+          <p>
+              {report.missionId ? (
+                <Link to={`/mission/${report.missionId}`}>
+                  Voir la fiche mission associée
+                </Link>
+              ) : (
+                "Aucune fiche mission associée"
+              )}
+            </p>
 
           {!report.isSigned && (
             <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>

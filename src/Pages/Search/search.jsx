@@ -21,7 +21,7 @@ export default function Search() {
       // Requête pour récupérer les rapports triés par date de création (createdAt) décroissante
       const q = query(
         collection(db, "interventionReports"),
-        orderBy("createdAt", "desc")
+        orderBy("interventionStartDate", "desc")
       );
       const querySnapshot = await getDocs(q);
       const reportsList = querySnapshot.docs.map((doc) => ({
