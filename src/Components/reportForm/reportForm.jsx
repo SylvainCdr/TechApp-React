@@ -394,7 +394,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         {actionsDone.map((action, index) => (
           <div key={index} className={styles.formGroup}>
             <label>
-              Description des actions menées <span>*</span>
+              Description d'une action <span>*</span>
             </label>
             <textarea
               value={action.description}
@@ -408,7 +408,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               required
             />
 
-            <label>Ajouter des photos pour cette action :</label>
+            <label>Ajouter une photo pour cette action :</label>
             <input
               type="file"
               onChange={(e) => handleActionPhotoChange(index, e)}
@@ -428,13 +428,13 @@ export default function ReportForm({ initialData, onSubmit }) {
           onClick={addActionField}
           className={styles.addBtn}
         >
-          <i class="fa-solid fa-plus"></i> Ajouter une action
+          <i className="fa-solid fa-plus"></i> Ajouter une action
         </button>
 
         <h3>Remarques / Risques</h3>
         {remarques.map((remarque, index) => (
           <div key={index} className={styles.formGroup}>
-            <label>Remarques :</label>
+            <label>Remarque :</label>
             <textarea
               value={remarque.remarque}
               onChange={(e) => {
@@ -446,7 +446,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               }}
             />
 
-            <label>Ajouter des photos pour cette remarque :</label>
+            <label>Ajouter une photo pour cette remarque :</label>
             <input
               type="file"
               onChange={(e) => handleRemarquePhotoChange(index, e)}
@@ -466,7 +466,7 @@ export default function ReportForm({ initialData, onSubmit }) {
           onClick={addRemarqueField}
           className={styles.addBtn}
         >
-          <i class="fa-solid fa-plus"></i> Ajouter une remarque
+          <i className="fa-solid fa-plus"></i> Ajouter une remarque
         </button>
 
         <h3>Risque(s) / Danger(s)</h3>
