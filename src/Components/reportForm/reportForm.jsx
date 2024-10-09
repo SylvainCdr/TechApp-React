@@ -366,7 +366,9 @@ export default function ReportForm({ initialData, onSubmit }) {
 
         <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
-          <label>Choisir les intervenants <span>*</span></label>
+          <label>
+            Choisir les intervenants <span>*</span>
+          </label>
           {intervenantsList.map((tech) => (
             <div key={tech.id}>
               <input
@@ -407,7 +409,6 @@ export default function ReportForm({ initialData, onSubmit }) {
             <label>Ajouter des photos pour cette action :</label>
             <input
               type="file"
-              multiple
               onChange={(e) => handleActionPhotoChange(index, e)}
               className={styles.uploadBtn}
             />
@@ -444,7 +445,6 @@ export default function ReportForm({ initialData, onSubmit }) {
             <label>Ajouter des photos pour cette remarque :</label>
             <input
               type="file"
-              multiple
               onChange={(e) => handleRemarquePhotoChange(index, e)}
               className={styles.uploadBtn}
             />
