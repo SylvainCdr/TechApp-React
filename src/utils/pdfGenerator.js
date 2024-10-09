@@ -246,7 +246,7 @@ for (let index = 0; index < report.actionsDone.length; index++) {
     }
   } else {
     // Si l'action n'a pas de photos, affichez seulement le texte de l'action
-    const wrappedText = doc.splitTextToSize(actionText, 270); // Utilise toute la largeur
+    const wrappedText = doc.splitTextToSize(actionText, 260); // Utilise toute la largeur
     doc.setFontSize(12);
     
     // Vérifie si la position Y dépasse la limite de la page
@@ -287,6 +287,11 @@ for (let index = 0; index < report.actionsDone.length; index++) {
 // Ajouter le pied de page à la dernière page des actions
 doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
 
+// -------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+// PAGE 4 : REMARQUES AVEC PHOTOS EN TABLEAU
+
+// Vérifiez si le rapport contient des remarques ou des photos associées
 // Vérifiez si le rapport contient des remarques ou des photos associées
 const hasRemarques = report.remarques && report.remarques.some(remarque => remarque.remarque || (remarque.photos && remarque.photos.length > 0));
 
@@ -298,11 +303,7 @@ if (hasRemarques) {
   doc.setFontSize(12);
   doc.setTextColor(255, 255, 255);
   doc.text(`Date(s) : ${interventionDates(report)}`, 130, 10);
-  doc.text(
-    `Client : ${report.client?.nomEntreprise || "Nom du client"}`,
-    130,
-    20
-  );
+  doc.text(`Client : ${report.client?.nomEntreprise || "Nom du client"}`, 130, 20);
   doc.setTextColor(0, 0, 0);
 
   doc.setFontSize(18);
@@ -316,58 +317,54 @@ if (hasRemarques) {
     const remarque = report.remarques[index];
     const remarqueText = `Remarque ${index + 1} : ${remarque.remarque}`;
 
-    // Affiche la remarque même s'il n'y a pas de photos
     if (remarque.remarque) {
-      const wrappedText = doc.splitTextToSize(remarqueText, descriptionWidth); // Gère les longues descriptions
-      doc.setFontSize(12);
-      
       // Vérifiez si la remarque a des photos associées
-      if (!remarque.photos || remarque.photos.length === 0) {
-        // Affiche la remarque sur toute la largeur de la page
+      if (remarque.photos && remarque.photos.length > 0) {
+        // Affichez la remarque et les photos sous forme de tableau
+        const wrappedText = doc.splitTextToSize(remarqueText, 100); // Largeur réduite pour laisser de la place aux photos
+        doc.setFontSize(12);
         doc.text(wrappedText, 10, yPositionRemark + 10); // Position de la description
+
+        let imageXPosition = 120; // Position X pour afficher les images à droite
+        for (let photo of remarque.photos) {
+          const img = await getDataUri(photo);
+
+          // Vérifiez si la position Y dépasse la limite de la page
+          if (yPositionRemark + imgHeight > maxHeightPerPage) {
+            // Ajouter le pied de page avant de changer de page
+            doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
+
+            // Ajouter une nouvelle page
+            doc.addPage();
+            doc.addImage(headerImg, "PNG", 0, 0, 220, 0);
+            doc.setTextColor(255, 255, 255);
+            doc.text(`Date(s) : ${interventionDates(report)}`, 130, 10);
+            doc.text(`Client : ${report.client?.nomEntreprise || "Nom du client"}`, 130, 20);
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(18);
+            doc.setFillColor(240, 240, 240); // Arrière-plan gris clair
+            doc.rect(0, 30, 250, 15, "F"); // Rectangle rempli pour l'arrière-plan
+            doc.setFontSize(18);
+            doc.setTextColor(0, 0, 0); // Couleur du texte noire
+            doc.text("Remarques (suite)", 20, 40);
+
+            // Réinitialise la position Y après le titre pour commencer en haut de la page
+            yPositionRemark = 60;
+          }
+
+          // Ajoute chaque image sur la même ligne que le texte de la remarque
+          doc.addImage(img, "JPEG", imageXPosition, yPositionRemark, imgWidth, imgHeight);
+          imageXPosition += imgWidth + 10; // Espace entre les images
+        }
+
+        yPositionRemark += imgHeight + 20; // Incrémente la position Y après la ligne d'images et du texte
       } else {
-        // Affiche la remarque avec un décalage pour les images
-        doc.text(wrappedText, 10, yPositionRemark + 10); // Position de la description en début de ligne
+        // Si la remarque n'a pas de photos, affichez-la sur toute la largeur de la page
+        const wrappedText = doc.splitTextToSize(remarqueText, 270); // Utilise toute la largeur
+        doc.setFontSize(12);
+        doc.text(wrappedText, 10, yPositionRemark + 10); // Position de la description
+        yPositionRemark += 20; // Incrémente la position Y après la remarque
       }
-
-      yPositionRemark += 20; // Incrémente la position Y après la remarque
-    }
-
-    // S'il y a des photos associées, les afficher
-    for (let photo of remarque.photos || []) {
-      const img = await getDataUri(photo);
-
-      // Vérifie si la position Y dépasse la limite de la page
-      if (yPositionRemark + imgHeight > maxHeightPerPage) {
-        // Ajouter le pied de page avant de changer de page
-        doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
-
-        // Ajouter une nouvelle page
-        doc.addPage();
-        doc.addImage(headerImg, "PNG", 0, 0, 220, 0);
-        doc.setTextColor(255, 255, 255);
-        doc.text(`Date(s) : ${interventionDates(report)}`, 130, 10);
-        doc.text(
-          `Client : ${report.client?.nomEntreprise || "Nom du client"}`,
-          130,
-          20
-        );
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(18);
-        doc.setFillColor(240, 240, 240); // Arrière-plan gris clair
-        doc.rect(0, 30, 250, 15, "F"); // Rectangle rempli pour l'arrière-plan
-        doc.setFontSize(18);
-        doc.setTextColor(0, 0, 0); // Couleur du texte noire
-        doc.text("Remarques (suite)", 20, 40);
-
-        // Réinitialise la position Y après le titre pour commencer en haut de la page
-        yPositionRemark = 60;
-      }
-
-      // Ajoute l'image à gauche (30% de la page)
-      doc.addImage(img, "JPEG", 10, yPositionRemark, imgWidth, imgHeight);
-
-      yPositionRemark += imgHeight + spaceBetweenImages; // Incrémente la position Y
     }
 
     // Ajoutez un espace après chaque remarque
@@ -377,8 +374,6 @@ if (hasRemarques) {
   // Ajouter le pied de page à la dernière page des remarques
   doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
 }
-
-
 
 
   // -------------------------------------------------------------------------------------------------------
