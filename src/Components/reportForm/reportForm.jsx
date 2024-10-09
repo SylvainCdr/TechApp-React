@@ -396,16 +396,18 @@ export default function ReportForm({ initialData, onSubmit }) {
             <label>
               Description des actions menées <span>*</span>
             </label>
-            <input
-              type="text"
+            <textarea
               value={action.description}
               onChange={(e) => {
+                const newValue = e.target.value;
+                console.log(newValue.split("\n")); // Affiche chaque ligne du texte dans la console
                 const newActionsDone = [...actionsDone];
-                newActionsDone[index].description = e.target.value;
+                newActionsDone[index].description = newValue;
                 setActionsDone(newActionsDone);
               }}
               required
             />
+
             <label>Ajouter des photos pour cette action :</label>
             <input
               type="file"
@@ -433,15 +435,17 @@ export default function ReportForm({ initialData, onSubmit }) {
         {remarques.map((remarque, index) => (
           <div key={index} className={styles.formGroup}>
             <label>Remarques :</label>
-            <input
-              type="text"
+            <textarea
               value={remarque.remarque}
               onChange={(e) => {
+                const newValue = e.target.value;
+                console.log(newValue.split("\n")); // Affiche chaque ligne du texte dans la console
                 const newRemarques = [...remarques];
-                newRemarques[index].remarque = e.target.value;
+                newRemarques[index].remarque = newValue;
                 setRemarques(newRemarques);
               }}
             />
+
             <label>Ajouter des photos pour cette remarque :</label>
             <input
               type="file"

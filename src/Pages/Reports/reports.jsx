@@ -217,7 +217,7 @@ const Reports = () => {
                 <h4>Actions menées :</h4>
                 <ul>
                   {report.actionsDone?.map((action, index) => (
-                    <li key={index}>
+                    <li key={index} style={{ whiteSpace: 'pre-wrap' }}>
                       <i className="fa-solid fa-check"></i> {action.description}
                     </li>
                   ))}
@@ -237,7 +237,7 @@ const Reports = () => {
                 <h4>Remarques / Risques:</h4>
                 <ul>
                   {report.remarques?.map((remarque, index) => (
-                    <li key={index}>
+                    <li key={index} style={{ whiteSpace: 'pre-wrap' }}>
                       <i className="fa-solid fa-minus"></i> {remarque.remarque}
                     </li>
                   ))}

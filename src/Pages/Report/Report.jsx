@@ -198,7 +198,7 @@ export default function InterventionReport() {
                           />
                         ))}
                       </td>
-                      <td>
+                      <td style={{ whiteSpace: 'pre-wrap' }}>
                         <i className="fa-solid fa-check"></i>{" "}
                         {action.description}
                       </td>
@@ -231,7 +231,7 @@ export default function InterventionReport() {
                           />
                         ))}
                       </td>
-                      <td>
+                      <td style={{ whiteSpace: 'pre-wrap' }}>
                         <i class="fa-solid fa-chevron-right"></i>{" "}
                         {remarque.remarque}
                       </td>
