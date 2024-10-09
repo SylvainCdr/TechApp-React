@@ -76,8 +76,11 @@ export default function Search() {
               <th>
                 <i class="fa-solid fa-user-group"></i>
               </th>
-              <th>
-                <i class="fa-solid fa-bars"></i>
+              <th className={styles.status}>
+              <i class="fa-solid fa-wrench"></i>
+              </th>
+              <th >
+                <i class="fa-solid fa-bars" ></i>
               </th>
             </tr>
           </thead>
@@ -115,20 +118,18 @@ export default function Search() {
                     .join(", ")}
                 </td>
 
+                <td className={styles.status}>
+            
+              {report.actionsDone?.length ? "Complété" : "À compléter"}
+            
+                </td>
+
 
                 <td className={styles.tableActions}>
                   <Link to={`/report/${report.id}`} className={styles.viewBtn}>
                     <i class="fa-solid fa-eye"></i>
                   </Link>
-{/* 
-                  {!report.isSigned && (
-                    <Link
-                      to={`/reports/edit/${report.id}`}
-                      className={styles.editBtn}
-                    >
-                      <i class="fa-solid fa-edit"></i>
-                    </Link>
-                  )} */}
+
                 </td>
                 
               </tr>

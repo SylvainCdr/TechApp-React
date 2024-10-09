@@ -106,7 +106,7 @@ align-items: center;
       font-size: 1rem;
    
     td {
-      padding: 7px 7px;
+      padding: 9px 9px;
       text-align: left;
       border: 1px solid #ddd;
      vertical-align: middle;
@@ -122,12 +122,15 @@ align-items: center;
       padding: 10px 10px;
     }
 
-
-
+   
 
  
 
 
   }
+  .status {
+    display: none;
+  }
+
 }
 }
