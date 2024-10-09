@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
-import { db } from "../../firebase/firebase";
+import { db, auth } from "../../firebase/firebase";
 import {
   collection,
   getDocs,
@@ -19,12 +19,17 @@ const Reports = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 6; // Nombre de rapports par page
 
+  const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
+  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(',')
+  : [];
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const reportsQuery = query(
           collection(db, "interventionReports"),
-          orderBy("createdAt", "desc")
+          orderBy("interventionStartDate", "desc") // Trie par interventionStartDate
         );
         const reportsSnapshot = await getDocs(reportsQuery);
         const reportsList = reportsSnapshot.docs.map((doc) => ({
@@ -32,7 +37,7 @@ const Reports = () => {
           ...doc.data(),
         }));
         setReports(reportsList);
-
+  
         const techniciansSnapshot = await getDocs(
           collection(db, "technicians")
         );
@@ -51,9 +56,10 @@ const Reports = () => {
         );
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -276,12 +282,20 @@ const Reports = () => {
                   >
                     <i className="fa-solid fa-pen-to-square"></i>
                   </Link>
-                  <Link
+                  {/* <Link
                     className={styles.deleteButton}
                     onClick={() => deleteReport(report.id)}
                   >
                     <i className="fa-solid fa-trash"></i>
-                  </Link>
+                  </Link> */}
+                   {authorizedUserIds.includes(auth.currentUser.uid) && (
+                    <Link
+                      className={styles.deleteButton}
+                      onClick={() => deleteReport(report.id)}
+                    >
+                      <i className="fa-solid fa-trash"></i>
+                    </Link>
+                  )}
                 </>
               )}
             </div>

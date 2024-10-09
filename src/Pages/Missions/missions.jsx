@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./style.module.scss";
-import { db } from "../../firebase/firebase";
+import { db, auth } from "../../firebase/firebase";
 import {
   collection,
   getDocs,
@@ -19,6 +19,11 @@ export default function Missions() {
   const [users, setUsers] = useState([]); // État pour stocker les utilisateurs
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 6; // Nombre de missions par page
+
+  const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
+  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(',')
+  : [];
+
 
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
@@ -267,13 +272,16 @@ export default function Missions() {
                 <i className="fa-solid fa-pen-to-square"></i>
               </Link>
 
-              {/* Bouton Supprimer */}
-              <Link
-                className={styles.deleteMission}
-                onClick={() => deleteMission(mission.id)}
-              >
-                <i className="fa-solid fa-trash"></i>
-              </Link>
+           
+              {authorizedUserIds.includes(auth.currentUser.uid) && (
+  <Link
+    className={styles.deleteMission}
+    onClick={() => deleteMission(mission.id)}
+  >
+    <i className="fa-solid fa-trash"></i>
+  </Link>
+)}
+
             </div>
           </motion.div>
         ))}
