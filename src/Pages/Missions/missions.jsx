@@ -149,7 +149,7 @@ export default function Missions() {
               {mission.createdAt.toDate().toLocaleDateString()} -{" "}
               {mission.client.nomEntreprise}
             </h2>
-            <p>
+            <p className={styles.interventionDate}>
               <i className="fa-solid fa-calendar-days"></i>Date(s)
               d'intervention :{" "}
               {new Date(mission.interventionStartDate).toLocaleDateString(

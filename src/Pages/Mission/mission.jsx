@@ -112,8 +112,8 @@ export default function Mission() {
             {mission.createdAt?.toDate().toLocaleDateString()} -{" "}
             {mission.client.nomEntreprise}
           </h2>
-          <p>
-            Date(s) d'intervention : {""}
+          <p className={styles.interventionDate}>
+          <i className="fa-solid fa-calendar-days"></i> Date(s) d'intervention : {""}
             {new Date(mission.interventionStartDate).toLocaleDateString(
               "fr-FR"
             ) ===
@@ -129,12 +129,12 @@ export default function Mission() {
           </p>
           <br />
 
-          <p>Missions créé(e) par : {getUserEmail(mission.createdBy)}</p>
+          <p><i className="fa-solid fa-folder-plus"></i>Mission créée par : {getUserEmail(mission.createdBy)}</p>
           <br />
-          <p>Commercial référent : {mission.commercial}</p>
+          <p> <i class="fa-solid fa-user-tie"></i>Commercial(e) en charge : {mission.commercial}</p>
           <br />
 
-          <p> Devis N° : {mission.devis}</p>
+          <p> <i class="fa-solid fa-folder-open"></i>Devis N° : {mission.devis}</p>
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
