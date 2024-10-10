@@ -171,6 +171,7 @@ interventionDetails.forEach((detail, index) => {
 
  // -------------------------------------------------------------------------------------------------------
 // PAGE 3 : ACTIONS MENÉES AVEC PHOTOS EN TABLEAU
+// PAGE 3 : ACTIONS MENÉES AVEC PHOTOS EN TABLEAU
 
 // Ajoute la page 3
 doc.addPage(); 
@@ -195,6 +196,9 @@ const imgHeightSmall = 65; // Hauteur réduite des images
 for (let index = 0; index < report.actionsDone.length; index++) {
   const action = report.actionsDone[index];
   const actionText = `Action ${index + 1} : ${action.description}`;
+  
+  // Vérifiez si action.description existe
+  console.log(action.description); // Ajoutez cette ligne pour déboguer
 
   // Affichage de la description de l'action au-dessus des photos
   const wrappedText = doc.splitTextToSize(actionText, 270); // Utilise toute la largeur pour la description
@@ -231,7 +235,7 @@ for (let index = 0; index < report.actionsDone.length; index++) {
 
         // Réinitialise la position Y après le titre pour commencer en haut de la page
         photoYPosition = 60;
-        yPosition = 60;
+        yPosition = 50;
       }
 
       // Ajouter l'image à la position calculée
@@ -243,7 +247,7 @@ for (let index = 0; index < report.actionsDone.length; index++) {
       } else {
         // Retour à la première colonne et passe à la ligne suivante
         photoXPosition = 10;
-        photoYPosition += imgHeightSmall + 50; // Incrémente la position Y pour la ligne suivante
+        photoYPosition += imgHeightSmall + 10; // Incrémente la position Y pour la ligne suivante
       }
     }
 
@@ -255,7 +259,6 @@ for (let index = 0; index < report.actionsDone.length; index++) {
   }
 
   // Ajouter un trait de séparation après chaque action
-  // couleur grise 
   doc.setDrawColor(200); // Couleur de la ligne
   doc.setLineWidth(0.3); // Épaisseur de la ligne
   doc.line(10, yPosition, 200, yPosition); // Ligne horizontale
@@ -264,6 +267,7 @@ for (let index = 0; index < report.actionsDone.length; index++) {
 
 // Ajouter le pied de page à la dernière page des actions
 doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
+
 
 
 // -------------------------------------------------------------------------------------------------------
@@ -302,8 +306,8 @@ if (hasRemarques) {
     if (remarque.photos && remarque.photos.length > 0) {
       let photoXPosition = 10; // Position initiale X pour les photos
       let photoYPosition = yPositionRemark;
-      const imgWidthSmall = 80; // Largeur réduite des images lorsqu'elles sont affichées deux par ligne
-      const imgHeightSmall = 60; // Hauteur réduite des images
+      const imgWidthSmall = 90; // Largeur réduite des images lorsqu'elles sont affichées deux par ligne
+      const imgHeightSmall = 65; // Hauteur réduite des images
 
       // Affichage des photos, deux par ligne
       for (let i = 0; i < remarque.photos.length; i++) {
