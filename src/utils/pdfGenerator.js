@@ -169,7 +169,8 @@ interventionDetails.forEach((detail, index) => {
 
   doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
 
- // PAGE 3 : ACTIONS MENÉES AVEC PHOTOS EN TABLEAU
+ // -------------------------------------------------------------------------------------------------------
+// PAGE 3 : ACTIONS MENÉES AVEC PHOTOS EN TABLEAU
 
 // Ajoute la page 3
 doc.addPage(); 
@@ -247,16 +248,26 @@ for (let index = 0; index < report.actionsDone.length; index++) {
     }
 
     // Met à jour la position Y pour les actions suivantes
-    yPosition = photoYPosition + imgHeightSmall + 20;
+    yPosition = photoYPosition + imgHeightSmall + 10;
+  } else {
+    // Si aucune photo n'est associée, on incrémente simplement yPosition pour l'action suivante
+    yPosition += 20; // Ajuster cette valeur pour contrôler l'espacement entre les descriptions sans photos
   }
+
+  // Ajouter un trait de séparation après chaque action
+  // couleur grise 
+  doc.setDrawColor(200); // Couleur de la ligne
+  doc.setLineWidth(0.3); // Épaisseur de la ligne
+  doc.line(10, yPosition, 200, yPosition); // Ligne horizontale
+  yPosition += 10; // Espacement après la ligne de séparation
 }
 
 // Ajouter le pied de page à la dernière page des actions
 doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
 
-// -------------------------------------------------------------------------------------------------------
-// PAGE 4 : REMARQUES AVEC PHOTOS EN TABLEAU
 
+// -------------------------------------------------------------------------------------------------------
+// PAGE 4 : REMARQUES / RISQUES  AVEC PHOTOS EN TABLEAU
 // Vérifiez si le rapport contient des remarques ou des photos associées
 const hasRemarques = report.remarques && report.remarques.some(remarque => remarque.remarque || (remarque.photos && remarque.photos.length > 0));
 
@@ -335,13 +346,21 @@ if (hasRemarques) {
       }
 
       // Met à jour la position Y pour les remarques et les photos suivantes
-      yPositionRemark = photoYPosition + imgHeightSmall + 20;
+      yPositionRemark = photoYPosition + imgHeightSmall + 20; // Ajoute un espacement supplémentaire après les photos
     }
+
+    // Ajouter un trait de séparation après la remarque + photos (si présentes)
+    doc.setDrawColor(200); // Couleur de la ligne
+    doc.setLineWidth(0.3); // Épaisseur de la ligne
+    doc.line(10, yPositionRemark, 200, yPositionRemark); // Ligne horizontale
+    yPositionRemark += 10; // Espacement après la ligne de séparation
   }
 
   // Ajouter le pied de page à la dernière page des remarques
   doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
 }
+
+
 
 
 
