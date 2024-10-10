@@ -411,6 +411,7 @@ export default function ReportForm({ initialData, onSubmit }) {
             <label>Ajouter une photo pour cette action :</label>
             <input
               type="file"
+              multiple
               onChange={(e) => handleActionPhotoChange(index, e)}
               className={styles.uploadBtn}
             />
@@ -449,6 +450,7 @@ export default function ReportForm({ initialData, onSubmit }) {
             <label>Ajouter une photo pour cette remarque :</label>
             <input
               type="file"
+              multiple
               onChange={(e) => handleRemarquePhotoChange(index, e)}
               className={styles.uploadBtn}
             />
