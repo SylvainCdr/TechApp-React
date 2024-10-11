@@ -18,7 +18,7 @@ import {
 import styles from "./style.module.scss";
 import { motion } from "framer-motion";
 
-export default function ClientsPage() {
+export default function Clients() {
   const [clients, setClients] = useState([]);
   const [formData, setFormData] = useState({
     clientName: "",
@@ -28,23 +28,24 @@ export default function ClientsPage() {
     siteAddress: "",
     commercial: "",
     clientLogo: "",
-
+    planPrevention: "",
   });
   const [editId, setEditId] = useState(null);
-  const [photo, setPhoto] = useState(null);
-  const [showForm, setShowForm] = useState(false); // État pour afficher ou non le formulaire
+  const [logo, setLogo] = useState(null);
+  const [planPrevention, setPlanPrevention] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
-  // Fonction pour récupérer les techniciens depuis Firestore
+  // Fonction pour récupérer les clients depuis Firestore
   const fetchClients = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "clients"));
-      const techniciansList = querySnapshot.docs.map((doc) => ({
+      const clientsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setClients(clientsList);
     } catch (error) {
-      console.error("Erreur lors de la récupération des techniciens : ", error);
+      console.error("Erreur lors de la récupération des clients : ", error);
     }
   };
 
@@ -52,27 +53,42 @@ export default function ClientsPage() {
     fetchClients();
   }, []);
 
+
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      let photoURL = formData.urlPhoto;
+      let logoURL = formData.clientLogo;
+      let planPreventionURL = formData.planPrevention;
 
-      if (photo) {
-        // Téléversement de la photo dans Firebase Storage
-        const photoRef = ref(storage, `technicians/${photo.name}`);
-        await uploadBytes(photoRef, photo);
-        photoURL = await getDownloadURL(photoRef);
+      if (logo) {
+        // Téléversement du logo dans Firebase Storage
+        const logoRef = ref(storage, `clients/${logo.name}`);
+        await uploadBytes(logoRef, logo); // Téléverse le fichier
+        logoURL = await getDownloadURL(logoRef); // Récupère l'URL téléchargeable
       }
 
-      const data = { ...formData, urlPhoto: photoURL };
+      if (planPrevention) {
+        // Téléversement du plan de prévention dans Firebase Storage
+        const planPreventionRef = ref(
+          storage,
+          `clients/${planPrevention.name}`
+        );
+        await uploadBytes(planPreventionRef, planPrevention);
+        planPreventionURL = await getDownloadURL(planPreventionRef);
+      }
+
+      const data = {
+        ...formData,
+        clientLogo: logoURL,
+        planPrevention: planPreventionURL,
+      };
 
       if (editId) {
-        // Mise à jour d'un technicien existant
+        // Mise à jour d'un client existant
         const clientRef = doc(db, "clients", editId);
         await updateDoc(clientRef, data);
-
         Swal.fire({
           title: "Succès",
           text: "Client mis à jour avec succès !",
@@ -80,9 +96,8 @@ export default function ClientsPage() {
           confirmButtonText: "OK",
         });
       } else {
-        // Création d'un nouveau technicien
+        // Création d'un nouveau client
         await addDoc(collection(db, "clients"), data);
-
         Swal.fire({
           title: "Succès",
           text: "Client ajouté avec succès !",
@@ -93,23 +108,23 @@ export default function ClientsPage() {
 
       // Réinitialisation du formulaire et des états
       setFormData({
-        
         clientName: "",
         tel: "",
         mail: "",
         siteName: "",
         siteAddress: "",
         commercial: "",
-
-
+        clientLogo: "",
+        planPrevention: "",
       });
-      setPhoto(null);
+      setLogo(null);
+      setPlanPrevention(null);
       setEditId(null);
-      setShowForm(false); // Fermer le formulaire après la soumission
+      setShowForm(false);
       fetchClients();
     } catch (error) {
       console.error(
-        "Erreur lors de l'ajout ou de la mise à jour du technicien : ",
+        "Erreur lors de l'ajout ou de la mise à jour du client : ",
         error
       );
       Swal.fire({
@@ -124,26 +139,28 @@ export default function ClientsPage() {
   // Fonction pour remplir le formulaire pour la modification
   const handleEdit = (client) => {
     setFormData({
-      firstName: technician.firstName,
-      lastName: technician.lastName,
-      role: technician.role,
-      phone: technician.phone,
-      email: technician.email,
-      urlPhoto: technician.urlPhoto,
+      clientName: client.clientName,
+      tel: client.tel,
+      mail: client.mail,
+      siteName: client.siteName,
+      siteAddress: client.siteAddress,
+      commercial: client.commercial,
+      clientLogo: client.clientLogo,
+      planPrevention: client.planPrevention,
     });
-    setEditId(technician.id);
-    setShowForm(true); // Ouvrir le formulaire en mode édition
+    setEditId(client.id);
+    setShowForm(true);
   };
 
-  // Fonction pour gérer le changement de photo
-  const handlePhotoChange = (e) => {
+  // Fonction pour gérer le changement de logo
+  const handleLogoChange = (e) => {
     if (e.target.files[0]) {
-      setPhoto(e.target.files[0]);
+      setLogo(e.target.files[0]);
     }
   };
 
-  // Fonction pour gérer la suppression d'un technicien avec SweetAlert2
-  const handleDelete = async (technician) => {
+  // Fonction pour gérer la suppression d'un client
+  const handleDelete = async (client) => {
     const result = await Swal.fire({
       title: "Êtes-vous sûr ?",
       text: "Cette action est irréversible !",
@@ -157,23 +174,25 @@ export default function ClientsPage() {
 
     if (result.isConfirmed) {
       try {
-        // Supprimer la photo associée
-        if (technician.urlPhoto) {
+        // Supprimer le logo associé
+        if (client.clientLogo && client.planPrevention) {
           const fileName = decodeURIComponent(
-            client.urlPhoto.split("/").pop().split("?")[0]
+            client.clientLogo.split("/").pop().split("?")[0],
+            client.planPrevention.split("/").pop().split("?")[0]
           );
-          const photoRef = ref(storage, `${fileName}`);
-          await deleteObject(photoRef);
+          const logoRef = ref(storage, `clients/${fileName}`);
+          const planPreventionRef = ref(storage, `clients/${fileName}`);
+          await deleteObject(logoRef && planPreventionRef);
         }
 
-        // Supprimer le technicien de Firestore
-        const technicianRef = doc(db, "technicians", technician.id);
-        await deleteDoc(technicianRef);
+        // Supprimer le client de Firestore
+        const clientRef = doc(db, "clients", client.id);
+        await deleteDoc(clientRef);
 
-        Swal.fire("Supprimé !", "Le technicien a été supprimé.", "success");
-        fetchTechnicians();
+        Swal.fire("Supprimé !", "Le client a été supprimé.", "success");
+        fetchClients();
       } catch (error) {
-        console.error("Erreur lors de la suppression du technicien : ", error);
+        console.error("Erreur lors de la suppression du client : ", error);
         Swal.fire({
           title: "Erreur",
           text: "Une erreur est survenue lors de la suppression.",
@@ -185,46 +204,22 @@ export default function ClientsPage() {
   };
 
   return (
-    <div className={styles.techniciansContainer}>
-      <h1>Gestion des Techniciens</h1>
+    <div className={styles.clientsContainer}>
+      <h1>Gestion des Sites</h1>
 
-      {/* Bouton pour afficher ou cacher le formulaire */}
       <button onClick={() => setShowForm(!showForm)}>
-        {showForm ? "Fermer le formulaire" : "  Ajouter un technicien"}
+        {showForm ? "Fermer le formulaire" : "Ajouter un site"}
       </button>
 
-      {/* Formulaire qui s'affiche si showForm est vrai */}
       {showForm && (
         <form onSubmit={handleSubmit} className={styles.form}>
           <div>
-            <label>Prénom :</label>
+            <label>Nom du Site :</label>
             <input
               type="text"
-              value={formData.firstName}
+              value={formData.clientName}
               onChange={(e) =>
-                setFormData({ ...formData, firstName: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div>
-            <label>Nom :</label>
-            <input
-              type="text"
-              value={formData.lastName}
-              onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div>
-            <label> Fonction :</label>
-            <input
-              type="text"
-              value={formData.role}
-              onChange={(e) =>
-                setFormData({ ...formData, role: e.target.value })
+                setFormData({ ...formData, clientName: e.target.value })
               }
               required
             />
@@ -233,9 +228,9 @@ export default function ClientsPage() {
             <label>Téléphone :</label>
             <input
               type="tel"
-              value={formData.phone}
+              value={formData.tel}
               onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
+                setFormData({ ...formData, tel: e.target.value })
               }
               required
             />
@@ -244,61 +239,113 @@ export default function ClientsPage() {
             <label>Email :</label>
             <input
               type="email"
-              value={formData.email}
+              value={formData.mail}
               onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+                setFormData({ ...formData, mail: e.target.value })
               }
               required
             />
           </div>
           <div>
-            <label>Photo :</label>
-            <input type="file" onChange={handlePhotoChange} />
+            <label>Nom du site :</label>
+            <input
+              type="text"
+              value={formData.siteName}
+              onChange={(e) =>
+                setFormData({ ...formData, siteName: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div>
+            <label>Adresse du site :</label>
+            <input
+              type="text"
+              value={formData.siteAddress}
+              onChange={(e) =>
+                setFormData({ ...formData, siteAddress: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div>
+            <label>Commercial :</label>
+            <input
+              type="text"
+              value={formData.commercial}
+              onChange={(e) =>
+                setFormData({ ...formData, commercial: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div>
+            <label>Logo du client :</label>
+            <input type="file" onChange={handleLogoChange} />
+          </div>
+          <div>
+            <label>Plan de prévention :</label>
+            <input
+              type="file"
+              onChange={(e) => setPlanPrevention(e.target.files[0])}
+            />
           </div>
           <button type="submit">{editId ? "Mettre à jour" : "Ajouter"}</button>
         </form>
       )}
 
-      <div className={styles.techniciansList}>
-        {technicians.map((technician) => (
-          <div key={technician.id} className={styles.technicianItem}>
-            <h2>
-              {technician.firstName} {technician.lastName}
-            </h2>
-            {technician.urlPhoto && (
+      <div className={styles.clientsList}>
+        {clients.map((client) => (
+          <div key={client.id} className={styles.clientItem}>
+            <div className={styles.section1}>
+            <h2>{client.siteName}</h2>
+            <div className={styles.logoContainer}>
+            {client.clientLogo && (
               <motion.img
-                src={technician.urlPhoto}
-                alt={`${technician.firstName} ${technician.lastName}`}
+                src={client.clientLogo}
+                alt={`Logo de ${client.clientName}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               />
             )}
+            </div>
+            </div>
+            <div className={styles.section2}> 
+            <p>Client: {client.clientName}</p>
+            <p>Commercial(e) : {client.commercial}</p>
+            <p>Tel: {client.tel}</p>
+            <p>Email: {client.mail}</p>
+            <p>Adresse : {client.siteAddress}</p>
             <p>
-              {" "}
-              <i class="fa-regular fa-id-card"></i>Fonction : {technician.role}
+              Plan de prévention :{" "}
+              {client.planPrevention ? "" : "Non transmis"}
+              {client.planPrevention && (
+                <a
+                  href={client.planPrevention}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  Consulter{" "}
+                </a>
+              )}
             </p>
-            <p>
-              {" "}
-              <i class="fa-solid fa-phone"></i>Téléphone : {technician.phone}
-            </p>
-            <p>
-              {" "}
-              <i class="fa-solid fa-at"></i>Email : {technician.email}
-            </p>
+            </div>
+
             <div className={styles.buttons}>
               <button
+                onClick={() => handleEdit(client)}
                 className={styles.editButton}
-                onClick={() => handleEdit(technician)}
               >
-                <i class="fa-solid fa-pen-to-square"></i>
+                Modifier
               </button>
               <button
+                onClick={() => handleDelete(client)}
                 className={styles.deleteButton}
-                onClick={() => handleDelete(technician)}
               >
-                <i class="fa-solid fa-trash"></i>
+                Supprimer
               </button>
             </div>
           </div>

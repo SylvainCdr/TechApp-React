@@ -22,6 +22,7 @@ import CreateIncident from "./Pages/CreateIncident/createIncident";
 import ProtectedRoute from "./Components/protectedRoute/ProtectedRoute";
 import Login from "./Components/login/login";
 import Loader from "./utils/loader/loader";
+import Clients from "./Pages/Clients/clients";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -178,7 +179,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-        </Route>
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute>
+              <Clients />
+            </ProtectedRoute>
+          }
+          />
+          </Route>
       </Routes>
     </BrowserRouter>
   );
