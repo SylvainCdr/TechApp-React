@@ -66,7 +66,8 @@
       -o-border-radius: 8px;
 
       .section1 {
-        height: 20vh;
+        height: 13vh;
+        margin-bottom: 3rem;
 
         h2 {
           text-align: center;
@@ -74,6 +75,7 @@
           font-weight: 600;
           font-size: 1.5rem;
           text-transform: uppercase;
+          margin-bottom: 0.5rem;
         }
         .logoContainer {
           align-items: center;
@@ -81,17 +83,13 @@
           justify-content: center;
           align-self: center;
           height: 100%;
+          background-color: white;
+          border-radius: 8px;
 
           img {
-            width: 10rem;
+            width: 12rem;
             object-fit: cover;
-            border-radius: 8px;
             display: flex;
-            margin: 1rem auto;
-            -webkit-border-radius: 8px;
-            -moz-border-radius: 8px;
-            -ms-border-radius: 8px;
-            -o-border-radius: 8px;
           }
         }
       }
@@ -104,7 +102,22 @@
       }
 
       p {
-        margin-top: 0.5rem;
+        margin-top: 0.7rem;
+        a {
+          color: #ffffff;
+          text-decoration: none;
+          background-color: #00b518;
+          padding: 3px 10px;
+          border-radius: 5px;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          -o-border-radius: 5px;
+          
+          &:hover {
+            background-color: #03d21f;
+          }
+        }
       }
 
       .buttons {

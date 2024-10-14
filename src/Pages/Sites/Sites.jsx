@@ -18,7 +18,7 @@ import {
 import styles from "./style.module.scss";
 import { motion } from "framer-motion";
 
-export default function Clients() {
+export default function Sites() {
   const [clients, setClients] = useState([]);
   const [formData, setFormData] = useState({
     nomEntreprise: "",
@@ -316,7 +316,6 @@ export default function Clients() {
             </div>
             <div className={styles.section2}>
               <p>Client: {client.nomEntreprise}</p>
-              <p>Commercial(e) : {client.commercial}</p>
               <p>Tel: {client.tel}</p>
               <p>Email: {client.email}</p>
               <p>Adresse : {client.siteAddress}</p>
@@ -333,6 +332,7 @@ export default function Clients() {
                     Consulter{" "}
                   </a>
                 )}
+                <p>Commercial(e) : {client.commercial}</p>
               </p>
             </div>
 
