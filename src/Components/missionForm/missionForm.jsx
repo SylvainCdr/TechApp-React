@@ -44,6 +44,7 @@ export default function MissionForm() {
   const [planPrevention, setPlanPrevention] = useState("");
   const [comments, setComments] = useState("");
   const [clients, setClients] = useState([]); // Liste des clients et sites
+  const [pjSupplementaires, setPjSupplementaires] = useState([]);
 
   const fetchClients = async () => {
     try {
@@ -110,6 +111,7 @@ export default function MissionForm() {
         setCommercial(missionData.commercial);
         setDevis(missionData.devis);
         setPlanPrevention(missionData.planPrevention);
+        setPjSupplementaires(missionData.pjSupplementaires || []);
         setComments(missionData.comments);
       } else {
         console.log("Mission non trouvée");
@@ -146,6 +148,7 @@ export default function MissionForm() {
         devis,
         planPrevention,
         comments,
+        pjSupplementaires,
       };
 
       if (missionId) {
@@ -214,6 +217,20 @@ export default function MissionForm() {
     const url = await getDownloadURL(storageRef);
     setPlanPrevention(url);
   };
+
+  // PJ supplémentaires est un upload de plusieurs fichiers (multiple)
+  const handlePjSupplementaires = async (e) => {
+    const files = e.target.files;
+    const urls = [];
+    for (const file of files) {
+      const storageRef = ref(storage, `pjSupplementaires/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      urls.push({ name: file.name, url });
+    }
+    setPjSupplementaires([...pjSupplementaires, ...urls]);
+  };
+
 
   return (
     <div className={styles.missionFormContainer}>
@@ -521,6 +538,20 @@ export default function MissionForm() {
             onChange={(e) => setComments(e.target.value)}
           ></textarea>
         </div>
+      
+          <h3>Pièces jointes supplémentaires</h3>
+
+          <div className={styles.formGroup}>
+            <label>Ajouter des pièces jointes supplémentaires</label>
+            <input
+              type="file"
+              multiple
+              onChange={handlePjSupplementaires}
+            />
+          </div>
+       
+    
+
 
         <button type="submit" className={styles.submitBtn}>
           Enregistrer la mission

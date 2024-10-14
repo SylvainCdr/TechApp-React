@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { db } from "../../firebase/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
+import { tab } from "@testing-library/user-event/dist/tab";
+import { table } from "framer-motion/client";
 
 export default function Mission() {
   const { missionId } = useParams();
@@ -146,7 +148,8 @@ export default function Mission() {
 
           <p>
             {" "}
-            <i className="fa-solid fa-folder-open"></i>Devis N° : {mission.devis}
+            <i className="fa-solid fa-folder-open"></i>Devis N° :{" "}
+            {mission.devis}
           </p>
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
@@ -244,6 +247,33 @@ export default function Mission() {
                 <i className="fa-solid fa-circle-info"></i>{" "}
                 {mission.comments || "Aucun commentaire"}
               </p>
+              <table className={styles.pjTable}>
+  <thead>
+    <tr>
+      <th>
+        <i className="fa-solid fa-file-pdf"></i> Nom de la pièce jointe
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {mission.pjSupplementaires.map((pj, index) => (
+      <tr key={index}>
+        <td>{pj.name}</td>
+        <td>
+          <a
+            href={pj.url}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.pjLink}
+          >
+            Télécharger
+          </a>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
             </div>
 
             <div className={styles.section3Right}>
