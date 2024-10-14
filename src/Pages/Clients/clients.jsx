@@ -53,7 +53,6 @@ export default function Clients() {
     fetchClients();
   }, []);
 
-
   // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -217,12 +216,36 @@ export default function Clients() {
             <label>Nom du Site :</label>
             <input
               type="text"
-              value={formData.clientName}
+              value={formData.siteName}
               onChange={(e) =>
-                setFormData({ ...formData, clientName: e.target.value })
+                setFormData({ ...formData, siteName: e.target.value })
               }
               required
             />
+            <div>
+              <div>
+                <label>Nom du client :</label>
+                <input
+                  type="text"
+                  value={formData.clientName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, clientName: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label>Commercial :</label>
+                <input
+                  type="text"
+                  value={formData.commercial}
+                  onChange={(e) =>
+                    setFormData({ ...formData, commercial: e.target.value })
+                  }
+                  required
+                />
+              </div>
+            </div>
           </div>
           <div>
             <label>Téléphone :</label>
@@ -246,17 +269,7 @@ export default function Clients() {
               required
             />
           </div>
-          <div>
-            <label>Nom du site :</label>
-            <input
-              type="text"
-              value={formData.siteName}
-              onChange={(e) =>
-                setFormData({ ...formData, siteName: e.target.value })
-              }
-              required
-            />
-          </div>
+
           <div>
             <label>Adresse du site :</label>
             <input
@@ -264,17 +277,6 @@ export default function Clients() {
               value={formData.siteAddress}
               onChange={(e) =>
                 setFormData({ ...formData, siteAddress: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div>
-            <label>Commercial :</label>
-            <input
-              type="text"
-              value={formData.commercial}
-              onChange={(e) =>
-                setFormData({ ...formData, commercial: e.target.value })
               }
               required
             />
@@ -298,40 +300,40 @@ export default function Clients() {
         {clients.map((client) => (
           <div key={client.id} className={styles.clientItem}>
             <div className={styles.section1}>
-            <h2>{client.siteName}</h2>
-            <div className={styles.logoContainer}>
-            {client.clientLogo && (
-              <motion.img
-                src={client.clientLogo}
-                alt={`Logo de ${client.clientName}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            )}
+              <h2>{client.siteName}</h2>
+              <div className={styles.logoContainer}>
+                {client.clientLogo && (
+                  <motion.img
+                    src={client.clientLogo}
+                    alt={`Logo de ${client.clientName}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
+              </div>
             </div>
-            </div>
-            <div className={styles.section2}> 
-            <p>Client: {client.clientName}</p>
-            <p>Commercial(e) : {client.commercial}</p>
-            <p>Tel: {client.tel}</p>
-            <p>Email: {client.mail}</p>
-            <p>Adresse : {client.siteAddress}</p>
-            <p>
-              Plan de prévention :{" "}
-              {client.planPrevention ? "" : "Non transmis"}
-              {client.planPrevention && (
-                <a
-                  href={client.planPrevention}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {" "}
-                  Consulter{" "}
-                </a>
-              )}
-            </p>
+            <div className={styles.section2}>
+              <p>Client: {client.clientName}</p>
+              <p>Commercial(e) : {client.commercial}</p>
+              <p>Tel: {client.tel}</p>
+              <p>Email: {client.mail}</p>
+              <p>Adresse : {client.siteAddress}</p>
+              <p>
+                Plan de prévention :{" "}
+                {client.planPrevention ? "" : "Non transmis"}
+                {client.planPrevention && (
+                  <a
+                    href={client.planPrevention}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {" "}
+                    Consulter{" "}
+                  </a>
+                )}
+              </p>
             </div>
 
             <div className={styles.buttons}>

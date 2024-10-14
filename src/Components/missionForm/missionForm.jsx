@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db, storage } from "../../firebase/firebase";
+import { db, storage, auth } from "../../firebase/firebase";
 import {
   doc,
   getDocs,
@@ -13,7 +13,7 @@ import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { createInterventionReport } from "../../automation/reportAutomation";
-import { auth } from "../../firebase/firebase";
+
 
 export default function MissionForm() {
   const { missionId } = useParams(); // Récupération de l'ID de la mission
