@@ -10,10 +10,15 @@ export default function Search() {
   const [reports, setReports] = useState([]);
   const [technicians, setTechnicians] = useState([]);
 
-  // Fonction de filtrage des rapports sur le champ nomEntreprise uniquement
-  const filteredReports = reports.filter((report) =>
-    report.client.nomEntreprise.toLowerCase().includes(searchTerm.toLowerCase())
-  && report.site.siteName.toLowerCase().includes(searchTerm.toLowerCase())
+  // Fonction de filtrage des rapports sur le champ client.nomEntreprise et site.siteName
+  const filteredReports = reports.filter(
+    (report) =>
+      (report.client?.nomEntreprise &&
+        report.client.nomEntreprise
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())) ||
+      (report.site?.siteName &&
+        report.site.siteName.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   // Fonction pour récupérer les rapports d'intervention depuis Firestore
@@ -30,6 +35,7 @@ export default function Search() {
         ...doc.data(),
       }));
       setReports(reportsList);
+
       const techniciansSnapshot = await getDocs(collection(db, "technicians"));
       const techniciansList = techniciansSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -48,10 +54,10 @@ export default function Search() {
 
   return (
     <div className={styles.searchContainer}>
-      <h1> Recherche de rapport</h1>
+      <h1>Recherche de rapport</h1>
       <input
         type="text"
-        placeholder="Rechercher par nom d'entreprise"
+        placeholder="Rechercher par site ou nom d'entreprise"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className={styles.searchInput}
@@ -68,27 +74,30 @@ export default function Search() {
           <thead>
             <tr>
               <th>
-                <i class="fa-regular fa-building"></i>
+                <i className="fa-regular fa-building"></i> Nom du site
               </th>
               <th>
-                <i class="fa-regular fa-calendar-days"></i>
+                <i className="fa-regular fa-building"></i>
               </th>
-
               <th>
-                <i class="fa-solid fa-user-group"></i>
+                <i className="fa-regular fa-calendar-days"></i>
+              </th>
+              <th>
+                <i className="fa-solid fa-user-group"></i>
               </th>
               <th className={styles.status}>
-              <i class="fa-solid fa-wrench"></i>
+                <i className="fa-solid fa-wrench"></i>
               </th>
-              <th >
-                <i class="fa-solid fa-bars" ></i>
+              <th>
+                <i className="fa-solid fa-bars"></i>
               </th>
             </tr>
           </thead>
           <tbody>
             {filteredReports.map((report) => (
               <tr key={report.id}>
-                <td>{report.client.nomEntreprise}</td>
+                <td>{report.site?.siteName || "Non spécifié"}</td>
+                <td>{report.client?.nomEntreprise || "Non spécifié"}</td>
                 <td>
                   {new Date(report.interventionStartDate).toLocaleDateString(
                     "fr-FR"
@@ -98,14 +107,13 @@ export default function Search() {
                   )
                     ? new Date(report.interventionStartDate).toLocaleDateString(
                         "fr-FR"
-                      ) // Si les dates sont identiques
+                      )
                     : `${new Date(
                         report.interventionStartDate
                       ).toLocaleDateString("fr-FR")} / ${new Date(
                         report.interventionEndDate
-                      ).toLocaleDateString("fr-FR")}`}{" "}
+                      ).toLocaleDateString("fr-FR")}`}
                 </td>
-
                 <td>
                   {report.intervenants
                     .map((intervenant) => {
@@ -118,21 +126,14 @@ export default function Search() {
                     })
                     .join(", ")}
                 </td>
-
                 <td className={styles.status}>
-            
-              {report.actionsDone?.length ? "Complété" : "À compléter"}
-            
+                  {report.actionsDone?.length ? "Complété" : "À compléter"}
                 </td>
-
-
                 <td className={styles.tableActions}>
                   <Link to={`/report/${report.id}`} className={styles.viewBtn}>
-                    <i class="fa-solid fa-eye"></i>
+                    <i className="fa-solid fa-eye"></i>
                   </Link>
-
                 </td>
-                
               </tr>
             ))}
           </tbody>

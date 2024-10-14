@@ -271,6 +271,15 @@ export default function MissionForm() {
             ))}
           </select>
         </div>
+        <h3>Commercial(e) en charge du dossier</h3>
+        <div className={styles.formGroup}>
+          <label>Nom du commercial</label>
+          <input
+            type="text"
+            value={commercial}
+            onChange={(e) => setCommercial(e.target.value)}
+          />
+        </div>
         <h3>Client</h3>
         <div className={styles.formGroup}>
           <label>
@@ -285,7 +294,6 @@ export default function MissionForm() {
             required
           />
         </div>
-     
 
         <div className={styles.formGroup}>
           <label>
@@ -308,14 +316,6 @@ export default function MissionForm() {
             value={client.tel}
             onChange={(e) => setClient({ ...client, tel: e.target.value })}
             required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label>Commercial référent</label>
-          <input
-            type="text"
-            value={commercial}
-            onChange={(e) => setCommercial(e.target.value)}
           />
         </div>
 

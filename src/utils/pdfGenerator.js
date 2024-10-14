@@ -117,7 +117,8 @@ const generateReportPdf = async (report, technicians) => {
   doc.setFontSize(10);
 
   const interventionDetails = [
-    { key: "Site", value: report.site?.adresse || "Adresse du site" },
+    { key: "Nom du site", value: report.site?.siteName || "Nom du site" },
+    { key: "Adresse", value: report.site?.adresse || "Adresse du site" },
     {
       key: "Nom du contact sur site",
       value: report.site?.nomContact || "Nom du contact",
