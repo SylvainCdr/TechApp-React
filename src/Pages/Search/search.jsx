@@ -13,6 +13,7 @@ export default function Search() {
   // Fonction de filtrage des rapports sur le champ nomEntreprise uniquement
   const filteredReports = reports.filter((report) =>
     report.client.nomEntreprise.toLowerCase().includes(searchTerm.toLowerCase())
+  && report.site.siteName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Fonction pour récupérer les rapports d'intervention depuis Firestore

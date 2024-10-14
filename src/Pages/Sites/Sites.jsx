@@ -234,17 +234,7 @@ export default function Sites() {
                   required
                 />
               </div>
-              <div>
-                <label>Commercial :</label>
-                <input
-                  type="text"
-                  value={formData.commercial}
-                  onChange={(e) =>
-                    setFormData({ ...formData, commercial: e.target.value })
-                  }
-                  required
-                />
-              </div>
+             
             </div>
           </div>
           <div>
@@ -292,6 +282,17 @@ export default function Sites() {
               onChange={(e) => setPlanPrevention(e.target.files[0])}
             />
           </div>
+          <div>
+                <label>Commercial :</label>
+                <input
+                  type="text"
+                  value={formData.commercial}
+                  onChange={(e) =>
+                    setFormData({ ...formData, commercial: e.target.value })
+                  }
+                  required
+                />
+              </div>
           <button type="submit">{editId ? "Mettre à jour" : "Ajouter"}</button>
         </form>
       )}

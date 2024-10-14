@@ -67,15 +67,18 @@
 
       .section1 {
         height: 13vh;
-        margin-bottom: 3rem;
+        margin-bottom: 5rem;
 
         h2 {
           text-align: center;
-          color: var(--col2);
+          color: white;
           font-weight: 600;
           font-size: 1.5rem;
           text-transform: uppercase;
           margin-bottom: 0.5rem;
+          background-color: var(--col2);
+          padding : 10px;
+          border-radius: 8px;
         }
         .logoContainer {
           align-items: center;
@@ -85,11 +88,15 @@
           height: 100%;
           background-color: white;
           border-radius: 8px;
+          padding: 10px;
+          
 
           img {
-            width: 12rem;
+            max-width: 13rem;
+            max-height: 100%;
             object-fit: cover;
             display: flex;
+          
           }
         }
       }
@@ -113,7 +120,7 @@
           -moz-border-radius: 5px;
           -ms-border-radius: 5px;
           -o-border-radius: 5px;
-          
+
           &:hover {
             background-color: #03d21f;
           }
