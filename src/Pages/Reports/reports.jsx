@@ -20,9 +20,8 @@ const Reports = () => {
   const reportsPerPage = 10; // Nombre de rapports par page
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
-  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(',')
-  : [];
-
+    ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
+    : [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +36,7 @@ const Reports = () => {
           ...doc.data(),
         }));
         setReports(reportsList);
-  
+
         const techniciansSnapshot = await getDocs(
           collection(db, "technicians")
         );
@@ -56,10 +55,9 @@ const Reports = () => {
         );
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -132,7 +130,8 @@ const Reports = () => {
                   )} / ${new Date(
                     report.interventionEndDate
                   ).toLocaleDateString("fr-FR")}`}{" "}
-              - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+              - {report.site.siteName} /{" "}
+              {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
             </h2>
 
             <span
@@ -142,7 +141,6 @@ const Reports = () => {
             >
               {report.actionsDone?.length ? "Complété" : "À compléter"}
             </span>
-            
 
             <p>
               {report.missionId ? (
@@ -169,6 +167,10 @@ const Reports = () => {
                   <li>
                     <i className="fa-solid fa-at"></i> Email :{" "}
                     {report.client.email}
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-monument"></i> Nom du site :{" "}
+                    {report.site.siteName}
                   </li>
                   <li>
                     <i className="fa-solid fa-location-dot"></i> Adresse du site
@@ -217,7 +219,7 @@ const Reports = () => {
                 <h4>Actions menées :</h4>
                 <ul>
                   {report.actionsDone?.map((action, index) => (
-                    <li key={index} style={{ whiteSpace: 'pre-wrap' }}>
+                    <li key={index} style={{ whiteSpace: "pre-wrap" }}>
                       <i className="fa-solid fa-check"></i> {action.description}
                     </li>
                   ))}
@@ -237,7 +239,7 @@ const Reports = () => {
                 <h4>Remarques / Risques:</h4>
                 <ul>
                   {report.remarques?.map((remarque, index) => (
-                    <li key={index} style={{ whiteSpace: 'pre-wrap' }}>
+                    <li key={index} style={{ whiteSpace: "pre-wrap" }}>
                       <i className="fa-solid fa-minus"></i> {remarque.remarque}
                     </li>
                   ))}
@@ -289,7 +291,7 @@ const Reports = () => {
                   >
                     <i className="fa-solid fa-trash"></i>
                   </Link> */}
-                   {authorizedUserIds.includes(auth.currentUser.uid) && (
+                  {authorizedUserIds.includes(auth.currentUser.uid) && (
                     <Link
                       className={styles.deleteButton}
                       onClick={() => deleteReport(report.id)}

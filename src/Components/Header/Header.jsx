@@ -66,7 +66,7 @@ function Header() {
               onClick={handleLinkClick}
               className={({ isActive }) => (isActive ? styles.activeLink : "")}
             >
-              Fiches missions
+              Fiches <br /> missions
             </NavLink>
           </li>
           <li className={styles.navLi}>
@@ -75,7 +75,7 @@ function Header() {
               onClick={handleLinkClick}
               className={({ isActive }) => (isActive ? styles.activeLink : "")}
             >
-              Rapports d'intervention
+              Rapports <br /> d'intervention
             </NavLink>
           </li>
           <li className={styles.navLi}>
@@ -84,7 +84,16 @@ function Header() {
               onClick={handleLinkClick}
               className={({ isActive }) => (isActive ? styles.activeLink : "")}
             >
-              Fiches incidents
+              Fiches <br /> incidents
+            </NavLink>
+          </li>
+          <li className={styles.navLi}>
+            <NavLink
+              to="/clients"
+              onClick={handleLinkClick}
+              className={({ isActive }) => (isActive ? styles.activeLink : "")}
+            >
+              Sites
             </NavLink>
           </li>
           <li className={styles.navLi}>

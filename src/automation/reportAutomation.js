@@ -74,6 +74,7 @@ export const createInterventionReport = async (missionId, missionData) => {
 
     // Filtrer les infos null ou undefined
     const validInfos = intervenantsInfos.filter((info) => info !== null);
+    
 
     // Envoi des emails
     validInfos.forEach(async (info) => {
@@ -86,6 +87,7 @@ export const createInterventionReport = async (missionId, missionData) => {
           startDate: missionData.interventionStartDate,
           endDate: missionData.interventionEndDate,
           clientName: missionData.client.nomEntreprise,
+          siteName: missionData.site.siteName,
         });
         console.log(`Email envoyé avec succès à ${info.email}`);
       } catch (error) {

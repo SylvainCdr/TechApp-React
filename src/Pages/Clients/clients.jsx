@@ -21,13 +21,13 @@ import { motion } from "framer-motion";
 export default function Clients() {
   const [clients, setClients] = useState([]);
   const [formData, setFormData] = useState({
-    clientName: "",
+    nomEntreprise: "",
     tel: "",
-    mail: "",
+    email: "",
     siteName: "",
     siteAddress: "",
     commercial: "",
-    clientLogo: "",
+    logoEntreprise: "",
     planPrevention: "",
   });
   const [editId, setEditId] = useState(null);
@@ -58,7 +58,7 @@ export default function Clients() {
     e.preventDefault();
 
     try {
-      let logoURL = formData.clientLogo;
+      let logoURL = formData.logoEntreprise;
       let planPreventionURL = formData.planPrevention;
 
       if (logo) {
@@ -72,7 +72,7 @@ export default function Clients() {
         // Téléversement du plan de prévention dans Firebase Storage
         const planPreventionRef = ref(
           storage,
-          `clients/${planPrevention.name}`
+          `plansPrevention/${planPrevention.name}`
         );
         await uploadBytes(planPreventionRef, planPrevention);
         planPreventionURL = await getDownloadURL(planPreventionRef);
@@ -80,7 +80,7 @@ export default function Clients() {
 
       const data = {
         ...formData,
-        clientLogo: logoURL,
+        logoEntreprise: logoURL,
         planPrevention: planPreventionURL,
       };
 
@@ -107,13 +107,13 @@ export default function Clients() {
 
       // Réinitialisation du formulaire et des états
       setFormData({
-        clientName: "",
+        nomEntreprise: "",
         tel: "",
-        mail: "",
+        email: "",
         siteName: "",
         siteAddress: "",
         commercial: "",
-        clientLogo: "",
+        logoEntreprise: "",
         planPrevention: "",
       });
       setLogo(null);
@@ -138,13 +138,13 @@ export default function Clients() {
   // Fonction pour remplir le formulaire pour la modification
   const handleEdit = (client) => {
     setFormData({
-      clientName: client.clientName,
+      nomEntreprise: client.nomEntreprise,
       tel: client.tel,
-      mail: client.mail,
+      email: client.email,
       siteName: client.siteName,
       siteAddress: client.siteAddress,
       commercial: client.commercial,
-      clientLogo: client.clientLogo,
+      logoEntreprise: client.logoEntreprise,
       planPrevention: client.planPrevention,
     });
     setEditId(client.id);
@@ -174,13 +174,13 @@ export default function Clients() {
     if (result.isConfirmed) {
       try {
         // Supprimer le logo associé
-        if (client.clientLogo && client.planPrevention) {
+        if (client.logoEntreprise && client.planPrevention) {
           const fileName = decodeURIComponent(
-            client.clientLogo.split("/").pop().split("?")[0],
+            client.logoEnteprise.split("/").pop().split("?")[0],
             client.planPrevention.split("/").pop().split("?")[0]
           );
           const logoRef = ref(storage, `clients/${fileName}`);
-          const planPreventionRef = ref(storage, `clients/${fileName}`);
+          const planPreventionRef = ref(storage, `plansPrevention/${fileName}`);
           await deleteObject(logoRef && planPreventionRef);
         }
 
@@ -227,9 +227,9 @@ export default function Clients() {
                 <label>Nom du client :</label>
                 <input
                   type="text"
-                  value={formData.clientName}
+                  value={formData.nomEntreprise}
                   onChange={(e) =>
-                    setFormData({ ...formData, clientName: e.target.value })
+                    setFormData({ ...formData, nomEntreprise: e.target.value })
                   }
                   required
                 />
@@ -262,9 +262,9 @@ export default function Clients() {
             <label>Email :</label>
             <input
               type="email"
-              value={formData.mail}
+              value={formData.email}
               onChange={(e) =>
-                setFormData({ ...formData, mail: e.target.value })
+                setFormData({ ...formData, email: e.target.value })
               }
               required
             />
@@ -282,7 +282,7 @@ export default function Clients() {
             />
           </div>
           <div>
-            <label>Logo du client :</label>
+            <label>Logo du l'entreprise :</label>
             <input type="file" onChange={handleLogoChange} />
           </div>
           <div>
@@ -302,10 +302,10 @@ export default function Clients() {
             <div className={styles.section1}>
               <h2>{client.siteName}</h2>
               <div className={styles.logoContainer}>
-                {client.clientLogo && (
+                {client.logoEntreprise && (
                   <motion.img
-                    src={client.clientLogo}
-                    alt={`Logo de ${client.clientName}`}
+                    src={client.logoEntreprise}
+                    alt={`Logo de ${client.nomEntreprise}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -315,10 +315,10 @@ export default function Clients() {
               </div>
             </div>
             <div className={styles.section2}>
-              <p>Client: {client.clientName}</p>
+              <p>Client: {client.nomEntreprise}</p>
               <p>Commercial(e) : {client.commercial}</p>
               <p>Tel: {client.tel}</p>
-              <p>Email: {client.mail}</p>
+              <p>Email: {client.email}</p>
               <p>Adresse : {client.siteAddress}</p>
               <p>
                 Plan de prévention :{" "}

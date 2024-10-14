@@ -14,7 +14,6 @@ import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { createInterventionReport } from "../../automation/reportAutomation";
 
-
 export default function MissionForm() {
   const { missionId } = useParams(); // Récupération de l'ID de la mission
   const [client, setClient] = useState({
@@ -23,6 +22,7 @@ export default function MissionForm() {
     tel: "",
   });
   const [site, setSite] = useState({
+    siteName: "",
     adresse: "",
     nomContact: "",
     fonctionContact: "",
@@ -43,6 +43,20 @@ export default function MissionForm() {
   const [devis, setDevis] = useState("");
   const [planPrevention, setPlanPrevention] = useState("");
   const [comments, setComments] = useState("");
+  const [clients, setClients] = useState([]); // Liste des clients et sites
+
+  const fetchClients = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "clients"));
+      const clientsList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setClients(clientsList);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des clients : ", error);
+    }
+  };
 
   // Fonction pour récupérer l id de l'utilisateur connecté
   const fetchUser = async () => {
@@ -109,6 +123,7 @@ export default function MissionForm() {
     fetchIntervenants();
     fetchMission();
     fetchUser();
+    fetchClients();
   }, [missionId]);
 
   const handleSubmit = async (e) => {
@@ -213,19 +228,54 @@ export default function MissionForm() {
           />
         </div>
 
-        <h3>Commercial(e) en charge du dossier</h3>
+        <h3>Sélectionner le client et le site d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Nom du commercial </label>
-          <input
-            type="text"
-            value={commercial}
-            onChange={(e) => setCommercial(e.target.value)}
-          />
+          <label>
+            Client et Site d'intervention <span>*</span>
+          </label>
+          <select
+            onChange={(e) => {
+              const selectedClientSite = clients.find(
+                (client) =>
+                  `${client.nomEntreprise} - ${client.siteName}` ===
+                  e.target.value
+              );
+              if (selectedClientSite) {
+                // Remplir automatiquement les champs du client et du site avec les données sélectionnées
+                setClient({
+                  nomEntreprise: selectedClientSite.nomEntreprise,
+                  email: selectedClientSite.email,
+                  tel: selectedClientSite.tel,
+                  // commercial: selectedClientSite.commercial || "",
+                });
+                setSite({
+                  siteName: selectedClientSite.siteName,
+                  adresse: selectedClientSite.siteAddress,
+                  nomContact: selectedClientSite.nomContact || "",
+                  fonctionContact: selectedClientSite.fonctionContact || "",
+                  telContact: selectedClientSite.telContact || "",
+                });
+                setPlanPrevention(selectedClientSite.planPrevention || "");
+                setCommercial(selectedClientSite.commercial || "");
+              }
+            }}
+          >
+            <option value="">Sélectionnez un client et un site</option>
+            {clients.map((client, index) => (
+              <option
+                key={index}
+                value={`${client.nomEntreprise} - ${client.siteName}`}
+              >
+                {client.nomEntreprise} - {client.siteName}
+              </option>
+            ))}
+          </select>
         </div>
-
-        <h3>Client</h3>
+        <h3>Informations du client</h3>
         <div className={styles.formGroup}>
-          <label>Nom de l'entreprise <span>*</span></label>
+          <label>
+            Nom de l'entreprise <span>*</span>
+          </label>
           <input
             type="text"
             value={client.nomEntreprise}
@@ -236,7 +286,18 @@ export default function MissionForm() {
           />
         </div>
         <div className={styles.formGroup}>
-          <label>Adresse mail <span>*</span></label>
+          <label>Commercial référent</label>
+          <input
+            type="text"
+            value={commercial}
+            onChange={(e) => setCommercial(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>
+            Email <span>*</span>
+          </label>
           <input
             type="email"
             value={client.email}
@@ -244,19 +305,36 @@ export default function MissionForm() {
             required
           />
         </div>
+
         <div className={styles.formGroup}>
-          <label>Téléphone <span>*</span></label>
+          <label>
+            Téléphone <span>*</span>
+          </label>
           <input
-            type="tel"
+            type="text"
             value={client.tel}
             onChange={(e) => setClient({ ...client, tel: e.target.value })}
             required
           />
         </div>
 
-        <h3>Site d'intervention</h3>
+        <h3>Informations de contact pour le site d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Adresse du site <span>*</span></label>
+          <label>
+            Nom du site <span>*</span>
+          </label>
+          <input
+            type="text"
+            value={site.siteName}
+            onChange={(e) => setSite({ ...site, siteName: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>
+            Adresse du site <span>*</span>
+          </label>
           <input
             type="text"
             value={site.adresse}
@@ -264,8 +342,11 @@ export default function MissionForm() {
             required
           />
         </div>
+
         <div className={styles.formGroup}>
-          <label>Nom du contact sur site <span>*</span></label>
+          <label>
+            Nom du contact <span>*</span>
+          </label>
           <input
             type="text"
             value={site.nomContact}
@@ -273,37 +354,65 @@ export default function MissionForm() {
             required
           />
         </div>
+
         <div className={styles.formGroup}>
-          <label>Fonction du contact sur site <span>*</span></label>
+          <label>
+            Fonction du contact <span>*</span>
+          </label>
           <input
             type="text"
             value={site.fonctionContact}
             onChange={(e) =>
               setSite({ ...site, fonctionContact: e.target.value })
             }
-            required
           />
         </div>
+
         <div className={styles.formGroup}>
-          <label>Téléphone du contact <span>*</span></label>
+          <label>
+            Téléphone du contact<span>*</span>
+          </label>
           <input
-            type="tel"
+            type="text"
             value={site.telContact}
             onChange={(e) => setSite({ ...site, telContact: e.target.value })}
             required
           />
         </div>
 
+        <h3>Plan de prévention</h3>
+        {/* // on affiche le lien du plan de prévention si il existe sinon on affiche un input pour l'ajouter */}
+        {planPrevention ? (
+          (console.log(planPrevention),
+          (
+            <div className={styles.formGroup}>
+              <label>Plan de prévention</label>
+              <a href={planPrevention} target="_blank" rel="noreferrer">
+                Voir le plan de prévention
+              </a>
+            </div>
+          ))
+        ) : (
+          <div className={styles.formGroup}>
+            <label>Ajouter un plan de prévention</label>
+            <input type="file" accept=".pdf" onChange={handlePlanPrevention} />
+          </div>
+        )}
+
         <h3>Date(s) d'intervention</h3>
         <div className={styles.formGroup}>
-          <label>Date de début <span>*</span></label>
+          <label>
+            Date de début <span>*</span>
+          </label>
           <input
             type="date"
             value={dateStartIntervention}
             onChange={(e) => setDateStartIntervention(e.target.value)}
             required
           />
-          <label>Date de fin <span>*</span></label>
+          <label>
+            Date de fin <span>*</span>
+          </label>
           <input
             type="date"
             value={dateEndIntervention}
@@ -314,7 +423,9 @@ export default function MissionForm() {
 
         <h3>Intervenant(s)</h3>
         <div className={styles.formGroup}>
-          <label>Sélectionnez un ou plusieurs intervenants <span>*</span></label>
+          <label>
+            Sélectionnez un ou plusieurs intervenants <span>*</span>
+          </label>
           {intervenantsExistants.map((intervenant) => (
             <div key={intervenant.id}>
               <input
@@ -339,7 +450,9 @@ export default function MissionForm() {
         <h3>Missions </h3>
         {missions.map((mission, index) => (
           <div key={index} className={styles.formGroup}>
-            <label>Mission {index + 1} <span>*</span></label>
+            <label>
+              Mission {index + 1} <span>*</span>
+            </label>
             <input
               type="text"
               value={mission}
@@ -398,12 +511,6 @@ export default function MissionForm() {
         >
           <i class="fa-solid fa-plus"></i> Ajouter un risque/EPI
         </button>
-
-        <h3>Plan de prévention</h3>
-        <div className={styles.formGroup}>
-          <label>Uploader le plan de prévention :</label>
-          <input type="file" onChange={handlePlanPrevention} />
-        </div>
 
         <h3>Commentaire(s) / indication(s) supplémentaire(s)</h3>
         <div className={styles.formGroup}>

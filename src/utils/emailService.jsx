@@ -8,6 +8,7 @@ export const sendEmail = ({
   startDate,
   endDate,
   clientName,
+  siteName,
 }) => {
   // Construire l'URL de la mission et du rapport
   const missionUrl = `https://pixecuritytechapp.web.app/mission/${missionId}`;
@@ -22,6 +23,7 @@ export const sendEmail = ({
     start_date: startDate, // Date de début d'intervention
     end_date: endDate, // Date de fin d'intervention
     client_name: clientName, // Nom du client
+    site_name: siteName, // Nom du site
   };
 
   return emailjs

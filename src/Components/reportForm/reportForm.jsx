@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { db } from "../../firebase/firebase";
+import { db, storage } from "../../firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../firebase/firebase";
 import styles from "./style.module.scss";
 import { createIncidentReport } from "../../automation/incidentAutomation";
 import Signature from "../../utils/signature/signature";
@@ -15,6 +14,7 @@ export default function ReportForm({ initialData, onSubmit }) {
     tel: "",
   });
   const [site, setSite] = useState({
+    siteName : "",
     adresse: "",
     nomContact: "",
     fonctionContact: "",
@@ -295,6 +295,17 @@ export default function ReportForm({ initialData, onSubmit }) {
         </div>
 
         <h3>Site d'intervention</h3>
+        <div className={styles.formGroup}>
+          <label>
+            Nom du site <span>*</span>
+          </label>
+          <input
+            type="text"
+            value={site.siteName}
+            onChange={(e) => setSite({ ...site, siteName: e.target.value })}
+            required
+          />
+        </div>
         <div className={styles.formGroup}>
           <label>
             Adresse du site <span>*</span>

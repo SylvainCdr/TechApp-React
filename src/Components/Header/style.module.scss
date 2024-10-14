@@ -50,6 +50,8 @@
 
     .navLi {
       margin: auto;
+      text-align: center;
+      line-height: 1.4rem;
 
       .activeLink {
         border-bottom: 2px solid var(--col1); /* Soulignement de la page active */

@@ -99,7 +99,7 @@ export default function InterventionReport() {
                 )} / ${new Date(report.interventionEndDate).toLocaleDateString(
                   "fr-FR"
                 )}`}{" "}
-            - {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+            - {report.site.siteName} / {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
           </h2>
           <p>
               {report.missionId ? (
@@ -132,6 +132,10 @@ export default function InterventionReport() {
                 <li>
                   <i class="fa-solid fa-at"></i>Email : {report.client.email}
                 </li>
+                <li>
+                    <i class="fa-solid fa-monument"></i> Nom du site :{" "}
+                    {report.site.siteName}
+                  </li>
                 <li>
                   <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
                   {report.site.adresse}

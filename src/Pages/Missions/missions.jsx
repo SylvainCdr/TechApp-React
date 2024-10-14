@@ -151,7 +151,7 @@ export default function Missions() {
             transition={{ duration: 0.3 }}
           >
             <h2>
-              {mission.createdAt.toDate().toLocaleDateString()} -{" "}
+              {mission.createdAt.toDate().toLocaleDateString()} -{" "}{mission.site.siteName} / {" "}
               {mission.client.nomEntreprise}
             </h2>
             <p className={styles.interventionDate}>
@@ -191,6 +191,10 @@ export default function Missions() {
                   <li>
                     <i className="fa-solid fa-at"></i> Email :{" "}
                     {mission.client.email}
+                  </li>
+                  <li>
+                  <i className="fa-solid fa-monument"></i> Nom du site :{" "}
+                    {mission.site.siteName}
                   </li>
                   <li>
                     <i className="fa-solid fa-location-dot"></i> Adresse du site

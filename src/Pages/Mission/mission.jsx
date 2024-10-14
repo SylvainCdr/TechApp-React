@@ -110,10 +110,13 @@ export default function Mission() {
         <div className={styles.missionItem}>
           <h2>
             {mission.createdAt?.toDate().toLocaleDateString()} -{" "}
+            {mission.site.siteName}
+            {"  "}/{"  "}
             {mission.client.nomEntreprise}
           </h2>
           <p className={styles.interventionDate}>
-          <i className="fa-solid fa-calendar-days"></i> Date(s) d'intervention : {""}
+            <i className="fa-solid fa-calendar-days"></i> Date(s) d'intervention
+            : {""}
             {new Date(mission.interventionStartDate).toLocaleDateString(
               "fr-FR"
             ) ===
@@ -129,12 +132,22 @@ export default function Mission() {
           </p>
           <br />
 
-          <p><i className="fa-solid fa-folder-plus"></i>Mission créée par : {getUserEmail(mission.createdBy)}</p>
+          <p>
+            <i className="fa-solid fa-folder-plus"></i>Mission créée par :{" "}
+            {getUserEmail(mission.createdBy)}
+          </p>
           <br />
-          <p> <i class="fa-solid fa-user-tie"></i>Commercial(e) en charge : {mission.commercial}</p>
+          <p>
+            {" "}
+            <i className="fa-solid fa-user-tie"></i>Commercial(e) en charge :{" "}
+            {mission.commercial}
+          </p>
           <br />
 
-          <p> <i class="fa-solid fa-folder-open"></i>Devis N° : {mission.devis}</p>
+          <p>
+            {" "}
+            <i className="fa-solid fa-folder-open"></i>Devis N° : {mission.devis}
+          </p>
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
@@ -148,6 +161,10 @@ export default function Mission() {
               </p>
               <p>
                 <i className="fa-solid fa-at"></i>Email : {mission.client.email}
+              </p>
+              <p>
+                <i className="fa-solid fa-monument"></i> Nom du site :{" "}
+                {mission.site.siteName}
               </p>
               <p>
                 <i className="fa-solid fa-location-dot"></i>Adresse du site :{" "}
