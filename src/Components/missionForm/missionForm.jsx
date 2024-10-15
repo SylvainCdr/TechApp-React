@@ -44,8 +44,22 @@ export default function MissionForm() {
   const [planPrevention, setPlanPrevention] = useState("");
   const [comments, setComments] = useState("");
   const [clients, setClients] = useState([]); // Liste des clients et sites
-  const [pjSupplementaires, setPjSupplementaires] = useState([]);
+  const [pjSupplementaires, setPjSupplementaires] = useState("");
 
+  // const fetchClients = async () => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, "clients"));
+  //     const clientsList = querySnapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     setClients(clientsList);
+  //   } catch (error) {
+  //     console.error("Erreur lors de la récupération des clients : ", error);
+  //   }
+  // };
+
+  // fonction pour récupérer les clients et les trier par nom d'entreprise et nom de site
   const fetchClients = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "clients"));
@@ -53,6 +67,15 @@ export default function MissionForm() {
         id: doc.id,
         ...doc.data(),
       }));
+      clientsList.sort((a, b) =>
+        a.nomEntreprise > b.nomEntreprise
+          ? 1
+          : a.nomEntreprise === b.nomEntreprise
+          ? a.siteName > b.siteName
+            ? 1
+            : -1
+          : -1
+      );
       setClients(clientsList);
     } catch (error) {
       console.error("Erreur lors de la récupération des clients : ", error);
@@ -111,7 +134,7 @@ export default function MissionForm() {
         setCommercial(missionData.commercial);
         setDevis(missionData.devis);
         setPlanPrevention(missionData.planPrevention);
-        setPjSupplementaires(missionData.pjSupplementaires || []);
+        setPjSupplementaires(missionData.pjSupplementaires);
         setComments(missionData.comments);
       } else {
         console.log("Mission non trouvée");
@@ -218,18 +241,17 @@ export default function MissionForm() {
     setPlanPrevention(url);
   };
 
-  // PJ supplémentaires est un upload de plusieurs fichiers (multiple)
+ // Fonction pour gérer l'upload d'une pj supplémentaire
   const handlePjSupplementaires = async (e) => {
-    const files = e.target.files;
-    const urls = [];
-    for (const file of files) {
-      const storageRef = ref(storage, `pjSupplementaires/${file.name}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      urls.push({ name: file.name, url });
-    }
-    setPjSupplementaires([...pjSupplementaires, ...urls]);
+    const file = e.target.files[0];
+    const storageRef = ref(storage, `pjSupplementaires/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    setPjSupplementaires(url);
   };
+
+
+
 
 
   return (
@@ -545,7 +567,7 @@ export default function MissionForm() {
             <label>Ajouter des pièces jointes supplémentaires</label>
             <input
               type="file"
-              multiple
+              accept=".pdf, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png"
               onChange={handlePjSupplementaires}
             />
           </div>

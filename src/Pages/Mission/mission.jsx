@@ -247,33 +247,25 @@ export default function Mission() {
                 <i className="fa-solid fa-circle-info"></i>{" "}
                 {mission.comments || "Aucun commentaire"}
               </p>
-              <table className={styles.pjTable}>
-  <thead>
-    <tr>
-      <th>
-        <i className="fa-solid fa-file-pdf"></i> Nom de la pièce jointe
-      </th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {mission.pjSupplementaires.map((pj, index) => (
-      <tr key={index}>
-        <td>{pj.name}</td>
-        <td>
-          <a
-            href={pj.url}
-            target="_blank"
-            rel="noreferrer"
-            className={styles.pjLink}
-          >
-            Télécharger
-          </a>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+              
+
+             
+              {mission.pjSupplementaires ? (
+                <a
+                  href={mission.pjSupplementaires}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.pjSupplementairesLink}
+                >
+                  <i className="fa-solid fa-file-pdf"></i> Voir la pièce
+                  jointe supplémentaire
+                </a>
+              ) : (
+                <p>Aucune pièce jointe supplémentaire</p>
+              )}
+                
+
+
             </div>
 
             <div className={styles.section3Right}>
