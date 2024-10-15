@@ -19,11 +19,13 @@ export default function Missions() {
   const [users, setUsers] = useState([]); // État pour stocker les utilisateurs
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 10; // Nombre de missions par page
+  const [filtered, setFiltered] = useState(false); // État pour le filtre
+  const userMail = auth.currentUser.email; // Récupération de l'email de l'utilisateur connecté
+  console.log(userMail);
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
-  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(',')
-  : [];
-
+    ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
+    : [];
 
   // Fonction pour récupérer les fiches missions depuis Firestore
   const fetchMissions = async () => {
@@ -37,6 +39,21 @@ export default function Missions() {
       setMissions(missionsList);
     } catch (error) {
       console.error("Erreur lors de la récupération des missions : ", error);
+    }
+  };
+
+  // Fonction pour filtrer les missions par email de l'utilisateur connecté
+  const filterMissionsByUser = () => {
+    if (filtered) {
+      fetchMissions();
+      setFiltered(false);
+    } else {
+      const filteredMissions = missions.filter(
+        (mission) => getUserEmail(mission.createdBy) === userMail
+      );
+      console.log(userMail);
+      setMissions(filteredMissions);
+      setFiltered(true);
     }
   };
 
@@ -140,6 +157,10 @@ export default function Missions() {
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche mission
       </Link>
 
+      <button onClick={filterMissionsByUser} className={styles.filterButton}> <i class="fa-solid fa-filter"></i>
+        {filtered  ? "Voir toutes les missions" : "Voir mes missions"}
+      </button>
+
       <div className={styles.missionsList}>
         {currentMissions.map((mission) => (
           <motion.div
@@ -151,8 +172,8 @@ export default function Missions() {
             transition={{ duration: 0.3 }}
           >
             <h2>
-              {mission.createdAt.toDate().toLocaleDateString()} -{" "}{mission.site.siteName} / {" "}
-              {mission.client.nomEntreprise}
+              {mission.createdAt.toDate().toLocaleDateString()} -{" "}
+              {mission.site.siteName} / {mission.client.nomEntreprise}
             </h2>
             <p className={styles.interventionDate}>
               <i className="fa-solid fa-calendar-days"></i>Date(s)
@@ -193,7 +214,7 @@ export default function Missions() {
                     {mission.client.email}
                   </li>
                   <li>
-                  <i className="fa-solid fa-monument"></i> Nom du site :{" "}
+                    <i className="fa-solid fa-monument"></i> Nom du site :{" "}
                     {mission.site.siteName}
                   </li>
                   <li>
@@ -276,16 +297,14 @@ export default function Missions() {
                 <i className="fa-solid fa-pen-to-square"></i>
               </Link>
 
-           
               {authorizedUserIds.includes(auth.currentUser.uid) && (
-  <Link
-    className={styles.deleteMission}
-    onClick={() => deleteMission(mission.id)}
-  >
-    <i className="fa-solid fa-trash"></i>
-  </Link>
-)}
-
+                <Link
+                  className={styles.deleteMission}
+                  onClick={() => deleteMission(mission.id)}
+                >
+                  <i className="fa-solid fa-trash"></i>
+                </Link>
+              )}
             </div>
           </motion.div>
         ))}

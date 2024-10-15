@@ -30,6 +30,26 @@
     }
   }
 
+  .filterButton {
+    
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #00b026;
+    border : none;
+    color: white;
+    font-size: 1em;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    i {
+      margin-right: 8px;
+    }
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
   .missionsList {
     list-style: none;
     padding: 0;

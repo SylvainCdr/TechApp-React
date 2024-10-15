@@ -1,11 +1,10 @@
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { db } from "../../firebase/firebase";
+import { db, auth } from "../../firebase/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
-import { tab } from "@testing-library/user-event/dist/tab";
-import { table } from "framer-motion/client";
+
 
 export default function Mission() {
   const { missionId } = useParams();
@@ -96,6 +95,9 @@ export default function Mission() {
     return user ? user.email : "Email inconnu";
   };
 
+
+
+
   useEffect(() => {
     fetchMission();
     fetchTechnicians();
@@ -107,6 +109,7 @@ export default function Mission() {
       <h1>Fiche Mission N° {missionId}</h1>
       {loading && <p>Chargement en cours...</p>}
       {error && <p>{error}</p>}
+
 
       {mission && (
         <div className={styles.missionItem}>
