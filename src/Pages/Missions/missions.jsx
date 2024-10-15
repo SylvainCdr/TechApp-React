@@ -19,43 +19,42 @@ export default function Missions() {
   const [users, setUsers] = useState([]); // État pour stocker les utilisateurs
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 10; // Nombre de missions par page
-  const [filtered, setFiltered] = useState(false); // État pour le filtre
-  const userMail = auth.currentUser.email; // Récupération de l'email de l'utilisateur connecté
-  console.log(userMail);
+  const [allMissions, setAllMissions] = useState([]);
+
+ 
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
     : [];
 
-  // Fonction pour récupérer les fiches missions depuis Firestore
-  const fetchMissions = async () => {
-    try {
-      const q = query(collection(db, "missions"), orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
-      const missionsList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setMissions(missionsList);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des missions : ", error);
-    }
-  };
+    const fetchMissions = async () => {
+      try {
+        const q = query(collection(db, "missions"), orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        const missionsList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMissions(missionsList);
+        setAllMissions(missionsList); // Stocker toutes les missions non filtrées
+      } catch (error) {
+        console.error("Erreur lors de la récupération des missions : ", error);
+      }
+    };
 
-  // Fonction pour filtrer les missions par email de l'utilisateur connecté
-  const filterMissionsByUser = () => {
-    if (filtered) {
-      fetchMissions();
-      setFiltered(false);
-    } else {
-      const filteredMissions = missions.filter(
-        (mission) => getUserEmail(mission.createdBy) === userMail
-      );
-      console.log(userMail);
-      setMissions(filteredMissions);
-      setFiltered(true);
-    }
-  };
+    const filterMissionsByUser = (e) => {
+      const selectedTechnician = e.target.value;
+      if (selectedTechnician === "all") {
+        setMissions(allMissions); // Rétablir toutes les missions non filtrées
+      } else {
+        const filteredMissions = allMissions.filter((mission) =>
+          mission.intervenants.includes(selectedTechnician)
+        );
+        setMissions(filteredMissions);
+      }
+    };
+    
+    
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
@@ -157,9 +156,22 @@ export default function Missions() {
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche mission
       </Link>
 
-      <button onClick={filterMissionsByUser} className={styles.filterButton}> <i class="fa-solid fa-filter"></i>
-        {filtered  ? "Voir toutes les missions" : "Voir mes missions"}
-      </button>
+      {/* select permemttant de filter les missions par technicien */}
+      <div className={styles.filterMissions}>
+        <label htmlFor="technician">Filtrer par technicien :</label>
+        <select
+          name="technician"
+          id="technician"
+          onChange={filterMissionsByUser}
+        >
+          <option value="all">Tous</option>
+          {technicians.map((technician) => (
+            <option key={technician.id} value={technician.id}>
+              {technician.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className={styles.missionsList}>
         {currentMissions.map((mission) => (

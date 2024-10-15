@@ -7,9 +7,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   color: black;
-  padding-top :6rem;
-  
-
+  padding-top: 6rem;
 
   .createMission {
     display: inline-block;
@@ -30,25 +28,31 @@
     }
   }
 
-  .filterButton {
-    
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background-color: #00b026;
-    border : none;
-    color: white;
-    font-size: 1em;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    i {
-      margin-right: 8px;
-    }
+  .filterMissions {
+    float: right;
 
-    &:hover {
-      background-color: #0056b3;
+    label {
+      font-size: 1.1em;
+      margin-right: 10px;
+      color : white ;
+  
     }
+    select {
+      width: 100%;
+      padding: 7px;
+      font-size: 1em;
+      border : none ;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
+      background-color: rgb(78, 78, 78);
+      color: white;
+  
+}
   }
+
 
   .missionsList {
     list-style: none;
@@ -91,9 +95,9 @@
         margin-top: 1rem;
       }
       .interventionDate {
-       color : #0048fd;
-       font-size: 1.1rem;
-       font-weight: 600;
+        color: #0048fd;
+        font-size: 1.1rem;
+        font-weight: 600;
       }
       i {
         margin-right: 8px;
@@ -208,13 +212,12 @@
           -ms-transition: background-color 0.3s ease;
           -o-transition: background-color 0.3s ease;
 
-           i {
-            color : white;
+          i {
+            color: white;
             font-size: 1.5rem;
-            margin : 0 ;
-            padding : 0;
-
-           }
+            margin: 0;
+            padding: 0;
+          }
           &:hover {
             scale: 1.1;
           }
@@ -243,14 +246,12 @@
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
 
-   
-
     button {
-      display: flex ;
+      display: flex;
       justify-content: space-around;
       margin: 0 5px;
       color: rgb(93, 93, 93);
-      padding : 5px;
+      padding: 5px;
       font-size: 1.2em;
       background-color: white;
       border: none;
@@ -266,11 +267,16 @@
 
 @media (max-width: 900px) {
   .missionsContainer {
+    .filterMissions { 
+      float : none ;
+      margin-bottom : 20px ;
+    }
     .missionsList {
       list-style: none;
       padding: 0;
 
       .missionItem {
+
         .section1 {
           display: flex;
           flex-direction: column;
@@ -319,11 +325,10 @@
 
           .section2Left {
             width: 100%;
-
           }
-            .section2Right {
-              width: 100%;
-            }
+          .section2Right {
+            width: 100%;
+          }
         }
       }
     }

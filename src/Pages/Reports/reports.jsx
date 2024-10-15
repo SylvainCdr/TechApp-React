@@ -19,6 +19,7 @@ const Reports = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 10; // Nombre de rapports par page
 
+
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
     : [];
@@ -58,6 +59,11 @@ const Reports = () => {
 
     fetchData();
   }, []);
+
+
+
+   
+
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -106,6 +112,8 @@ const Reports = () => {
         <i className="fa-solid fa-plus"></i> Créer un nouveau rapport
         d'intervention
       </Link>
+
+   
 
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
