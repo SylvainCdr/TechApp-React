@@ -319,7 +319,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
         ))}
         <button type="button" onClick={addRemarqueField}
         className={styles.addBtn} >
-          <i class="fa-solid fa-plus"></i> Ajouter remarque
+          <i className="fa-solid fa-plus"></i> Ajouter remarque
         </button>
 
         <h3>Action(s) :</h3>
@@ -339,7 +339,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
         ))}
         <button type="button" onClick={addActionField}
         className={styles.addBtn}>
-          <i class="fa-solid fa-plus"></i> Ajouter action
+          <i className="fa-solid fa-plus"></i> Ajouter action
         </button>
 
         <h3>Nature du danger :</h3>
@@ -364,7 +364,7 @@ export default function IncidentForm({ initialData, onSubmit }) {
         ))}
         <button type="button" onClick={addMissionDangereuseField}
         className={styles.addBtn}>
-          <i class="fa-solid fa-plus"></i> Ajouter mission dangereuse
+          <i className="fa-solid fa-plus"></i> Ajouter mission dangereuse
         </button>
 
         <h3>Photo(s) liée(s) au rappport d'intervention</h3>

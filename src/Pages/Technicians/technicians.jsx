@@ -272,28 +272,28 @@ export default function TechniciansPage() {
             )}
             <p>
               {" "}
-              <i class="fa-regular fa-id-card"></i>Fonction : {technician.role}
+              <i className="fa-regular fa-id-card"></i>Fonction : {technician.role}
             </p>
             <p>
               {" "}
-              <i class="fa-solid fa-phone"></i>Téléphone : {technician.phone}
+              <i className="fa-solid fa-phone"></i>Téléphone : {technician.phone}
             </p>
             <p>
               {" "}
-              <i class="fa-solid fa-at"></i>Email : {technician.email}
+              <i className="fa-solid fa-at"></i>Email : {technician.email}
             </p>
             <div className={styles.buttons}>
               <button
                 className={styles.editButton}
                 onClick={() => handleEdit(technician)}
               >
-                <i class="fa-solid fa-pen-to-square"></i>
+                <i className="fa-solid fa-pen-to-square"></i>
               </button>
               <button
                 className={styles.deleteButton}
                 onClick={() => handleDelete(technician)}
               >
-                <i class="fa-solid fa-trash"></i>
+                <i className="fa-solid fa-trash"></i>
               </button>
             </div>
           </div>

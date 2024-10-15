@@ -205,7 +205,7 @@ const Reports = () => {
                     {report.client.email}
                   </li>
                   <li>
-                    <i class="fa-solid fa-monument"></i> Nom du site :{" "}
+                    <i className="fa-solid fa-monument"></i> Nom du site :{" "}
                     {report.site.siteName}
                   </li>
                   <li>
@@ -291,7 +291,7 @@ const Reports = () => {
                 </p>
                 <p>
                   {" "}
-                  <i class="fa-solid fa-clock"></i> Durée de l'intervention (en
+                  <i className="fa-solid fa-clock"></i> Durée de l'intervention (en
                   heures) : {report.interventionDuration || "Non précisé"}{" "}
                 </p>
                 <p>
@@ -308,7 +308,7 @@ const Reports = () => {
 
               {report.isSigned && ( // badge signé
                 <span className={styles.badgeSigned}>
-                  <i class="fa-solid fa-circle-check"></i> Signé par le client
+                  <i className="fa-solid fa-circle-check"></i> Signé par le client
                 </span>
               )}
 

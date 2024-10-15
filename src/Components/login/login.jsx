@@ -94,7 +94,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">
-          <i class="fa-solid fa-right-to-bracket"></i>
+          <i className="fa-solid fa-right-to-bracket"></i>
         </button>
       </motion.form>
     </motion.div>

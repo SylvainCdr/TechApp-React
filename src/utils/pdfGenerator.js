@@ -4,6 +4,8 @@ const coverImg = "/assets/pix-bg.png";
 const footerImg = "/assets/pix-footer.png";
 const headerImg = "/assets/pix-header.png";
 
+
+
 const interventionDates = (report) => {
   const startDate = new Date(report.interventionStartDate).toLocaleDateString(
     "fr-FR"
@@ -29,43 +31,86 @@ const generateReportPdf = async (report, technicians) => {
   const pageWidth = doc.internal.pageSize.getWidth(); // Largeur de la page
   const pageHeight = doc.internal.pageSize.getHeight(); // Hauteur de la page
 
-  // -------------------------------------------------------------------------------------------------------
-  // PAGE 1 : COUVERTURE DU RAPPORT
-  doc.addImage(coverImg, "PNG", 0, 0, pageWidth, pageHeight); // Image en fond qui occupe toute la page
-  doc.setFontSize(25);
+// -------------------------------------------------------------------------------------------------------
+// PAGE 1 : COUVERTURE DU RAPPORT
+doc.addImage(coverImg, "PNG", 0, 0, pageWidth, pageHeight); // Image en fond qui occupe toute la page
+doc.setFontSize(25);
 
-  doc.setTextColor(255, 255, 255);
-  doc.text("Rapport d'intervention", 105, 50, null, null, "center");
-  doc.setFontSize(14);
-  doc.text(
-    "Date(s) : " + interventionDates(report),
-    105,
-    60,
-    null,
-    null,
-    "center"
-  );
+doc.setTextColor(255, 255, 255);
+doc.text("Rapport d'intervention", 105, 50, null, null, "center");
+doc.setFontSize(14);
+doc.text(
+  "Date(s) : " + interventionDates(report),
+  105,
+  60,
+  null,
+  null,
+  "center"
+);
 
-  // Définition de la zone pour `nomEntreprise`
-  const zoneWidth = pageWidth * 0.3; // 30% de la largeur de la page
-  const zoneHeight = pageHeight * 0.15; // 15% de la hauteur de la page
-  const zoneX = pageWidth * 0.57; // Décalage vers la droite (ajustez cette valeur pour affiner)
-  const zoneY = pageHeight * 0.83; // Décalage vers le bas (ajustez cette valeur pour affiner)
+// Définition de la zone pour `nomEntreprise`
+const zoneWidth = pageWidth * 0.3; // 30% de la largeur de la page
+const zoneHeight = pageHeight * 0.15; // 15% de la hauteur de la page
+const zoneX = pageWidth * 0.57; // Décalage vers la droite (ajustez cette valeur pour affiner)
+const zoneY = pageHeight * 0.85; // Décalage vers le bas (ajustez cette valeur pour affiner)
 
-  doc.setTextColor(0, 0, 0); // Couleur noire pour le texte suivant
+doc.setTextColor(0, 0, 0); // Couleur noire pour le texte suivant
+doc.setFontSize(20);
+
+// Fonction pour charger l'image avec crossOrigin correctement placé
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "Anonymous"; // Important : placer ceci avant la définition de la source
+    img.onload = () => resolve(img);
+    img.onerror = (error) => reject(error);
+    img.src = url;
+  });
+}
+
+const logoWidth = 70; // Largeur de l'image du logo
+const logoHeight = 35; // Hauteur de l'image du logo
+
+async function addLogoOrCompanyName() {
+  if (report.client?.logoEntreprise) {
+    try {
+      const img = await loadImage(report.client.logoEntreprise);
+      // Ajout de l'image au PDF
+      doc.addImage(
+        img,
+        img.src.endsWith('.png') ? 'PNG' : 'JPEG',
+        zoneX,
+        zoneY,
+        logoWidth,
+       logoHeight
+      );
+    } catch (error) {
+      console.error('Erreur lors du chargement du logo : ', error);
+      // Afficher le nom de l'entreprise si le logo ne peut pas être chargé
+      displayCompanyName();
+    }
+  } else {
+    // Si le logo n'est pas disponible, afficher le nom de l'entreprise
+    displayCompanyName();
+  }
+}
+
+function displayCompanyName() {
+  doc.setTextColor(0, 0, 0);
   doc.setFontSize(20);
-
-  // Centrage du texte à l'intérieur de la zone définie
   doc.text(
     `${report.client?.nomEntreprise || "Nom du client"}`,
-    zoneX + zoneWidth / 2, // Centre du rectangle en largeur
-    zoneY + zoneHeight / 2, // Centre du rectangle en hauteur
-    null,
-    null,
-    "center"
+    zoneX + logoWidth / 2,
+    zoneY + logoHeight / 2,
+    { align: 'center' }
   );
+}
 
-  doc.addPage(); // Ajoute la page 2
+// Appel de la fonction et attente de sa complétion
+await addLogoOrCompanyName(); // Attendre que l'ajout du logo ou du nom soit terminé
+
+doc.addPage(); // Ajoute la page 2
+
 
   // -------------------------------------------------------------------------------------------------------
   // PAGE 2 : INFORMATIONS INTERVENTION
@@ -168,6 +213,9 @@ const generateReportPdf = async (report, technicians) => {
 
     interventionStartY += cellHeight; // Met à jour la position verticale pour la prochaine ligne
   });
+
+
+  
 
   doc.addImage(footerImg, "PNG", 0, 255, 220, 0);
 
@@ -282,11 +330,11 @@ for (let index = 0; index < report.actionsDone.length; index++) {
     yPosition += 20; // Ajuster cette valeur pour contrôler l'espacement entre les descriptions sans photos
   }
 
-  // Ajouter un trait de séparation après chaque action
-  doc.setDrawColor(200); // Couleur de la ligne
-  doc.setLineWidth(0.3); // Épaisseur de la ligne
-  doc.line(10, yPosition, 200, yPosition); // Ligne horizontale
-  yPosition += 10; // Espacement après la ligne de séparation
+  // // Ajouter un trait de séparation après chaque action
+  // doc.setDrawColor(200); // Couleur de la ligne
+  // doc.setLineWidth(0.3); // Épaisseur de la ligne
+  // doc.line(10, yPosition, 200, yPosition); // Ligne horizontale
+  // yPosition += 10; // Espacement après la ligne de séparation
 }
 
 // Ajouter le pied de page à la dernière page des actions
@@ -400,11 +448,11 @@ if (hasRemarques) {
       }
     }
 
-    // Ajouter un trait de séparation après la remarque + photos (si présentes)
-    doc.setDrawColor(200); // Couleur de la ligne
-    doc.setLineWidth(0.3); // Épaisseur de la ligne
-    doc.line(10, yPositionRemark, 200, yPositionRemark); // Ligne horizontale
-    yPositionRemark += 10; // Espacement après la ligne de séparation
+    // // Ajouter un trait de séparation après la remarque + photos (si présentes)
+    // doc.setDrawColor(200); // Couleur de la ligne
+    // doc.setLineWidth(0.3); // Épaisseur de la ligne
+    // doc.line(10, yPositionRemark, 200, yPositionRemark); // Ligne horizontale
+    // yPositionRemark += 10; // Espacement après la ligne de séparation
   }
 
   // Ajouter le pied de page à la dernière page des remarques

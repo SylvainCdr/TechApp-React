@@ -223,7 +223,7 @@ export default function IncidentReports() {
                 <ul>
                   {incident.remarques.map((remarque, index) => (
                     <li key={index}>
-                      <i class="fa-solid fa-chevron-right"></i>
+                      <i className="fa-solid fa-chevron-right"></i>
                       {remarque.remarque}
                     </li>
                   ))}

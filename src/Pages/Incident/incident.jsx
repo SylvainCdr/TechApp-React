@@ -161,7 +161,7 @@ export default function Incident() {
               <ul>
                 {incident.missionsDangereuses.map((mission, index) => (
                   <li key={index}>
-                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <i className="fa-solid fa-triangle-exclamation"></i>
                     {mission}
                   </li>
                 ))}
@@ -177,7 +177,7 @@ export default function Incident() {
                 <div key={index} className={styles.remarqueItem}>
                   <p>
                     {" "}
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i className="fa-solid fa-chevron-right"></i>
                     {remarqueObj.remarque}
                   </p>
                   {remarqueObj.photos &&

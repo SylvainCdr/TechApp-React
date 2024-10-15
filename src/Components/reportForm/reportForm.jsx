@@ -12,6 +12,7 @@ export default function ReportForm({ initialData, onSubmit }) {
     nomEntreprise: "",
     email: "",
     tel: "",
+    logoEntreprise: "",
   });
   const [site, setSite] = useState({
     siteName : "",
@@ -98,7 +99,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               800, // largeur
               800, // hauteur
               "JPEG", // format
-              30, // qualité
+              50, // qualité
               0, // rotation
               (uri) => {
                 resolve(uri); // Renvoie le fichier Blob

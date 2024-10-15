@@ -81,7 +81,7 @@ export default function InterventionReport() {
     <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
       <button onClick={handleDownloadPdf} className={styles.downloadPdf}>
-        <i class="fa-solid fa-file-pdf"></i> Télécharger{" "}
+        <i className="fa-solid fa-file-pdf"></i> Télécharger{" "}
       </button>
 
       {report ? (
@@ -99,17 +99,18 @@ export default function InterventionReport() {
                 )} / ${new Date(report.interventionEndDate).toLocaleDateString(
                   "fr-FR"
                 )}`}{" "}
-            - {report.site.siteName} / {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+            - {report.site.siteName} /{" "}
+            {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
           </h2>
           <p>
-              {report.missionId ? (
-                <Link to={`/mission/${report.missionId}`}>
-                  Voir la fiche mission associée
-                </Link>
-              ) : (
-                "Aucune fiche mission associée"
-              )}
-            </p>
+            {report.missionId ? (
+              <Link to={`/mission/${report.missionId}`}>
+                Voir la fiche mission associée
+              </Link>
+            ) : (
+              "Aucune fiche mission associée"
+            )}
+          </p>
 
           {!report.isSigned && (
             <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>
@@ -122,35 +123,36 @@ export default function InterventionReport() {
               <h4>Entreprise / Site</h4>
               <ul>
                 <li>
-                  <i class="fa-regular fa-building"></i> Client :{" "}
+                  <i className="fa-regular fa-building"></i> Client :{" "}
                   {report.client.nomEntreprise}
                 </li>
                 <li>
-                  <i class="fa-solid fa-phone"></i>Téléphone :{" "}
+                  <i className="fa-solid fa-phone"></i>Téléphone :{" "}
                   {report.client.tel}
                 </li>
                 <li>
-                  <i class="fa-solid fa-at"></i>Email : {report.client.email}
+                  <i className="fa-solid fa-at"></i>Email :{" "}
+                  {report.client.email}
                 </li>
                 <li>
-                    <i class="fa-solid fa-monument"></i> Nom du site :{" "}
-                    {report.site.siteName}
-                  </li>
+                  <i className="fa-solid fa-monument"></i> Nom du site :{" "}
+                  {report.site.siteName}
+                </li>
                 <li>
-                  <i class="fa-solid fa-location-dot"></i>Adresse du site :{" "}
+                  <i className="fa-solid fa-location-dot"></i>Adresse du site :{" "}
                   {report.site.adresse}
                 </li>
                 <li>
-                  <i class="fa-regular fa-user"></i>Contact sur site :{" "}
+                  <i className="fa-regular fa-user"></i>Contact sur site :{" "}
                   {report.site.nomContact}
                 </li>
                 <li>
-                  <i class="fa-regular fa-address-card"></i>Fonction du contact
-                  : {report.site.fonctionContact}
+                  <i className="fa-regular fa-address-card"></i>Fonction du
+                  contact : {report.site.fonctionContact}
                 </li>
                 <li>
-                  <i class="fa-solid fa-mobile-screen-button"></i> Téléphone :{" "}
-                  {report.site.telContact}
+                  <i className="fa-solid fa-mobile-screen-button"></i> Téléphone
+                  : {report.site.telContact}
                 </li>
               </ul>
             </div>
@@ -202,7 +204,7 @@ export default function InterventionReport() {
                           />
                         ))}
                       </td>
-                      <td style={{ whiteSpace: 'pre-wrap' }}>
+                      <td style={{ whiteSpace: "pre-wrap" }}>
                         <i className="fa-solid fa-check"></i>{" "}
                         {action.description}
                       </td>
@@ -235,8 +237,8 @@ export default function InterventionReport() {
                           />
                         ))}
                       </td>
-                      <td style={{ whiteSpace: 'pre-wrap' }}>
-                        <i class="fa-solid fa-chevron-right"></i>{" "}
+                      <td style={{ whiteSpace: "pre-wrap" }}>
+                        <i className="fa-solid fa-chevron-right"></i>{" "}
                         {remarque.remarque}
                       </td>
                       {/* Colonne pour les photos */}
@@ -257,8 +259,8 @@ export default function InterventionReport() {
               </p>
               <p>
                 {" "}
-                <i class="fa-solid fa-clock"></i> Durée de l'intervention (en
-                heures) : {report.interventionDuration}{" "}
+                <i className="fa-solid fa-clock"></i> Durée de l'intervention
+                (en heures) : {report.interventionDuration}{" "}
               </p>
             </div>
           </div>

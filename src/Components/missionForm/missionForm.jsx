@@ -20,6 +20,7 @@ export default function MissionForm() {
     nomEntreprise: "",
     email: "",
     tel: "",
+    logoEntreprise: "",
   });
   const [site, setSite] = useState({
     siteName: "",
@@ -45,19 +46,6 @@ export default function MissionForm() {
   const [comments, setComments] = useState("");
   const [clients, setClients] = useState([]); // Liste des clients et sites
   const [pjSupplementaires, setPjSupplementaires] = useState("");
-
-  // const fetchClients = async () => {
-  //   try {
-  //     const querySnapshot = await getDocs(collection(db, "clients"));
-  //     const clientsList = querySnapshot.docs.map((doc) => ({
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     }));
-  //     setClients(clientsList);
-  //   } catch (error) {
-  //     console.error("Erreur lors de la récupération des clients : ", error);
-  //   }
-  // };
 
   // fonction pour récupérer les clients et les trier par nom d'entreprise et nom de site
   const fetchClients = async () => {
@@ -241,7 +229,7 @@ export default function MissionForm() {
     setPlanPrevention(url);
   };
 
- // Fonction pour gérer l'upload d'une pj supplémentaire
+  // Fonction pour gérer l'upload d'une pj supplémentaire
   const handlePjSupplementaires = async (e) => {
     const file = e.target.files[0];
     const storageRef = ref(storage, `pjSupplementaires/${file.name}`);
@@ -249,10 +237,6 @@ export default function MissionForm() {
     const url = await getDownloadURL(storageRef);
     setPjSupplementaires(url);
   };
-
-
-
-
 
   return (
     <div className={styles.missionFormContainer}>
@@ -285,9 +269,11 @@ export default function MissionForm() {
                   nomEntreprise: selectedClientSite.nomEntreprise,
                   email: selectedClientSite.email,
                   tel: selectedClientSite.tel,
-                  // commercial: selectedClientSite.commercial || "",
+                  logoEntreprise: selectedClientSite.logoEntreprise || "",
+                 
                 });
                 setSite({
+                  
                   siteName: selectedClientSite.siteName,
                   adresse: selectedClientSite.siteAddress,
                   nomContact: selectedClientSite.nomContact || "",
@@ -435,7 +421,11 @@ export default function MissionForm() {
         ) : (
           <div className={styles.formGroup}>
             <label>Ajouter un plan de prévention</label>
-            <input type="file" accept=".pdf" onChange={handlePlanPrevention} />
+            <input
+              type="file"
+              accept=".pdf, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png"
+              onChange={handlePlanPrevention}
+            />
           </div>
         )}
 
@@ -518,7 +508,7 @@ export default function MissionForm() {
           onClick={addMissionField}
           className={styles.addBtn}
         >
-          <i class="fa-solid fa-plus"></i> Ajouter une mission
+          <i className="fa-solid fa-plus"></i> Ajouter une mission
         </button>
 
         <h3>Risques / EPI</h3>
@@ -549,7 +539,7 @@ export default function MissionForm() {
           onClick={addRisqueField}
           className={styles.addBtn}
         >
-          <i class="fa-solid fa-plus"></i> Ajouter un risque/EPI
+          <i className="fa-solid fa-plus"></i> Ajouter un risque/EPI
         </button>
 
         <h3>Commentaire(s) / indication(s) supplémentaire(s)</h3>
@@ -560,20 +550,17 @@ export default function MissionForm() {
             onChange={(e) => setComments(e.target.value)}
           ></textarea>
         </div>
-      
-          <h3>Pièces jointes supplémentaires</h3>
 
-          <div className={styles.formGroup}>
-            <label>Ajouter des pièces jointes supplémentaires</label>
-            <input
-              type="file"
-              accept=".pdf, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png"
-              onChange={handlePjSupplementaires}
-            />
-          </div>
-       
-    
+        <h3>Pièces jointes supplémentaires</h3>
 
+        <div className={styles.formGroup}>
+          <label>Ajouter des pièces jointes supplémentaires</label>
+          <input
+            type="file"
+            accept=".pdf, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png"
+            onChange={handlePjSupplementaires}
+          />
+        </div>
 
         <button type="submit" className={styles.submitBtn}>
           Enregistrer la mission
