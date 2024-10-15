@@ -18,51 +18,66 @@ const Reports = () => {
   const [technicians, setTechnicians] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 10; // Nombre de rapports par page
+  const [allReports, setAllReports] = useState([]);
 
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
     : [];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const reportsQuery = query(
-          collection(db, "interventionReports"),
-          orderBy("interventionStartDate", "desc") // Trie par interventionStartDate
-        );
-        const reportsSnapshot = await getDocs(reportsQuery);
-        const reportsList = reportsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setReports(reportsList);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const reportsQuery = query(
+            collection(db, "interventionReports"),
+            orderBy("interventionStartDate", "desc") // Trie par interventionStartDate
+          );
+          const reportsSnapshot = await getDocs(reportsQuery);
+          const reportsList = reportsSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          
+          // Initialisez both states reports et allReports avec les données récupérées
+          setReports(reportsList);
+          setAllReports(reportsList);
+    
+          const techniciansSnapshot = await getDocs(
+            collection(db, "technicians")
+          );
+          const techniciansList = techniciansSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            name: `${doc.data().firstName} ${doc.data().lastName}`,
+            urlPhoto: doc.data().urlPhoto,
+          }));
+          setTechnicians(techniciansList);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des données : ", error);
+          Swal.fire(
+            "Erreur",
+            "Une erreur est survenue lors de la récupération des données.",
+            "error"
+          );
+        }
+      };
+    
+      fetchData();
+    }, []);
+    
 
-        const techniciansSnapshot = await getDocs(
-          collection(db, "technicians")
+
+    const filterReportsByUser = (e) => {
+      const selectedTechnician = e.target.value;
+      if (selectedTechnician === "all") {
+        setReports(allReports); // Rétablir toutes les missions non filtrées
+      } else {
+        const filteredReports = allReports.filter((report) =>
+          report.intervenants.includes(selectedTechnician)
         );
-        const techniciansList = techniciansSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          name: `${doc.data().firstName} ${doc.data().lastName}`,
-          urlPhoto: doc.data().urlPhoto,
-        }));
-        setTechnicians(techniciansList);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des données : ", error);
-        Swal.fire(
-          "Erreur",
-          "Une erreur est survenue lors de la récupération des données.",
-          "error"
-        );
+        setReports(filteredReports);
       }
     };
-
-    fetchData();
-  }, []);
-
-
-
-   
+    
 
 
   const getTechnicianPhotoURL = (id) => {
@@ -112,6 +127,19 @@ const Reports = () => {
         <i className="fa-solid fa-plus"></i> Créer un nouveau rapport
         d'intervention
       </Link>
+
+      <div className={styles.filterReports}>
+        <label htmlFor="technician">Filtrer par technicien :</label>
+        <select name="technician" id="technician" onChange={filterReportsByUser}>
+          <option value="all">Tous</option>
+          {technicians.map((technician) => (
+            <option key={technician.id} value={technician.id}>
+              {technician.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
 
    
 
