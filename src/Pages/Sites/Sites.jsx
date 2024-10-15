@@ -43,6 +43,8 @@ export default function Sites() {
         id: doc.id,
         ...doc.data(),
       }));
+      // on trie par nomEntreprise
+      clientsList.sort((a, b) => a.nomEntreprise.localeCompare(b.nomEntreprise));
       setClients(clientsList);
     } catch (error) {
       console.error("Erreur lors de la récupération des clients : ", error);

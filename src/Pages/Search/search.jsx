@@ -73,9 +73,7 @@ export default function Search() {
         >
           <thead>
             <tr>
-              <th>
-                <i className="fa-regular fa-building"></i> Nom du site
-              </th>
+              
               <th>
                 <i className="fa-regular fa-building"></i>
               </th>
@@ -96,8 +94,8 @@ export default function Search() {
           <tbody>
             {filteredReports.map((report) => (
               <tr key={report.id}>
-                <td>{report.site?.siteName || "Non spécifié"}</td>
-                <td>{report.client?.nomEntreprise || "Non spécifié"}</td>
+                
+                <td>{report.site?.siteName || "Non spécifié"} - {report.client?.nomEntreprise || "Non spécifié"}</td>
                 <td>
                   {new Date(report.interventionStartDate).toLocaleDateString(
                     "fr-FR"
@@ -126,9 +124,18 @@ export default function Search() {
                     })
                     .join(", ")}
                 </td>
+                {/* <td className={styles.status}>
+                  {report.actionsDone?.length ? "Complété"  : "À compléter"}
+                </td> */}
+{/* //affichage en non complété en rouge et complété en vert */}
                 <td className={styles.status}>
-                  {report.actionsDone?.length ? "Complété" : "À compléter"}
+                  {report.actionsDone?.length ? (
+                    <span className={styles.done}>Complété</span>
+                  ) : (
+                    <span className={styles.todo}>À compléter</span>
+                  )}
                 </td>
+
                 <td className={styles.tableActions}>
                   <Link to={`/report/${report.id}`} className={styles.viewBtn}>
                     <i className="fa-solid fa-eye"></i>
