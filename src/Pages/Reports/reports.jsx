@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { motion } from "framer-motion";
+import AOS from "aos";
 
 const Reports = () => {
   const [reports, setReports] = useState([]);
@@ -114,11 +114,20 @@ const Reports = () => {
     currentPage * reportsPerPage
   );
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1300,
+    });
+  }, []);
+
   return (
     <div className={styles.reportsContainer}>
       <h1>Rapports d'intervention</h1>
 
-      <Link to="/reports/create" className={styles.createReport}>
+      <Link
+        to="/reports/create"
+        className={styles.createReport}
+      >
         <i className="fa-solid fa-plus"></i> Créer un nouveau rapport
         d'intervention
       </Link>
@@ -141,15 +150,7 @@ const Reports = () => {
 
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
-          <motion.li
-            key={report.id}
-            className={styles.reportItem}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5 }}
-          >
-      
+          <li key={report.id} className={styles.reportItem} data-aos="fade-up">
             <h2>
               {new Date(report.interventionStartDate).toLocaleDateString(
                 "fr-FR"
@@ -190,11 +191,14 @@ const Reports = () => {
                 <h4>Entreprise / Site</h4>
                 <ul>
                   <li>
-                           {/* //si le logo de l entreprise est renseigné, on l affiche */}
-              {report.client.logoEntreprise && (
-
-<img src={report.client.logoEntreprise} alt="logo entreprise" className={styles.logoEntreprise} />
-)}
+                    {/* //si le logo de l entreprise est renseigné, on l affiche */}
+                    {report.client.logoEntreprise && (
+                      <img
+                        src={report.client.logoEntreprise}
+                        alt="logo entreprise"
+                        className={styles.logoEntreprise}
+                      />
+                    )}
                   </li>
                   <li>
                     <i className="fa-regular fa-building"></i> Client :{" "}
@@ -213,8 +217,8 @@ const Reports = () => {
                     {report.site.siteName}
                   </li>
                   <li>
-                    <i className="fa-solid fa-location-dot"></i> Adresse 
-                    : {report.site.adresse}
+                    <i className="fa-solid fa-location-dot"></i> Adresse :{" "}
+                    {report.site.adresse}
                   </li>
                   <li>
                     <i className="fa-regular fa-user"></i> Contact sur site :{" "}
@@ -244,6 +248,7 @@ const Reports = () => {
                         <img
                           src={getTechnicianPhotoURL(intervenantId)}
                           alt={`Photo de technicien`}
+                          data-aos="flip-down"
                         />
                       </div>
                     ))
@@ -307,13 +312,16 @@ const Reports = () => {
 
             <div className={styles.section3}>
               <Link to={`/report/${report.id}`} className={styles.viewButton}>
-                <i className="fa-solid fa-eye"></i>
+                <i className="fa-solid fa-eye" data-aos="zoom-in"></i>
               </Link>
 
               {report.isSigned && ( // badge signé
                 <span className={styles.badgeSigned}>
-                  <i className="fa-solid fa-circle-check"></i> Signé par le
-                  client
+                  <i
+                    className="fa-solid fa-circle-check"
+                    data-aos="zoom-in"
+                  ></i>{" "}
+                  Signé par le client
                 </span>
               )}
 
@@ -324,21 +332,24 @@ const Reports = () => {
                     to={`/reports/edit/${report.id}`}
                     className={styles.editButton}
                   >
-                    <i className="fa-solid fa-pen-to-square"></i>
+                    <i
+                      className="fa-solid fa-pen-to-square"
+                      data-aos="zoom-in"
+                    ></i>
                   </Link>
-               
+
                   {authorizedUserIds.includes(auth.currentUser.uid) && (
                     <Link
                       className={styles.deleteButton}
                       onClick={() => deleteReport(report.id)}
                     >
-                      <i className="fa-solid fa-trash"></i>
+                      <i className="fa-solid fa-trash" data-aos="zoom-in"></i>
                     </Link>
                   )}
                 </>
               )}
             </div>
-          </motion.li>
+          </li>
         ))}
       </ul>
 

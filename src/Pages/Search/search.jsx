@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styles from "./style.module.scss";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { motion } from "framer-motion";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,12 +63,9 @@ export default function Search() {
       />
 
       {filteredReports.length > 0 ? (
-        <motion.table
-          className={styles.reportTable}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+        <table
+          className={styles.reportTable} data-aos="fade-down"
+       
         >
           <thead>
             <tr>
@@ -144,7 +140,7 @@ export default function Search() {
               </tr>
             ))}
           </tbody>
-        </motion.table>
+        </table>
       ) : (
         <p>Aucun rapport trouvé</p>
       )}

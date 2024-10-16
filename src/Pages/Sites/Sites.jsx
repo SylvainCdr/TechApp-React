@@ -310,7 +310,7 @@ export default function Sites() {
 
       <div className={styles.clientsList}>
         {clients.map((client) => (
-          <div key={client.id} className={styles.clientItem}
+          <div key={client.id} className={styles.clientItem} data-aos="fade-up-left"
          >
             <div className={styles.section1}>
               <h2>{client.siteName}</h2>

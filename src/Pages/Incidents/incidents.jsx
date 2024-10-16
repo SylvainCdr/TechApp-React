@@ -125,13 +125,10 @@ export default function IncidentReports() {
 
       <ul className={styles.incidentsList}>
         {currentIncidents.map((incident) => (
-          <motion.li
+          <li
             key={incident.id}
             className={styles.incidentItem}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            data-aos="fade-up"
           >
             <h2>
               {incident.createdAt
@@ -307,7 +304,7 @@ export default function IncidentReports() {
               </Link>
             )}
             </div>
-          </motion.li>
+          </li>
         ))}
       </ul>
 

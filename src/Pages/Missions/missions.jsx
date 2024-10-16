@@ -11,7 +11,10 @@ import {
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { motion } from "framer-motion";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+
 
 export default function Missions() {
   const [missions, setMissions] = useState([]);
@@ -152,10 +155,16 @@ export default function Missions() {
     return currentDate > interventionEndDate;
   };
 
+  useEffect(() => {
+    AOS.init({ duration: 1300 });
+  }, []);
+
+
+
   return (
     <div className={styles.missionsContainer}>
       <h1>Fiches Missions</h1>
-      <Link to="/missions/create" className={styles.createMission}>
+      <Link to="/missions/create" className={styles.createMission} >
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche mission
       </Link>
 
@@ -178,13 +187,10 @@ export default function Missions() {
 
       <div className={styles.missionsList}>
         {currentMissions.map((mission) => (
-          <motion.div
+          <div
             className={styles.missionItem}
             key={mission.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5 }}
+        data-aos="fade-up"
           >
             <h2>
               {mission.createdAt.toDate().toLocaleDateString()} -{" "}
@@ -271,10 +277,10 @@ export default function Missions() {
 
               <div className={styles.section1Right}>
                 <h3>Intervenant(s)</h3>
-                <div className={styles.technicians}>
+                <div className={styles.technicians} >
                   {mission.intervenants && mission.intervenants.length > 0 ? (
                     mission.intervenants.map((intervenantId, index) => (
-                      <div key={index} className={styles.technicianItem}>
+                      <div key={index} className={styles.technicianItem} >
                         <p>
                           {technicians.find((tech) => tech.id === intervenantId)
                             ?.name || "Nom inconnu"}
@@ -282,6 +288,7 @@ export default function Missions() {
                         <img
                           src={getTechnicianPhotoURL(intervenantId)}
                           alt={`Photo de technicien`}
+                          data-aos="flip-down"
                         />
                       </div>
                     ))
@@ -316,19 +323,21 @@ export default function Missions() {
               </div>
             </div>
 
-            <div className={styles.section3}>
+            <div className={styles.section3} >
               <Link
                 to={`/mission/${mission.id}`}
-                className={styles.viewMission}
+                className={styles.viewMission} 
+              
+                
               >
-                <i className="fa-solid fa-eye"></i>
+                <i className="fa-solid fa-eye"   data-aos="zoom-in" ></i>
               </Link>
 
               <Link
                 to={`/missions/edit/${mission.id}`}
                 className={styles.editMission}
               >
-                <i className="fa-solid fa-pen-to-square"></i>
+                <i className="fa-solid fa-pen-to-square" data-aos="zoom-in"></i>
               </Link>
 
               {authorizedUserIds.includes(auth.currentUser.uid) && (
@@ -336,11 +345,11 @@ export default function Missions() {
                   className={styles.deleteMission}
                   onClick={() => deleteMission(mission.id)}
                 >
-                  <i className="fa-solid fa-trash"></i>
+                  <i className="fa-solid fa-trash" data-aos="zoom-in"></i>
                 </Link>
               )}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 

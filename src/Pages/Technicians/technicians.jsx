@@ -260,7 +260,7 @@ export default function TechniciansPage() {
 
       <div className={styles.techniciansList}>
         {technicians.map((technician) => (
-          <div key={technician.id} className={styles.technicianItem}>
+          <div key={technician.id} className={styles.technicianItem} data-aos="fade-up-left">
             <h2>
               {technician.firstName} {technician.lastName}
             </h2>
