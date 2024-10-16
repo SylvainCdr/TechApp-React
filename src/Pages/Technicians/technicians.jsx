@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { db, storage } from "../../firebase/firebase";
+import { db, storage, auth } from "../../firebase/firebase";
 import {
   collection,
   addDoc,
@@ -31,6 +31,10 @@ export default function TechniciansPage() {
   const [editId, setEditId] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [showForm, setShowForm] = useState(false); // État pour afficher ou non le formulaire
+
+  const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
+  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
+  : [];
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
@@ -289,12 +293,14 @@ export default function TechniciansPage() {
               >
                 <i className="fa-solid fa-pen-to-square"></i>
               </button>
+              {authorizedUserIds.includes(auth.currentUser.uid) && (
               <button
                 className={styles.deleteButton}
                 onClick={() => handleDelete(technician)}
               >
                 <i className="fa-solid fa-trash"></i>
               </button>
+            )}
             </div>
           </div>
         ))}

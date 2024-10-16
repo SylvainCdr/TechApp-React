@@ -326,12 +326,7 @@ const Reports = () => {
                   >
                     <i className="fa-solid fa-pen-to-square"></i>
                   </Link>
-                  {/* <Link
-                    className={styles.deleteButton}
-                    onClick={() => deleteReport(report.id)}
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </Link> */}
+               
                   {authorizedUserIds.includes(auth.currentUser.uid) && (
                     <Link
                       className={styles.deleteButton}

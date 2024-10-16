@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { db, storage } from "../../firebase/firebase";
+import { db, storage, auth } from "../../firebase/firebase";
 import {
   collection,
   addDoc,
@@ -34,6 +34,11 @@ export default function Sites() {
   const [logo, setLogo] = useState(null);
   const [planPrevention, setPlanPrevention] = useState(null);
   const [showForm, setShowForm] = useState(false);
+
+  const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
+  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
+  : [];
+
 
   // Fonction pour récupérer les clients depuis Firestore
   const fetchClients = async () => {
@@ -346,12 +351,14 @@ export default function Sites() {
               >
                 Modifier
               </button>
+              {authorizedUserIds.includes(auth.currentUser.uid) && (
               <button
                 onClick={() => handleDelete(client)}
                 className={styles.deleteButton}
               >
                 Supprimer
               </button>
+              )}
             </div>
           </div>
         ))}

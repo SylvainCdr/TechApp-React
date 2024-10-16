@@ -1,6 +1,6 @@
 import styles from "./style.module.scss";
 import { useState, useEffect } from "react";
-import { db } from "../../firebase/firebase";
+import { db, auth } from "../../firebase/firebase";
 import {
   collection,
   getDocs,
@@ -19,6 +19,11 @@ export default function IncidentReports() {
   const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
   const incidentsPerPage = 6; // Nombre d'incidents par page
   const [technicians, setTechnicians] = useState([]);
+
+  const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
+  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
+  : [];
+
 
   const fetchIncidents = async () => {
     // setLoading(true);
@@ -293,12 +298,14 @@ export default function IncidentReports() {
               >
                 <i className="fa-solid fa-pen-to-square"></i>
               </Link>
+              {authorizedUserIds.includes(auth.currentUser.uid) && (
               <Link
                 onClick={() => handleDelete(incident.id)}
                 className={styles.deleteBtn}
               >
                 <i className="fa-solid fa-trash"></i>
               </Link>
+            )}
             </div>
           </motion.li>
         ))}
