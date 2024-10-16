@@ -34,9 +34,8 @@
     cursor: pointer;
     border: none;
     text-decoration: none;
-   
-    &:hover 
-{
+
+    &:hover {
       background-color: rgb(251, 74, 43);
       scale: 1.02;
     }
@@ -45,7 +44,6 @@
       font-size: 1.5rem;
     }
   }
-
 
   .badgeGreen {
     color: #03c113;
@@ -57,11 +55,24 @@
 
   .badgeRed {
     color: #ff4d4f;
-
     font-size: 2.2rem;
     text-transform: uppercase;
     font-weight: 700;
     float: right;
+  }
+  .editBtn {
+    background-color: #039c38;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    float: right;
+    text-decoration: none;
   }
 
   .reportItem {
@@ -104,21 +115,6 @@
       margin-right: 8px;
       font-size: 1.2rem;
       color: rgb(133, 133, 133);
-    }
-
-    .editBtn {
-      background-color: #039c38;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
-      -ms-border-radius: 5px;
-      -o-border-radius: 5px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      float: right;
-      text-decoration: none;
     }
 
     .section1 {
@@ -232,7 +228,7 @@
           font-size: 1.1em;
           font-weight: bold;
           float: right;
-          padding-left : 6rem;
+          padding-left: 6rem;
 
           .risqueOui {
             color: red;
@@ -262,8 +258,16 @@
       padding: 10px;
     }
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       margin-bottom: 10px;
+    }
+
+    .badgeGreen {
+      font-size: 1.3rem;
+    }
+
+    .badgeRed {
+      font-size: 1.3rem;
     }
 
     .reportItem {
@@ -284,7 +288,7 @@
 
           ul {
             li {
-              font-size: 0.8em;
+              font-size: 0.9em;
             }
           }
         }
@@ -316,7 +320,7 @@
 
         table {
           th {
-            font-size: 0.8em;
+            font-size: 0.9em;
           }
 
           td {

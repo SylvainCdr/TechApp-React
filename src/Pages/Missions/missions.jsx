@@ -190,6 +190,13 @@ export default function Missions() {
               {mission.createdAt.toDate().toLocaleDateString()} -{" "}
               {mission.site.siteName} / {mission.client.nomEntreprise}
             </h2>
+
+            {/* // badge avec a venir ou passée */}
+            {isInterventionDatePassed(mission) ? (
+              <span className={styles.passedBadge}>Passée</span>
+            ) : (
+              <span className={styles.upcomingBadge}>À venir</span>
+            )}
             <p className={styles.interventionDate}>
               <i className="fa-solid fa-calendar-days"></i>Date(s)
               d'intervention :{" "}
@@ -207,13 +214,6 @@ export default function Missions() {
                   ).toLocaleDateString("fr-FR")}`}
             </p>
 
-            {/* // badge avec a venir ou passée */}
-            {isInterventionDatePassed(mission) ? (
-              <span className={styles.passedBadge}>Passée</span>
-            ) : (
-              <span className={styles.upcomingBadge}>À venir</span>
-            )}
-
             <br />
             <p>
               <i className="fa-solid fa-folder-plus"></i>Mission créée par :{" "}
@@ -224,6 +224,16 @@ export default function Missions() {
               <div className={styles.section1Left}>
                 <h3>Entreprise / Site</h3>
                 <ul>
+                  <li>
+                    {/* //si le logo de l entreprise est renseigné, on l affiche */}
+                    {mission.client.logoEntreprise && (
+                      <img
+                        src={mission.client.logoEntreprise}
+                        alt="logo entreprise"
+                        className={styles.logoEntreprise}
+                      />
+                    )}
+                  </li>
                   <li>
                     <i className="fa-regular fa-building"></i> Client :{" "}
                     {mission.client.nomEntreprise}
@@ -241,7 +251,7 @@ export default function Missions() {
                     {mission.site.siteName}
                   </li>
                   <li>
-                    <i className="fa-solid fa-location-dot"></i> Adresse du site
+                    <i className="fa-solid fa-location-dot"></i> Adresse
                     : {mission.site.adresse}
                   </li>
                   <li>
@@ -258,6 +268,7 @@ export default function Missions() {
                   </li>
                 </ul>
               </div>
+
               <div className={styles.section1Right}>
                 <h3>Intervenant(s)</h3>
                 <div className={styles.technicians}>

@@ -149,6 +149,7 @@ const Reports = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
+      
             <h2>
               {new Date(report.interventionStartDate).toLocaleDateString(
                 "fr-FR"
@@ -189,6 +190,13 @@ const Reports = () => {
                 <h4>Entreprise / Site</h4>
                 <ul>
                   <li>
+                           {/* //si le logo de l entreprise est renseigné, on l affiche */}
+              {report.client.logoEntreprise && (
+
+<img src={report.client.logoEntreprise} alt="logo entreprise" className={styles.logoEntreprise} />
+)}
+                  </li>
+                  <li>
                     <i className="fa-regular fa-building"></i> Client :{" "}
                     {report.client.nomEntreprise}
                   </li>
@@ -205,7 +213,7 @@ const Reports = () => {
                     {report.site.siteName}
                   </li>
                   <li>
-                    <i className="fa-solid fa-location-dot"></i> Adresse du site
+                    <i className="fa-solid fa-location-dot"></i> Adresse 
                     : {report.site.adresse}
                   </li>
                   <li>

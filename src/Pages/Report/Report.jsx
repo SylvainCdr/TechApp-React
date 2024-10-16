@@ -80,17 +80,18 @@ export default function InterventionReport() {
   return (
     <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
+
+      <span
+        className={
+          report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
+        }
+      >
+        {report.actionsDone?.length ? "Complété" : "À compléter"}
+      </span>
+
       <button onClick={handleDownloadPdf} className={styles.downloadPdf}>
         <i className="fa-solid fa-file-pdf"></i> Télécharger{" "}
       </button>
-
-      <span
-              className={
-                report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
-              }
-            >
-              {report.actionsDone?.length ? "Complété" : "À compléter"}
-            </span>
 
       {report ? (
         <div className={styles.reportItem}>
@@ -110,6 +111,11 @@ export default function InterventionReport() {
             - {report.site.siteName} /{" "}
             {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
           </h2>
+          {!report.isSigned && (
+            <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>
+              Remplir / Modifier{" "}
+            </Link>
+          )}
           <p>
             {report.missionId ? (
               <Link to={`/mission/${report.missionId}`}>
@@ -119,12 +125,6 @@ export default function InterventionReport() {
               "Aucune fiche mission associée"
             )}
           </p>
-
-          {!report.isSigned && (
-            <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>
-              Remplir / Modifier{" "}
-            </Link>
-          )}
 
           <div className={styles.section1}>
             <div className={styles.section1Left}>
