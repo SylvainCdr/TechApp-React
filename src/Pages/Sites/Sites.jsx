@@ -36,9 +36,8 @@ export default function Sites() {
   const [showForm, setShowForm] = useState(false);
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
-  ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
-  : [];
-
+    ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
+    : [];
 
   // Fonction pour récupérer les clients depuis Firestore
   const fetchClients = async () => {
@@ -113,20 +112,7 @@ export default function Sites() {
       }
 
       // Réinitialisation du formulaire et des états
-      setFormData({
-        nomEntreprise: "",
-        tel: "",
-        email: "",
-        siteName: "",
-        siteAddress: "",
-        commercial: "",
-        logoEntreprise: "",
-        planPrevention: "",
-      });
-      setLogo(null);
-      setPlanPrevention(null);
-      setEditId(null);
-      setShowForm(false);
+      resetForm();
       fetchClients();
     } catch (error) {
       console.error(
@@ -140,6 +126,23 @@ export default function Sites() {
         confirmButtonText: "OK",
       });
     }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      nomEntreprise: "",
+      tel: "",
+      email: "",
+      siteName: "",
+      siteAddress: "",
+      commercial: "",
+      logoEntreprise: "",
+      planPrevention: "",
+    });
+    setLogo(null);
+    setPlanPrevention(null);
+    setEditId(null);
+    setShowForm(false);
   };
 
   // Fonction pour remplir le formulaire pour la modification
@@ -181,14 +184,13 @@ export default function Sites() {
     if (result.isConfirmed) {
       try {
         // Supprimer le logo associé
-        if (client.logoEntreprise && client.planPrevention) {
-          const fileName = decodeURIComponent(
-            client.logoEnteprise.split("/").pop().split("?")[0],
-            client.planPrevention.split("/").pop().split("?")[0]
-          );
-          const logoRef = ref(storage, `clients/${fileName}`);
-          const planPreventionRef = ref(storage, `plansPrevention/${fileName}`);
-          await deleteObject(logoRef && planPreventionRef);
+        if (client.logoEntreprise) {
+          const logoRef = ref(storage, client.logoEntreprise);
+          await deleteObject(logoRef);
+        }
+        if (client.planPrevention) {
+          const planPreventionRef = ref(storage, client.planPrevention);
+          await deleteObject(planPreventionRef);
         }
 
         // Supprimer le client de Firestore
@@ -209,104 +211,107 @@ export default function Sites() {
     }
   };
 
+  // Composant Modal
+  const Modal = ({ show, onClose }) => {
+    if (!show) return null;
+
+    return (
+      <div className={styles.modalOverlay}>
+        <div className={styles.modalContent}>
+          <span className={styles.closeButton} onClick={onClose}>
+            &times;
+          </span>
+          <h2>{editId ? "Modifier le Site" : "Ajouter un Site"}</h2>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            {/* Les champs du formulaire ici */}
+            <div>
+              <label>Nom du Site :</label>
+              <input
+                type="text"
+                value={formData.siteName}
+                onChange={(e) =>
+                  setFormData({ ...formData, siteName: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label>Nom du client :</label>
+              <input
+                type="text"
+                value={formData.nomEntreprise}
+                onChange={(e) =>
+                  setFormData({ ...formData, nomEntreprise: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label>Téléphone :</label>
+              <input
+                type="tel"
+                value={formData.tel}
+                onChange={(e) =>
+                  setFormData({ ...formData, tel: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label>Email :</label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label>Adresse du site :</label>
+              <input
+                type="text"
+                value={formData.siteAddress}
+                onChange={(e) =>
+                  setFormData({ ...formData, siteAddress: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label>Logo de l'entreprise :</label>
+              <input type="file" onChange={handleLogoChange} />
+            </div>
+            <div>
+              <label>Plan de prévention :</label>
+              <input
+                type="file"
+                onChange={(e) => setPlanPrevention(e.target.files[0])}
+              />
+            </div>
+            <button type="submit">Soumettre</button>
+          </form>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.clientsContainer}>
+      <Modal show={showForm} onClose={resetForm} />
       <h1>Gestion des Sites</h1>
-
-      <button onClick={() => setShowForm(!showForm)}>
-        {showForm ? "Fermer le formulaire" : "Ajouter un site"}
+      <button
+        onClick={() => setShowForm(true)}
+        className={styles.addButton}
+      >
+        Ajouter un Site
       </button>
-
-      {showForm && (
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div>
-            <label>Nom du Site :</label>
-            <input
-              type="text"
-              value={formData.siteName}
-              onChange={(e) =>
-                setFormData({ ...formData, siteName: e.target.value })
-              }
-              required
-            />
-            <div>
-              <div>
-                <label>Nom du client :</label>
-                <input
-                  type="text"
-                  value={formData.nomEntreprise}
-                  onChange={(e) =>
-                    setFormData({ ...formData, nomEntreprise: e.target.value })
-                  }
-                  required
-                />
-              </div>
-             
-            </div>
-          </div>
-          <div>
-            <label>Téléphone :</label>
-            <input
-              type="tel"
-              value={formData.tel}
-              onChange={(e) =>
-                setFormData({ ...formData, tel: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div>
-            <label>Email :</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              required
-            />
-          </div>
-
-          <div>
-            <label>Adresse du site :</label>
-            <input
-              type="text"
-              value={formData.siteAddress}
-              onChange={(e) =>
-                setFormData({ ...formData, siteAddress: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div>
-            <label>Logo du l'entreprise :</label>
-            <input type="file" onChange={handleLogoChange} />
-          </div>
-          <div>
-            <label>Plan de prévention :</label>
-            <input
-              type="file"
-              onChange={(e) => setPlanPrevention(e.target.files[0])}
-            />
-          </div>
-          <div>
-                <label>Commercial :</label>
-                <input
-                  type="text"
-                  value={formData.commercial}
-                  onChange={(e) =>
-                    setFormData({ ...formData, commercial: e.target.value })
-                  }
-                  required
-                />
-              </div>
-          <button type="submit">{editId ? "Mettre à jour" : "Ajouter"}</button>
-        </form>
-      )}
 
       <div className={styles.clientsList}>
         {clients.map((client) => (
-          <div key={client.id} className={styles.clientItem}>
+          <div key={client.id} className={styles.clientItem}
+         >
             <div className={styles.section1}>
               <h2>{client.siteName}</h2>
               <div className={styles.logoContainer}>
@@ -317,7 +322,7 @@ export default function Sites() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 1.5 }}
                   />
                 )}
               </div>
