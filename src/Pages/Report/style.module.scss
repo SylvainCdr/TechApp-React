@@ -12,8 +12,8 @@
   padding-top: 6rem;
 
   h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    margin-bottom: 10px;
     text-align: center;
     color: var(--col2);
     text-transform: uppercase;
@@ -258,8 +258,7 @@
       padding: 10px;
     }
     h1 {
-      font-size: 1.3rem;
-      margin-bottom: 10px;
+      font-size: 0.8rem;
     }
 
     .badgeGreen {
@@ -289,6 +288,11 @@
           ul {
             li {
               font-size: 0.9em;
+            }
+            .logoEntreprise {
+              height: 40px;
+              background-color: white;
+              margin-left : 1.8rem;
             }
           }
         }

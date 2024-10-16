@@ -153,7 +153,7 @@ export default function Mission() {
           <br />
           <p>
             {" "}
-            <i className="fa-solid fa-user-tie"></i>Commercial(e) en charge :{" "}
+            <i className="fa-solid fa-user-tie"></i>Commercial(e) :{" "}
             {mission.commercial}
           </p>
           <br />
@@ -166,6 +166,13 @@ export default function Mission() {
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
+              <p> {mission.client.logoEntreprise && (
+                      <img
+                        src={mission.client.logoEntreprise}
+                        alt="logo entreprise"
+                        className={styles.logoEntreprise}
+                      />
+                    )}</p>
               <p>
                 <i className="fa-regular fa-building"></i> Client :{" "}
                 {mission.client.nomEntreprise}

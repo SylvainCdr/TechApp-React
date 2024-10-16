@@ -131,6 +131,15 @@ export default function InterventionReport() {
               <h4>Entreprise / Site</h4>
               <ul>
                 <li>
+                {report.client.logoEntreprise && (
+                      <img
+                        src={report.client.logoEntreprise}
+                        alt="logo entreprise"
+                        className={styles.logoEntreprise}
+                      />
+                    )}
+                </li>
+                <li>
                   <i className="fa-regular fa-building"></i> Client :{" "}
                   {report.client.nomEntreprise}
                 </li>
