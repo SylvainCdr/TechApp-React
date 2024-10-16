@@ -56,10 +56,26 @@
       padding: 10px;
     }
     .interventionDate {
-      color : #0048fd;
+      color: #0048fd;
       font-size: 1.1rem;
       font-weight: 600;
-     }
+    }
+    .upcomingBadge {
+      color: #03c113;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      float: right;
+    }
+
+    .passedBadge {
+      color: #ff4d4f;
+
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      float: right;
+    }
     i {
       margin-right: 8px;
       font-size: 1.2rem;
@@ -264,8 +280,7 @@
           button {
             max-width: 25rem;
             width: 50%;
-            margin-left : 0.5rem;
-    
+            margin-left: 0.5rem;
           }
         }
         .section1Right {

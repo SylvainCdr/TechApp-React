@@ -84,6 +84,14 @@ export default function InterventionReport() {
         <i className="fa-solid fa-file-pdf"></i> Télécharger{" "}
       </button>
 
+      <span
+              className={
+                report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
+              }
+            >
+              {report.actionsDone?.length ? "Complété" : "À compléter"}
+            </span>
+
       {report ? (
         <div className={styles.reportItem}>
           <h2>

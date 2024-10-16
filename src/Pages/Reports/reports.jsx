@@ -20,65 +20,60 @@ const Reports = () => {
   const reportsPerPage = 10; // Nombre de rapports par page
   const [allReports, setAllReports] = useState([]);
 
-
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
     : [];
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const reportsQuery = query(
-            collection(db, "interventionReports"),
-            orderBy("interventionStartDate", "desc") // Trie par interventionStartDate
-          );
-          const reportsSnapshot = await getDocs(reportsQuery);
-          const reportsList = reportsSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          
-          // Initialisez both states reports et allReports avec les données récupérées
-          setReports(reportsList);
-          setAllReports(reportsList);
-    
-          const techniciansSnapshot = await getDocs(
-            collection(db, "technicians")
-          );
-          const techniciansList = techniciansSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            name: `${doc.data().firstName} ${doc.data().lastName}`,
-            urlPhoto: doc.data().urlPhoto,
-          }));
-          setTechnicians(techniciansList);
-        } catch (error) {
-          console.error("Erreur lors de la récupération des données : ", error);
-          Swal.fire(
-            "Erreur",
-            "Une erreur est survenue lors de la récupération des données.",
-            "error"
-          );
-        }
-      };
-    
-      fetchData();
-    }, []);
-    
-
-
-    const filterReportsByUser = (e) => {
-      const selectedTechnician = e.target.value;
-      if (selectedTechnician === "all") {
-        setReports(allReports); // Rétablir toutes les missions non filtrées
-      } else {
-        const filteredReports = allReports.filter((report) =>
-          report.intervenants.includes(selectedTechnician)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const reportsQuery = query(
+          collection(db, "interventionReports"),
+          orderBy("interventionStartDate", "desc") // Trie par interventionStartDate
         );
-        setReports(filteredReports);
+        const reportsSnapshot = await getDocs(reportsQuery);
+        const reportsList = reportsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // Initialisez both states reports et allReports avec les données récupérées
+        setReports(reportsList);
+        setAllReports(reportsList);
+
+        const techniciansSnapshot = await getDocs(
+          collection(db, "technicians")
+        );
+        const techniciansList = techniciansSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: `${doc.data().firstName} ${doc.data().lastName}`,
+          urlPhoto: doc.data().urlPhoto,
+        }));
+        setTechnicians(techniciansList);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données : ", error);
+        Swal.fire(
+          "Erreur",
+          "Une erreur est survenue lors de la récupération des données.",
+          "error"
+        );
       }
     };
-    
 
+    fetchData();
+  }, []);
+
+  const filterReportsByUser = (e) => {
+    const selectedTechnician = e.target.value;
+    if (selectedTechnician === "all") {
+      setReports(allReports); // Rétablir toutes les missions non filtrées
+    } else {
+      const filteredReports = allReports.filter((report) =>
+        report.intervenants.includes(selectedTechnician)
+      );
+      setReports(filteredReports);
+    }
+  };
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -130,7 +125,11 @@ const Reports = () => {
 
       <div className={styles.filterReports}>
         <label htmlFor="technician">Filtrer par technicien :</label>
-        <select name="technician" id="technician" onChange={filterReportsByUser}>
+        <select
+          name="technician"
+          id="technician"
+          onChange={filterReportsByUser}
+        >
           <option value="all">Tous</option>
           {technicians.map((technician) => (
             <option key={technician.id} value={technician.id}>
@@ -139,9 +138,6 @@ const Reports = () => {
           ))}
         </select>
       </div>
-
-
-   
 
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
@@ -291,8 +287,8 @@ const Reports = () => {
                 </p>
                 <p>
                   {" "}
-                  <i className="fa-solid fa-clock"></i> Durée de l'intervention (en
-                  heures) : {report.interventionDuration || "Non précisé"}{" "}
+                  <i className="fa-solid fa-clock"></i> Durée de l'intervention
+                  (en heures) : {report.interventionDuration || "Non précisé"}{" "}
                 </p>
                 <p>
                   <i className="fa-solid fa-triangle-exclamation"></i>{" "}
@@ -308,7 +304,8 @@ const Reports = () => {
 
               {report.isSigned && ( // badge signé
                 <span className={styles.badgeSigned}>
-                  <i className="fa-solid fa-circle-check"></i> Signé par le client
+                  <i className="fa-solid fa-circle-check"></i> Signé par le
+                  client
                 </span>
               )}
 

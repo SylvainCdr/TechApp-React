@@ -5,7 +5,6 @@ import { db, auth } from "../../firebase/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 
-
 export default function Mission() {
   const { missionId } = useParams();
   const [mission, setMission] = useState(null);
@@ -95,21 +94,24 @@ export default function Mission() {
     return user ? user.email : "Email inconnu";
   };
 
-
-
-
   useEffect(() => {
     fetchMission();
     fetchTechnicians();
     fetchUsers();
   }, []);
 
+  //fonction pour savoir si la date d intervention de la mission est passée
+  const isInterventionDatePassed = (mission) => {
+    const currentDate = new Date();
+    const interventionEndDate = new Date(mission.interventionEndDate);
+    return currentDate > interventionEndDate;
+  };
+
   return (
     <div className={styles.missionContainer} id="mission-content">
       <h1>Fiche Mission N° {missionId}</h1>
       {loading && <p>Chargement en cours...</p>}
       {error && <p>{error}</p>}
-
 
       {mission && (
         <div className={styles.missionItem}>
@@ -135,6 +137,13 @@ export default function Mission() {
                   "fr-FR"
                 )}`}{" "}
           </p>
+          {/* // badge avec a venir ou passée */}
+          {isInterventionDatePassed(mission) ? (
+            <span className={styles.passedBadge}>Passée</span>
+          ) : (
+            <span className={styles.upcomingBadge}>À venir</span>
+          )}
+
           <br />
 
           <p>
@@ -250,9 +259,7 @@ export default function Mission() {
                 <i className="fa-solid fa-circle-info"></i>{" "}
                 {mission.comments || "Aucun commentaire"}
               </p>
-              
 
-             
               {mission.pjSupplementaires ? (
                 <a
                   href={mission.pjSupplementaires}
@@ -260,15 +267,12 @@ export default function Mission() {
                   rel="noreferrer"
                   className={styles.pjSupplementairesLink}
                 >
-                  <i className="fa-solid fa-file-pdf"></i> Voir la pièce
-                  jointe supplémentaire
+                  <i className="fa-solid fa-file-pdf"></i> Voir la pièce jointe
+                  supplémentaire
                 </a>
               ) : (
                 <p>Aucune pièce jointe supplémentaire</p>
               )}
-                
-
-
             </div>
 
             <div className={styles.section3Right}>

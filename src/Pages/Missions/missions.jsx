@@ -21,40 +21,36 @@ export default function Missions() {
   const missionsPerPage = 10; // Nombre de missions par page
   const [allMissions, setAllMissions] = useState([]);
 
- 
-
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
     : [];
 
-    const fetchMissions = async () => {
-      try {
-        const q = query(collection(db, "missions"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        const missionsList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setMissions(missionsList);
-        setAllMissions(missionsList); // Stocker toutes les missions non filtrées
-      } catch (error) {
-        console.error("Erreur lors de la récupération des missions : ", error);
-      }
-    };
+  const fetchMissions = async () => {
+    try {
+      const q = query(collection(db, "missions"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+      const missionsList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMissions(missionsList);
+      setAllMissions(missionsList); // Stocker toutes les missions non filtrées
+    } catch (error) {
+      console.error("Erreur lors de la récupération des missions : ", error);
+    }
+  };
 
-    const filterMissionsByUser = (e) => {
-      const selectedTechnician = e.target.value;
-      if (selectedTechnician === "all") {
-        setMissions(allMissions); // Rétablir toutes les missions non filtrées
-      } else {
-        const filteredMissions = allMissions.filter((mission) =>
-          mission.intervenants.includes(selectedTechnician)
-        );
-        setMissions(filteredMissions);
-      }
-    };
-    
-    
+  const filterMissionsByUser = (e) => {
+    const selectedTechnician = e.target.value;
+    if (selectedTechnician === "all") {
+      setMissions(allMissions); // Rétablir toutes les missions non filtrées
+    } else {
+      const filteredMissions = allMissions.filter((mission) =>
+        mission.intervenants.includes(selectedTechnician)
+      );
+      setMissions(filteredMissions);
+    }
+  };
 
   // Fonction pour récupérer les techniciens depuis Firestore
   const fetchTechnicians = async () => {
@@ -149,6 +145,13 @@ export default function Missions() {
     }
   };
 
+  //fonction pour savoir si la date d intervention de la mission est passée
+  const isInterventionDatePassed = (mission) => {
+    const currentDate = new Date();
+    const interventionEndDate = new Date(mission.interventionEndDate);
+    return currentDate > interventionEndDate;
+  };
+
   return (
     <div className={styles.missionsContainer}>
       <h1>Fiches Missions</h1>
@@ -203,6 +206,14 @@ export default function Missions() {
                     mission.interventionEndDate
                   ).toLocaleDateString("fr-FR")}`}
             </p>
+
+            {/* // badge avec a venir ou passée */}
+            {isInterventionDatePassed(mission) ? (
+              <span className={styles.passedBadge}>Passée</span>
+            ) : (
+              <span className={styles.upcomingBadge}>À venir</span>
+            )}
+
             <br />
             <p>
               <i className="fa-solid fa-folder-plus"></i>Mission créée par :{" "}

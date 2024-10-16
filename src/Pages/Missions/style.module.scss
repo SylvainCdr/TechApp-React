@@ -30,30 +30,25 @@
 
   .filterMissions {
     float: right;
-    
 
     label {
       font-size: 1.1em;
       margin-right: 10px;
-      color : white ;
-  
+      color: white;
     }
     select {
       width: 100%;
       padding: 7px;
       font-size: 1em;
-      border : none ;
+      border: none;
       border-radius: 5px;
       -webkit-border-radius: 5px;
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
       -o-border-radius: 5px;
       background-color: white;
-
-  
-}
+    }
   }
-
 
   .missionsList {
     list-style: none;
@@ -99,6 +94,23 @@
         color: #0048fd;
         font-size: 1.1rem;
         font-weight: 600;
+      }
+
+      .upcomingBadge {
+        color: #03c113;
+        font-size: 2.2rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        float: right;
+      }
+
+      .passedBadge {
+        color: #ff4d4f;
+
+        font-size: 2.2rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        float: right;
       }
       i {
         margin-right: 8px;
@@ -158,6 +170,7 @@
       .section2 {
         width: 100%;
         display: flex;
+        display: none;
 
         .section2Left {
           width: 50%;
@@ -200,7 +213,7 @@
 
         a {
           padding: 10px 5px;
-          width: 25%;
+          width: 20%;
           text-align: center;
           background-color: #007bff;
           color: white;
@@ -268,18 +281,15 @@
 
 @media (max-width: 900px) {
   .missionsContainer {
-    .filterMissions { 
-      float : none ;
-      margin-bottom : 20px ;
+    .filterMissions {
+      float: none;
+      margin-bottom: 20px;
     }
     .missionsList {
       list-style: none;
       padding: 0;
 
-
-
       .missionItem {
-
         h2 {
           font-size: 1.1em;
         }
