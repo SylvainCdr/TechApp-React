@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { db, auth } from "../../firebase/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
+import AOS from "aos";
 
 export default function Mission() {
   const { missionId } = useParams();
@@ -107,21 +108,25 @@ export default function Mission() {
     return currentDate > interventionEndDate;
   };
 
+  useEffect(() => {
+    AOS.init({ duration: 1300 });
+  }, []);
+
   return (
-    <div className={styles.missionContainer} id="mission-content">
+    <div className={styles.missionContainer} id="mission-content" >
       <h1>Fiche Mission N° {missionId}</h1>
       {loading && <p>Chargement en cours...</p>}
       {error && <p>{error}</p>}
 
       {mission && (
-        <div className={styles.missionItem}>
+        <div className={styles.missionItem} >
           <h2>
             {mission.createdAt?.toDate().toLocaleDateString()} -{" "}
             {mission.site.siteName}
             {"  "}/{"  "}
             {mission.client.nomEntreprise}
           </h2>
-          <p className={styles.interventionDate}>
+          <p className={styles.interventionDate} data-aos="fade-down">
             <i className="fa-solid fa-calendar-days"></i> Date(s) d'intervention
             : {""}
             {new Date(mission.interventionStartDate).toLocaleDateString(
@@ -205,10 +210,10 @@ export default function Mission() {
                 {mission.site.telContact}
               </p>
 
-              <button onClick={handleCopy} className={styles.copyButton}>
+              <button onClick={handleCopy} className={styles.copyButton} data-aos="fade-right">
                 Copier l'adresse
               </button>
-              <button onClick={callContact} className={styles.callButton}>
+              <button onClick={callContact} className={styles.callButton} data-aos="fade-right">
                 Appeler le contact
               </button>
             </ul>
@@ -225,6 +230,7 @@ export default function Mission() {
                       <img
                         src={getTechnicianPhotoURL(intervenantId)}
                         alt={`Technicien`}
+                        data-aos="flip-down"
                       />
                     </div>
                   ))
@@ -309,10 +315,10 @@ export default function Mission() {
 
         <div className={styles.securityRules}>
           <div className={styles.icons}>
-            <img src="/assets/pharmacy.png" alt="" />
-            <img src="/assets/panic.png" alt="" />
-            <img src="/assets/help.png" alt="" />
-            <img src="/assets/call.png" alt="" />
+            <img src="/assets/pharmacy.png" alt="" data-aos="zoom-in-right"/>
+            <img src="/assets/panic.png" alt="" data-aos="zoom-in-right"/>
+            <img src="/assets/help.png" alt="" data-aos="zoom-in-right"/>
+            <img src="/assets/call.png" alt="" data-aos="zoom-in-right"/>
           </div>
           <div className={styles.text}>
             <p>
@@ -340,6 +346,7 @@ export default function Mission() {
           src="/assets/numerosUrgence.jpg"
           className={styles.numUrgence}
           alt=""
+          data-aos="zoom-in-left"
         />
       </div>
     </div>
