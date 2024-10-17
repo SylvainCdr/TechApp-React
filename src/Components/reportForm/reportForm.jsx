@@ -99,7 +99,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               800, // largeur
               800, // hauteur
               "JPEG", // format
-              50, // qualité
+              80, // qualité
               0, // rotation
               (uri) => {
                 resolve(uri); // Renvoie le fichier Blob
@@ -137,7 +137,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               800, // largeur
               800, // hauteur
               "JPEG", // format
-              50, // qualité
+              80, // qualité
               0, // rotation
               (uri) => {
                 resolve(uri); // Renvoie le fichier Blob
