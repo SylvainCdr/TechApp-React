@@ -351,7 +351,7 @@ export default function Sites() {
               </p>
             </div>
 
-            <div className={styles.buttons} data-aos="zoom-in">
+            <div className={styles.buttons}>
               <button
                 onClick={() => handleEdit(client)}
                 className={styles.editButton}

@@ -285,7 +285,7 @@ export default function TechniciansPage() {
               {" "}
               <i className="fa-solid fa-at"></i>Email : {technician.email}
             </p>
-            <div className={styles.buttons} data-aos="zoom-in">
+            <div className={styles.buttons} >
               <button
                 className={styles.editButton}
                 onClick={() => handleEdit(technician)}

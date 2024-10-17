@@ -173,7 +173,7 @@ const Reports = () => {
             <span
               className={
                 report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
-              }
+              } data-aos="fade-left"
             >
               {report.actionsDone?.length ? "Complété" : "À compléter"}
             </span>
@@ -313,7 +313,7 @@ const Reports = () => {
               </div>
             </div>
 
-            <div className={styles.section3} data-aos="zoom-in">
+            <div className={styles.section3} >
               <Link to={`/report/${report.id}`} className={styles.viewButton}>
                 <i className="fa-solid fa-eye"></i>
               </Link>

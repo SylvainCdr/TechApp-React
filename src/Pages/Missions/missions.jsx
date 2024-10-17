@@ -211,9 +211,9 @@ export default function Missions() {
 
             {/* // badge avec a venir ou passée */}
             {isInterventionDatePassed(mission) ? (
-              <span className={styles.passedBadge}>Passée</span>
+              <span className={styles.passedBadge} data-aos="fade-left">Passée</span>
             ) : (
-              <span className={styles.upcomingBadge}>À venir</span>
+              <span className={styles.upcomingBadge} data-aos="fade-left">À venir</span>
             )}
             {/* <p className={styles.interventionDate}>
               <i className="fa-solid fa-calendar-days"></i>Date(s)
@@ -249,6 +249,7 @@ export default function Missions() {
                         src={mission.client.logoEntreprise}
                         alt="logo entreprise"
                         className={styles.logoEntreprise}
+                        data-aos="zoom-in"
                       />
                     )}
                   </li>
@@ -335,7 +336,7 @@ export default function Missions() {
               </div>
             </div>
 
-            <div className={styles.section3} data-aos="zoom-in" >
+            <div className={styles.section3} >
               <Link
                 to={`/mission/${mission.id}`}
                 className={styles.viewMission} 
