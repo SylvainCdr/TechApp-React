@@ -54,10 +54,10 @@ function Homepage() {
           <Link to="/reports">Rapports d'interventions</Link>
         </motion.div>
         <motion.div variants={item}>
-          <Link to="/incidents">Fiches incidents</Link>
+          <Link to="/search">Rechercher un Rapport</Link>
         </motion.div>
         <motion.div variants={item}>
-          <Link to="/tech">Techniciens</Link>
+        <Link to="/sites">Sites / Clients</Link>
         </motion.div>
       </motion.div>
     </motion.div>

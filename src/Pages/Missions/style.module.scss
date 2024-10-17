@@ -77,6 +77,10 @@
         -moz-border-radius: 5px;
         -ms-border-radius: 5px;
         -o-border-radius: 5px;
+        .interventionDate {
+          color: #ffe600;
+          font-weight: 500;
+        }
       }
 
       h3 {
@@ -92,11 +96,7 @@
         margin-bottom: 1rem;
         margin-top: 1rem;
       }
-      .interventionDate {
-        color: #ffe600;
-        font-size: 1.1rem;
-        font-weight: 500;
-      }
+     
 
       .upcomingBadge {
         color: #03c113;
