@@ -420,7 +420,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               required
             />
 
-            <label>Ajouter une photo pour cette action :</label>
+            <label>Ajouter des photos à l'action (portrait idéalement) :</label>
             <input
               type="file"
               multiple
@@ -459,7 +459,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               }}
             />
 
-            <label>Ajouter une photo pour cette remarque :</label>
+            <label>Ajouter des photos à la remarque (portrait idéalement) :</label>
             <input
               type="file"
               multiple
