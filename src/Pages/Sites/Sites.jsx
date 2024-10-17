@@ -17,7 +17,6 @@ import {
 } from "firebase/storage";
 import styles from "./style.module.scss";
 import AOS from "aos";
-import { use } from "framer-motion/client";
 
 export default function Sites() {
   const [clients, setClients] = useState([]);
@@ -40,7 +39,6 @@ export default function Sites() {
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
     : [];
 
-  // Fonction pour récupérer les clients depuis Firestore
   const fetchClients = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "clients"));
@@ -48,7 +46,6 @@ export default function Sites() {
         id: doc.id,
         ...doc.data(),
       }));
-      // on trie par nomEntreprise
       clientsList.sort((a, b) => a.nomEntreprise.localeCompare(b.nomEntreprise));
       setClients(clientsList);
     } catch (error) {
@@ -59,10 +56,16 @@ export default function Sites() {
   useEffect(() => {
     fetchClients();
     AOS.init({ duration: 1500 });
-    
   }, []);
 
-  // Fonction pour gérer la soumission du formulaire
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -71,18 +74,13 @@ export default function Sites() {
       let planPreventionURL = formData.planPrevention;
 
       if (logo) {
-        // Téléversement du logo dans Firebase Storage
         const logoRef = ref(storage, `clients/${logo.name}`);
-        await uploadBytes(logoRef, logo); // Téléverse le fichier
-        logoURL = await getDownloadURL(logoRef); // Récupère l'URL téléchargeable
+        await uploadBytes(logoRef, logo);
+        logoURL = await getDownloadURL(logoRef);
       }
 
       if (planPrevention) {
-        // Téléversement du plan de prévention dans Firebase Storage
-        const planPreventionRef = ref(
-          storage,
-          `plansPrevention/${planPrevention.name}`
-        );
+        const planPreventionRef = ref(storage, `plansPrevention/${planPrevention.name}`);
         await uploadBytes(planPreventionRef, planPrevention);
         planPreventionURL = await getDownloadURL(planPreventionRef);
       }
@@ -94,40 +92,19 @@ export default function Sites() {
       };
 
       if (editId) {
-        // Mise à jour d'un client existant
         const clientRef = doc(db, "clients", editId);
         await updateDoc(clientRef, data);
-        Swal.fire({
-          title: "Succès",
-          text: "Client mis à jour avec succès !",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
+        Swal.fire("Succès", "Client mis à jour avec succès !", "success");
       } else {
-        // Création d'un nouveau client
         await addDoc(collection(db, "clients"), data);
-        Swal.fire({
-          title: "Succès",
-          text: "Client ajouté avec succès !",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
+        Swal.fire("Succès", "Client ajouté avec succès !", "success");
       }
 
-      // Réinitialisation du formulaire et des états
       resetForm();
       fetchClients();
     } catch (error) {
-      console.error(
-        "Erreur lors de l'ajout ou de la mise à jour du client : ",
-        error
-      );
-      Swal.fire({
-        title: "Erreur",
-        text: "Une erreur est survenue lors de la soumission du formulaire.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      console.error("Erreur lors de l'ajout ou de la mise à jour du client : ", error);
+      Swal.fire("Erreur", "Une erreur est survenue lors de la soumission du formulaire.", "error");
     }
   };
 
@@ -148,7 +125,6 @@ export default function Sites() {
     setShowForm(false);
   };
 
-  // Fonction pour remplir le formulaire pour la modification
   const handleEdit = (client) => {
     setFormData({
       nomEntreprise: client.nomEntreprise,
@@ -164,14 +140,12 @@ export default function Sites() {
     setShowForm(true);
   };
 
-  // Fonction pour gérer le changement de logo
   const handleLogoChange = (e) => {
     if (e.target.files[0]) {
       setLogo(e.target.files[0]);
     }
   };
 
-  // Fonction pour gérer la suppression d'un client
   const handleDelete = async (client) => {
     const result = await Swal.fire({
       title: "Êtes-vous sûr ?",
@@ -186,7 +160,6 @@ export default function Sites() {
 
     if (result.isConfirmed) {
       try {
-        // Supprimer le logo associé
         if (client.logoEntreprise) {
           const logoRef = ref(storage, client.logoEntreprise);
           await deleteObject(logoRef);
@@ -196,7 +169,6 @@ export default function Sites() {
           await deleteObject(planPreventionRef);
         }
 
-        // Supprimer le client de Firestore
         const clientRef = doc(db, "clients", client.id);
         await deleteDoc(clientRef);
 
@@ -204,107 +176,99 @@ export default function Sites() {
         fetchClients();
       } catch (error) {
         console.error("Erreur lors de la suppression du client : ", error);
-        Swal.fire({
-          title: "Erreur",
-          text: "Une erreur est survenue lors de la suppression.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        Swal.fire("Erreur", "Une erreur est survenue lors de la suppression.", "error");
       }
     }
   };
 
-
-
-  // Composant Modal
-  const Modal = ({ show, onClose }) => {
-    if (!show) return null;
-
-    return (
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalContent}>
-          <span className={styles.closeButton} onClick={onClose}>
-            &times;
-          </span>
-          <h2>{editId ? "Modifier le Site" : "Ajouter un Site"}</h2>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            {/* Les champs du formulaire ici */}
-            <div>
-              <label>Nom du Site :</label>
-              <input
-                type="text"
-                value={formData.siteName}
-                onChange={(e) =>
-                  setFormData({ ...formData, siteName: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div>
-              <label>Nom du client :</label>
-              <input
-                type="text"
-                value={formData.nomEntreprise}
-                onChange={(e) =>
-                  setFormData({ ...formData, nomEntreprise: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div>
-              <label>Téléphone :</label>
-              <input
-                type="tel"
-                value={formData.tel}
-                onChange={(e) =>
-                  setFormData({ ...formData, tel: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div>
-              <label>Email :</label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div>
-              <label>Adresse du site :</label>
-              <input
-                type="text"
-                value={formData.siteAddress}
-                onChange={(e) =>
-                  setFormData({ ...formData, siteAddress: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div>
-              <label>Logo de l'entreprise :</label>
-              <input type="file" onChange={handleLogoChange} />
-            </div>
-            <div>
-              <label>Plan de prévention :</label>
-              <input
-                type="file"
-                onChange={(e) => setPlanPrevention(e.target.files[0])}
-              />
-            </div>
-            <button type="submit">Soumettre</button>
-          </form>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className={styles.clientsContainer}>
-      <Modal show={showForm} onClose={resetForm} />
+      {showForm && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <span className={styles.closeButton} onClick={resetForm}>
+              &times;
+            </span>
+            <h2>{editId ? "Modifier le Site" : "Ajouter un Site"}</h2>
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div>
+                <label>Nom du Site :</label>
+                <input
+                  type="text"
+                  name="siteName"
+                  value={formData.siteName}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Nom du client :</label>
+                <input
+                  type="text"
+                  name="nomEntreprise"
+                  value={formData.nomEntreprise}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Téléphone :</label>
+                <input
+                  type="tel"
+                  name="tel"
+                  value={formData.tel}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Email :</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Adresse du site :</label>
+                <input
+                  type="text"
+                  name="siteAddress"
+                  value={formData.siteAddress}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Logo de l'entreprise :</label>
+                <input type="file" onChange={handleLogoChange} />
+              </div>
+              <div>
+                <label>Plan de prévention :</label>
+                <input
+                  type="file"
+                  onChange={(e) => setPlanPrevention(e.target.files[0])}
+                />
+              </div>
+              <div>
+                <label>Commercial(e) :</label>
+                <input
+                  type="text"
+                  name="commercial"
+                  value={formData.commercial}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <button type="submit">Soumettre</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+
       <h1>Gestion des Sites</h1>
       <button
         onClick={() => setShowForm(true)}
