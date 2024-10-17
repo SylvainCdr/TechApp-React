@@ -4,6 +4,7 @@ import { db } from "../../firebase/firebase";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import styles from "./style.module.scss";
 import generateReportPdf from "../../utils/pdfGenerator";
+import AOS from "aos";
 
 export default function InterventionReport() {
   const { reportId } = useParams(); // Récupérer l'ID du rapport depuis l'URL
@@ -58,7 +59,13 @@ export default function InterventionReport() {
   useEffect(() => {
     fetchReport();
     fetchTechnicians();
+
+
   }, [reportId]);
+
+  useEffect(() => {
+    AOS.init({ duration: 1500 });
+  }, []);
 
   if (loading) {
     return <p>Chargement en cours...</p>;
@@ -85,6 +92,7 @@ export default function InterventionReport() {
         className={
           report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
         }
+        data-aos="fade-down"
       >
         {report.actionsDone?.length ? "Complété" : "À compléter"}
       </span>
@@ -95,22 +103,24 @@ export default function InterventionReport() {
 
       {report ? (
         <div className={styles.reportItem}>
-          <h2>
-            {new Date(report.interventionStartDate).toLocaleDateString(
-              "fr-FR"
-            ) ===
-            new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
-              ? new Date(report.interventionStartDate).toLocaleDateString(
-                  "fr-FR"
-                ) // Si les dates sont identiques
-              : `${new Date(report.interventionStartDate).toLocaleDateString(
-                  "fr-FR"
-                )} / ${new Date(report.interventionEndDate).toLocaleDateString(
-                  "fr-FR"
-                )}`}{" "}
-            - {report.site.siteName} /{" "}
-            {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
-          </h2>
+               <h2>               <span className={styles.interventionDate}>
+
+{new Date(report.interventionStartDate).toLocaleDateString(
+  "fr-FR"
+) ===
+new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
+  ? new Date(report.interventionStartDate).toLocaleDateString(
+      "fr-FR"
+    ) // Si les dates sont identiques
+  : `${new Date(report.interventionStartDate).toLocaleDateString(
+      "fr-FR"
+    )} / ${new Date(
+      report.interventionEndDate
+    ).toLocaleDateString("fr-FR")}`}{" "}
+</span>
+- {report.site.siteName} /{" "}
+{report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+</h2>
           {!report.isSigned && (
             <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>
               Remplir / Modifier{" "}
@@ -136,6 +146,7 @@ export default function InterventionReport() {
                         src={report.client.logoEntreprise}
                         alt="logo entreprise"
                         className={styles.logoEntreprise}
+                         data-aos="zoom-in"
                       />
                     )}
                 </li>
@@ -186,7 +197,8 @@ export default function InterventionReport() {
                       </p>
                       <img
                         src={getTechnicianPhotoURL(intervenantId)}
-                        alt={`Photo de technicien`}
+                        alt="technicien"
+                        data-aos="zoom-in"
                       />
                     </div>
                   ))

@@ -116,7 +116,7 @@ const Reports = () => {
 
   useEffect(() => {
     AOS.init({
-      duration: 1300,
+      duration: 1500,
     });
   }, []);
 
@@ -199,6 +199,7 @@ const Reports = () => {
                         src={report.client.logoEntreprise}
                         alt="logo entreprise"
                         className={styles.logoEntreprise}
+                        data-aos="zoom-in"
                       />
                     )}
                   </li>

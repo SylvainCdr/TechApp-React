@@ -1,7 +1,7 @@
 import styles from "./style.module.scss";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { db, auth } from "../../firebase/firebase";
+import { db } from "../../firebase/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 import AOS from "aos";
@@ -109,7 +109,7 @@ export default function Mission() {
   };
 
   useEffect(() => {
-    AOS.init({ duration: 1300 });
+    AOS.init({ duration: 1500 });
   }, []);
 
   return (
@@ -119,14 +119,24 @@ export default function Mission() {
       {error && <p>{error}</p>}
 
       {mission && (
-        <div className={styles.missionItem} >
+        <div className={styles.missionItem}  >
           <h2>
-            {mission.createdAt?.toDate().toLocaleDateString()} -{" "}
-            {mission.site.siteName}
-            {"  "}/{"  "}
-            {mission.client.nomEntreprise}
-          </h2>
-          <p className={styles.interventionDate} data-aos="fade-down">
+              <span className={styles.interventionDate}>
+               {new Date(mission.interventionStartDate).toLocaleDateString(
+                "fr-FR"
+              ) ===
+              new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
+                ? new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )
+                : `${new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )} - ${new Date(
+                    mission.interventionEndDate
+                  ).toLocaleDateString("fr-FR")}`}</span> -{" "}
+              {mission.site.siteName} / {mission.client.nomEntreprise}
+            </h2>
+          {/* <p className={styles.interventionDate} data-aos="fade-down">
             <i className="fa-solid fa-calendar-days"></i> Date(s) d'intervention
             : {""}
             {new Date(mission.interventionStartDate).toLocaleDateString(
@@ -141,12 +151,12 @@ export default function Mission() {
                 )} - ${new Date(mission.interventionEndDate).toLocaleDateString(
                   "fr-FR"
                 )}`}{" "}
-          </p>
+          </p> */}
           {/* // badge avec a venir ou passée */}
           {isInterventionDatePassed(mission) ? (
-            <span className={styles.passedBadge}>Passée</span>
+            <span className={styles.passedBadge} data-aos="fade-down">Passée</span>
           ) : (
-            <span className={styles.upcomingBadge}>À venir</span>
+            <span className={styles.upcomingBadge} data-aos="fade-down">À venir</span>
           )}
 
           <br />
@@ -176,6 +186,7 @@ export default function Mission() {
                         src={mission.client.logoEntreprise}
                         alt="logo entreprise"
                         className={styles.logoEntreprise}
+                        data-aos="zoom-out"
                       />
                     )}</p>
               <p>
@@ -230,7 +241,7 @@ export default function Mission() {
                       <img
                         src={getTechnicianPhotoURL(intervenantId)}
                         alt={`Technicien`}
-                        data-aos="flip-down"
+                        data-aos="zoom-out"
                       />
                     </div>
                   ))
@@ -279,6 +290,7 @@ export default function Mission() {
                   target="_blank"
                   rel="noreferrer"
                   className={styles.pjSupplementairesLink}
+                  
                 >
                   <i className="fa-solid fa-file-pdf"></i> Voir la pièce jointe
                   supplémentaire
@@ -296,6 +308,7 @@ export default function Mission() {
                   target="_blank"
                   rel="noreferrer"
                   className={styles.planPreventionLink}
+                 
                 >
                   <i className="fa-solid fa-file-pdf"></i> Voir le plan de
                   prévention

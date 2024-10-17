@@ -97,6 +97,10 @@
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
       -o-border-radius: 5px;
+      .interventionDate {
+        color: #ffe600;
+        font-weight: 500;
+      }
     }
 
     h4 {
@@ -285,7 +289,7 @@
 
       .section1 {
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
 
         .section1Left {
           width: 100%;
@@ -315,12 +319,16 @@
       .section2 {
         display: flex;
         flex-direction: column;
+        width: 100%;
 
         .section2Left {
           width: 100%;
         }
         .section2Right {
           width: 100%;
+          p {
+            font-size: 0.8em;
+          }
         }
 
         table {
@@ -336,11 +344,7 @@
           }
         }
 
-        .section2Right {
-          p {
-            font-size: 0.8em;
-          }
-        }
+       
       }
     }
   }

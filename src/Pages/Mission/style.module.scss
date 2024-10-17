@@ -34,15 +34,20 @@
     min-height: 60vh;
 
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       margin-bottom: 20px;
       text-align: center;
       background-color: var(--col2);
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 500;
       color: white;
       padding: 10px;
       border-radius: 8px;
+      .interventionDate {
+        color: #ffe600;
+        font-size: 1.4rem;
+        font-weight: 500;
+      }
     }
 
     h3 {
@@ -267,7 +272,12 @@
       padding: 10px;
 
       h2 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        .interventionDate {
+         
+          font-size: 1.1rem;
+          
+        }
       }
 
       .upcomingBadge {
@@ -289,7 +299,7 @@
       }
 
       .section1 {
-        flex-direction: column;
+        flex-direction: column-reverse;
 
         .section1Left {
           width: 100%;
