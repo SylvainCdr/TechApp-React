@@ -240,7 +240,7 @@ const generateReportPdf = async (report, technicians) => {
   const maxHeightPerPage = 260;
  // on définit la taille des images à afficher dans le tableau des photos et on respecte le ratio
   const imgWidthSmall = 90; // Largeur réduite des images lorsqu'elles sont affichées deux par ligne
-  const imgHeightSmall = 65; // Hauteur réduite des images
+  const imgHeightSmall = 180; // Hauteur réduite des images
 
   for (let index = 0; index < report.actionsDone.length; index++) {
     const action = report.actionsDone[index];
