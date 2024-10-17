@@ -151,7 +151,8 @@ const Reports = () => {
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
           <li key={report.id} className={styles.reportItem} data-aos="fade-up">
-            <h2>
+            <h2>               <span className={styles.interventionDate}>
+
               {new Date(report.interventionStartDate).toLocaleDateString(
                 "fr-FR"
               ) ===
@@ -164,6 +165,7 @@ const Reports = () => {
                   )} / ${new Date(
                     report.interventionEndDate
                   ).toLocaleDateString("fr-FR")}`}{" "}
+             </span>
               - {report.site.siteName} /{" "}
               {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
             </h2>
@@ -247,8 +249,8 @@ const Reports = () => {
                         </p>
                         <img
                           src={getTechnicianPhotoURL(intervenantId)}
-                          alt={`Photo de technicien`}
-                          data-aos="flip-down"
+                          alt="technicien"
+                         data-aos="zoom-in"
                         />
                       </div>
                     ))
@@ -310,16 +312,16 @@ const Reports = () => {
               </div>
             </div>
 
-            <div className={styles.section3}>
+            <div className={styles.section3} data-aos="zoom-in">
               <Link to={`/report/${report.id}`} className={styles.viewButton}>
-                <i className="fa-solid fa-eye" data-aos="zoom-in"></i>
+                <i className="fa-solid fa-eye"></i>
               </Link>
 
               {report.isSigned && ( // badge signé
                 <span className={styles.badgeSigned}>
                   <i
                     className="fa-solid fa-circle-check"
-                    data-aos="zoom-in"
+                    
                   ></i>{" "}
                   Signé par le client
                 </span>
@@ -334,7 +336,7 @@ const Reports = () => {
                   >
                     <i
                       className="fa-solid fa-pen-to-square"
-                      data-aos="zoom-in"
+                      
                     ></i>
                   </Link>
 
@@ -343,7 +345,7 @@ const Reports = () => {
                       className={styles.deleteButton}
                       onClick={() => deleteReport(report.id)}
                     >
-                      <i className="fa-solid fa-trash" data-aos="zoom-in"></i>
+                      <i className="fa-solid fa-trash" ></i>
                     </Link>
                   )}
                 </>

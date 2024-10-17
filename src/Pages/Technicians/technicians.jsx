@@ -16,7 +16,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import styles from "./style.module.scss";
-import { motion } from "framer-motion";
+import AOS from "aos";
 
 export default function TechniciansPage() {
   const [technicians, setTechnicians] = useState([]);
@@ -52,6 +52,8 @@ export default function TechniciansPage() {
 
   useEffect(() => {
     fetchTechnicians();
+    AOS.init({ duration: 1500 });
+
   }, []);
 
   // Fonction pour gérer la soumission du formulaire
@@ -260,18 +262,15 @@ export default function TechniciansPage() {
 
       <div className={styles.techniciansList}>
         {technicians.map((technician) => (
-          <div key={technician.id} className={styles.technicianItem} data-aos="fade-up-left">
+          <div key={technician.id} className={styles.technicianItem} data-aos="fade-up">
             <h2>
               {technician.firstName} {technician.lastName}
             </h2>
             {technician.urlPhoto && (
-              <motion.img
+              <img
                 src={technician.urlPhoto}
                 alt={`${technician.firstName} ${technician.lastName}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.5 }}
+                data-aos="zoom-out"
               />
             )}
             <p>
@@ -286,7 +285,7 @@ export default function TechniciansPage() {
               {" "}
               <i className="fa-solid fa-at"></i>Email : {technician.email}
             </p>
-            <div className={styles.buttons}>
+            <div className={styles.buttons} data-aos="zoom-in">
               <button
                 className={styles.editButton}
                 onClick={() => handleEdit(technician)}

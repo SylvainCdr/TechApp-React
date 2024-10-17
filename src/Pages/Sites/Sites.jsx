@@ -16,7 +16,8 @@ import {
   deleteObject,
 } from "firebase/storage";
 import styles from "./style.module.scss";
-import { motion } from "framer-motion";
+import AOS from "aos";
+import { use } from "framer-motion/client";
 
 export default function Sites() {
   const [clients, setClients] = useState([]);
@@ -57,6 +58,8 @@ export default function Sites() {
 
   useEffect(() => {
     fetchClients();
+    AOS.init({ duration: 1500 });
+    
   }, []);
 
   // Fonction pour gérer la soumission du formulaire
@@ -211,6 +214,8 @@ export default function Sites() {
     }
   };
 
+
+
   // Composant Modal
   const Modal = ({ show, onClose }) => {
     if (!show) return null;
@@ -310,29 +315,26 @@ export default function Sites() {
 
       <div className={styles.clientsList}>
         {clients.map((client) => (
-          <div key={client.id} className={styles.clientItem} data-aos="fade-up-left"
+          <div key={client.id} className={styles.clientItem} data-aos="fade-up"
          >
             <div className={styles.section1}>
               <h2>{client.siteName}</h2>
               <div className={styles.logoContainer}>
                 {client.logoEntreprise && (
-                  <motion.img
+                  <img
                     src={client.logoEntreprise}
                     alt={`Logo de ${client.nomEntreprise}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1.5 }}
+                data-aos="zoom-out"
                   />
                 )}
               </div>
             </div>
             <div className={styles.section2}>
-              <p>Client: {client.nomEntreprise}</p>
-              <p>Tel: {client.tel}</p>
-              <p>Email: {client.email}</p>
-              <p>Adresse : {client.siteAddress}</p>
-              <p>
+              <p><i className="fa-regular fa-id-card"></i> Client: {client.nomEntreprise}</p>
+              <p> <i className="fa-solid fa-phone"></i>Tel: {client.tel}</p>
+              <p> <i className="fa-solid fa-at"></i>Email: {client.email}</p>
+              <p> <i className="fa-solid fa-location-dot"></i> Adresse : {client.siteAddress}</p>
+              <p> <i class="fa-solid fa-file"></i>
                 Plan de prévention :{" "}
                 {client.planPrevention ? "" : "Non transmis"}
                 {client.planPrevention && (
@@ -345,11 +347,11 @@ export default function Sites() {
                     Consulter{" "}
                   </a>
                 )}
-                <p>Commercial(e) : {client.commercial}</p>
+                <p> <i class="fa-solid fa-user-tie"></i>Commercial(e) : {client.commercial}</p>
               </p>
             </div>
 
-            <div className={styles.buttons}>
+            <div className={styles.buttons} data-aos="zoom-in">
               <button
                 onClick={() => handleEdit(client)}
                 className={styles.editButton}

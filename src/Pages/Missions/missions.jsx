@@ -30,7 +30,7 @@ export default function Missions() {
 
   const fetchMissions = async () => {
     try {
-      const q = query(collection(db, "missions"), orderBy("createdAt", "desc"));
+      const q = query(collection(db, "missions"), orderBy("interventionEndDate", "desc"));
       const querySnapshot = await getDocs(q);
       const missionsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -193,7 +193,19 @@ export default function Missions() {
         data-aos="fade-up"
           >
             <h2>
-              {mission.createdAt.toDate().toLocaleDateString()} -{" "}
+              <span className={styles.interventionDate}>
+               {new Date(mission.interventionStartDate).toLocaleDateString(
+                "fr-FR"
+              ) ===
+              new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
+                ? new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )
+                : `${new Date(mission.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )} - ${new Date(
+                    mission.interventionEndDate
+                  ).toLocaleDateString("fr-FR")}`}</span> -{" "}
               {mission.site.siteName} / {mission.client.nomEntreprise}
             </h2>
 
@@ -203,7 +215,7 @@ export default function Missions() {
             ) : (
               <span className={styles.upcomingBadge}>À venir</span>
             )}
-            <p className={styles.interventionDate}>
+            {/* <p className={styles.interventionDate}>
               <i className="fa-solid fa-calendar-days"></i>Date(s)
               d'intervention :{" "}
               {new Date(mission.interventionStartDate).toLocaleDateString(
@@ -218,12 +230,12 @@ export default function Missions() {
                   )} - ${new Date(
                     mission.interventionEndDate
                   ).toLocaleDateString("fr-FR")}`}
-            </p>
+            </p> */}
 
             <br />
             <p>
               <i className="fa-solid fa-folder-plus"></i>Mission créée par :{" "}
-              {getUserEmail(mission.createdBy)}
+              {getUserEmail(mission.createdBy)} le {mission.createdAt.toDate().toLocaleDateString()}
             </p>
 
             <div className={styles.section1}>
@@ -287,8 +299,8 @@ export default function Missions() {
                         </p>
                         <img
                           src={getTechnicianPhotoURL(intervenantId)}
-                          alt={`Photo de technicien`}
-                          data-aos="flip-down"
+                          alt="Technicien"
+                          data-aos="zoom-in"
                         />
                       </div>
                     ))
@@ -323,29 +335,31 @@ export default function Missions() {
               </div>
             </div>
 
-            <div className={styles.section3} >
+            <div className={styles.section3} data-aos="zoom-in" >
               <Link
                 to={`/mission/${mission.id}`}
                 className={styles.viewMission} 
               
                 
               >
-                <i className="fa-solid fa-eye"   data-aos="zoom-in" ></i>
+                <i className="fa-solid fa-eye" ></i>
               </Link>
 
               <Link
                 to={`/missions/edit/${mission.id}`}
                 className={styles.editMission}
+                
               >
-                <i className="fa-solid fa-pen-to-square" data-aos="zoom-in"></i>
+                <i className="fa-solid fa-pen-to-square"></i>
               </Link>
 
               {authorizedUserIds.includes(auth.currentUser.uid) && (
                 <Link
                   className={styles.deleteMission}
                   onClick={() => deleteMission(mission.id)}
+                  
                 >
-                  <i className="fa-solid fa-trash" data-aos="zoom-in"></i>
+                  <i className="fa-solid fa-trash" ></i>
                 </Link>
               )}
             </div>
