@@ -97,23 +97,32 @@
         margin-top: 1rem;
       }
      
-
-      .upcomingBadge {
+      /* Styles pour les différents statuts */
+      .passee {
+        color: #ff4d4f;
+        font-size: 2.2rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        float: right;}
+       
+      
+      .ceJour {
         color: #03c113;
         font-size: 2.2rem;
         text-transform: uppercase;
         font-weight: 700;
         float: right;
       }
-
-      .passedBadge {
-        color: #ff4d4f;
-
+      
+      .aVenir {
+        color: orange; 
         font-size: 2.2rem;
         text-transform: uppercase;
         font-weight: 700;
         float: right;
       }
+
+    
       i {
         margin-right: 8px;
         font-size: 1.2rem;
@@ -307,12 +316,9 @@
           font-size: 1em;
         }
 
-        .upcomingBadge {
-          font-size: 1.4rem;
-        }
-
-        .passedBadge {
-          font-size: 1.4rem;
+        .passee, .ceJour , .aVenir  {
+          padding-top: 0.5rem;
+          font-size: 1.2rem;
         }
         .section1 {
           display: flex;

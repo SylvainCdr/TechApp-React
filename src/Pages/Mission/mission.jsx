@@ -112,6 +112,29 @@ export default function Mission() {
     AOS.init({ duration: 1500 });
   }, []);
 
+  
+  const isInterventionDateWhen = (mission) => {
+    const currentDate = new Date();
+    const interventionStartDate = new Date(mission.interventionStartDate);
+    const interventionEndDate = new Date(mission.interventionEndDate);
+  
+    // Supprime l'heure pour ne comparer que les dates
+    currentDate.setHours(0, 0, 0, 0);
+    interventionStartDate.setHours(0, 0, 0, 0);
+    interventionEndDate.setHours(0, 0, 0, 0);
+  
+    if (currentDate > interventionEndDate) {
+      return "passee";
+    } else if (
+      currentDate >= interventionStartDate &&
+      currentDate <= interventionEndDate
+    ) {
+      return "ceJour";
+    } else {
+      return "aVenir";
+    }
+  };
+
   return (
     <div className={styles.missionContainer} id="mission-content" >
       <h1>Fiche Mission N° {missionId}</h1>
@@ -153,12 +176,11 @@ export default function Mission() {
                 )}`}{" "}
           </p> */}
           {/* // badge avec a venir ou passée */}
-          {isInterventionDatePassed(mission) ? (
-            <span className={styles.passedBadge} data-aos="fade-down">Passée</span>
-          ) : (
-            <span className={styles.upcomingBadge} data-aos="fade-down">À venir</span>
-          )}
-
+          <span className={styles[isInterventionDateWhen(mission)]} data-aos="fade-up">
+  {isInterventionDateWhen(mission) === "passee" && "Passée"}
+  {isInterventionDateWhen(mission) === "ceJour" && "Aujourd'hui"}
+  {isInterventionDateWhen(mission) === "aVenir" && "À venir"}
+</span>
           <br />
 
           <p>

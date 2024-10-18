@@ -148,12 +148,40 @@ export default function Missions() {
     }
   };
 
-  //fonction pour savoir si la date d intervention de la mission est passée
-  const isInterventionDatePassed = (mission) => {
+  const isInterventionDateWhen = (mission) => {
     const currentDate = new Date();
+    const interventionStartDate = new Date(mission.interventionStartDate);
     const interventionEndDate = new Date(mission.interventionEndDate);
-    return currentDate > interventionEndDate;
+  
+    // Supprime l'heure pour ne comparer que les dates
+    currentDate.setHours(0, 0, 0, 0);
+    interventionStartDate.setHours(0, 0, 0, 0);
+    interventionEndDate.setHours(0, 0, 0, 0);
+  
+    if (currentDate > interventionEndDate) {
+      return "passee";
+    } else if (
+      currentDate >= interventionStartDate &&
+      currentDate <= interventionEndDate
+    ) {
+      return "ceJour";
+    } else {
+      return "aVenir";
+    }
   };
+  
+
+
+
+
+
+
+
+  // const isInterventionDatePassed = (mission) => {
+  //   const currentDate = new Date();
+  //   const interventionEndDate = new Date(mission.interventionEndDate);
+  //   return currentDate > interventionEndDate;
+  // };
 
   useEffect(() => {
     AOS.init({ duration: 1300 });
@@ -209,28 +237,14 @@ export default function Missions() {
               {mission.site.siteName} / {mission.client.nomEntreprise}
             </h2>
 
-            {/* // badge avec a venir ou passée */}
-            {isInterventionDatePassed(mission) ? (
-              <span className={styles.passedBadge} data-aos="fade-left">Passée</span>
-            ) : (
-              <span className={styles.upcomingBadge} data-aos="fade-left">À venir</span>
-            )}
-            {/* <p className={styles.interventionDate}>
-              <i className="fa-solid fa-calendar-days"></i>Date(s)
-              d'intervention :{" "}
-              {new Date(mission.interventionStartDate).toLocaleDateString(
-                "fr-FR"
-              ) ===
-              new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
-                ? new Date(mission.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  )
-                : `${new Date(mission.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  )} - ${new Date(
-                    mission.interventionEndDate
-                  ).toLocaleDateString("fr-FR")}`}
-            </p> */}
+            {/* // badge avec a venir, aujourd'hui ou passée */}
+            <span className={styles[isInterventionDateWhen(mission)]} data-aos="fade-up">
+  {isInterventionDateWhen(mission) === "passee" && "Passée"}
+  {isInterventionDateWhen(mission) === "ceJour" && "Aujourd'hui"}
+  {isInterventionDateWhen(mission) === "aVenir" && "À venir"}
+</span>
+
+        
 
             <br />
             <p>
