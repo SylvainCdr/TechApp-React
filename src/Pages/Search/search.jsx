@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./style.module.scss";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
+import AOS from "aos";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,6 +61,7 @@ export default function Search() {
 
   useEffect(() => {
     fetchReports();
+    AOS.init({ duration: 1500 });
 
   }, []);
 
@@ -91,7 +93,7 @@ export default function Search() {
         </thead>
         <tbody>
           {filteredReports.map((report) => (
-            <tr key={report.id}>
+            <tr key={report.id} >
               <td>{report.site?.siteName || "Non spécifié"} - {report.client?.nomEntreprise || "Non spécifié"}</td>
               <td>
                 {new Date(report.interventionStartDate).toLocaleDateString("fr-FR") ===
