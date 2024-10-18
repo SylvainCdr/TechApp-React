@@ -65,30 +65,30 @@
       font-size: 1.1rem;
       font-weight: 600;
     }
-        /* Styles pour les différents statuts */
-        .passee {
-          color: #ff4d4f;
-          font-size: 2.2rem;
-          text-transform: uppercase;
-          font-weight: 700;
-          float: right;}
-         
-        
-        .ceJour {
-          color: #03c113;
-          font-size: 2.2rem;
-          text-transform: uppercase;
-          font-weight: 700;
-          float: right;
-        }
-        
-        .aVenir {
-          color: orange; 
-          font-size: 2.2rem;
-          text-transform: uppercase;
-          font-weight: 700;
-          float: right;
-        }
+    /* Styles pour les différents statuts */
+    .passee {
+      color: #ff4d4f;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      float: right;
+    }
+
+    .ceJour {
+      color: #03c113;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      float: right;
+    }
+
+    .aVenir {
+      color: orange;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      float: right;
+    }
     i {
       margin-right: 8px;
       font-size: 1.2rem;
@@ -266,14 +266,12 @@
 }
 
 @media screen and (max-width: 900px) {
-
   .missionContainer {
     padding: 10px;
     padding-top: 6rem;
 
     h1 {
       font-size: 0.8rem;
-
     }
 
     .missionItem {
@@ -282,19 +280,16 @@
       h2 {
         font-size: 1.1rem;
         .interventionDate {
-         
           font-size: 1.1rem;
-          
         }
       }
 
-      .passee, .ceJour , .aVenir  {
+      .passee,
+      .ceJour,
+      .aVenir {
         padding-top: 0.5rem;
         font-size: 1.3rem;
       }
-       
-     
-   
 
       h3 {
         font-size: 1rem;
@@ -309,11 +304,11 @@
 
         .section1Left {
           width: 100%;
-          
+
           .logoEntreprise {
             height: 40px;
             background-color: white;
-            margin-left : 1.8rem;
+            margin-left: 1.8rem;
           }
 
           p,
@@ -331,7 +326,6 @@
           width: 100%;
 
           .technicians {
-
             .technicianItem {
               width: 100%;
 
@@ -348,8 +342,6 @@
 
         .section2Left {
           width: 100%;
-
-
         }
         .section2Right {
           width: 100%;
@@ -380,7 +372,6 @@
       }
 
       .securityRules {
-
         width: 100%;
 
         .icons {

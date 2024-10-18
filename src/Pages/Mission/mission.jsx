@@ -112,17 +112,16 @@ export default function Mission() {
     AOS.init({ duration: 1500 });
   }, []);
 
-  
   const isInterventionDateWhen = (mission) => {
     const currentDate = new Date();
     const interventionStartDate = new Date(mission.interventionStartDate);
     const interventionEndDate = new Date(mission.interventionEndDate);
-  
+
     // Supprime l'heure pour ne comparer que les dates
     currentDate.setHours(0, 0, 0, 0);
     interventionStartDate.setHours(0, 0, 0, 0);
     interventionEndDate.setHours(0, 0, 0, 0);
-  
+
     if (currentDate > interventionEndDate) {
       return "passee";
     } else if (
@@ -136,16 +135,16 @@ export default function Mission() {
   };
 
   return (
-    <div className={styles.missionContainer} id="mission-content" >
+    <div className={styles.missionContainer} id="mission-content">
       <h1>Fiche Mission N° {missionId}</h1>
       {loading && <p>Chargement en cours...</p>}
       {error && <p>{error}</p>}
 
       {mission && (
-        <div className={styles.missionItem}  >
+        <div className={styles.missionItem}>
           <h2>
-              <span className={styles.interventionDate}>
-               {new Date(mission.interventionStartDate).toLocaleDateString(
+            <span className={styles.interventionDate}>
+              {new Date(mission.interventionStartDate).toLocaleDateString(
                 "fr-FR"
               ) ===
               new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
@@ -156,9 +155,10 @@ export default function Mission() {
                     "fr-FR"
                   )} - ${new Date(
                     mission.interventionEndDate
-                  ).toLocaleDateString("fr-FR")}`}</span> -{" "}
-              {mission.site.siteName} / {mission.client.nomEntreprise}
-            </h2>
+                  ).toLocaleDateString("fr-FR")}`}
+            </span>{" "}
+            - {mission.site.siteName} / {mission.client.nomEntreprise}
+          </h2>
           {/* <p className={styles.interventionDate} data-aos="fade-down">
             <i className="fa-solid fa-calendar-days"></i> Date(s) d'intervention
             : {""}
@@ -176,11 +176,14 @@ export default function Mission() {
                 )}`}{" "}
           </p> */}
           {/* // badge avec a venir ou passée */}
-          <span className={styles[isInterventionDateWhen(mission)]} data-aos="fade-up">
-  {isInterventionDateWhen(mission) === "passee" && "Passée"}
-  {isInterventionDateWhen(mission) === "ceJour" && "Aujourd'hui"}
-  {isInterventionDateWhen(mission) === "aVenir" && "À venir"}
-</span>
+          <span
+            className={styles[isInterventionDateWhen(mission)]}
+            data-aos="fade-up"
+          >
+            {isInterventionDateWhen(mission) === "passee" && "Passée"}
+            {isInterventionDateWhen(mission) === "ceJour" && "Aujourd'hui"}
+            {isInterventionDateWhen(mission) === "aVenir" && "À venir"}
+          </span>
           <br />
 
           <p>
@@ -203,14 +206,17 @@ export default function Mission() {
           <div className={styles.section1}>
             <ul className={styles.section1Left}>
               <h3>Entreprise / Site</h3>
-              <p> {mission.client.logoEntreprise && (
-                      <img
-                        src={mission.client.logoEntreprise}
-                        alt="logo entreprise"
-                        className={styles.logoEntreprise}
-                        data-aos="zoom-out"
-                      />
-                    )}</p>
+              <p>
+                {" "}
+                {mission.client.logoEntreprise && (
+                  <img
+                    src={mission.client.logoEntreprise}
+                    alt="logo entreprise"
+                    className={styles.logoEntreprise}
+                    data-aos="zoom-out"
+                  />
+                )}
+              </p>
               <p>
                 <i className="fa-regular fa-building"></i> Client :{" "}
                 {mission.client.nomEntreprise}
@@ -243,10 +249,18 @@ export default function Mission() {
                 {mission.site.telContact}
               </p>
 
-              <button onClick={handleCopy} className={styles.copyButton} data-aos="fade-right">
+              <button
+                onClick={handleCopy}
+                className={styles.copyButton}
+                data-aos="fade-right"
+              >
                 Copier l'adresse
               </button>
-              <button onClick={callContact} className={styles.callButton} data-aos="fade-right">
+              <button
+                onClick={callContact}
+                className={styles.callButton}
+                data-aos="fade-right"
+              >
                 Appeler le contact
               </button>
             </ul>
@@ -312,7 +326,6 @@ export default function Mission() {
                   target="_blank"
                   rel="noreferrer"
                   className={styles.pjSupplementairesLink}
-                  
                 >
                   <i className="fa-solid fa-file-pdf"></i> Voir la pièce jointe
                   supplémentaire
@@ -330,7 +343,6 @@ export default function Mission() {
                   target="_blank"
                   rel="noreferrer"
                   className={styles.planPreventionLink}
-                 
                 >
                   <i className="fa-solid fa-file-pdf"></i> Voir le plan de
                   prévention
@@ -350,10 +362,10 @@ export default function Mission() {
 
         <div className={styles.securityRules}>
           <div className={styles.icons}>
-            <img src="/assets/pharmacy.png" alt="" data-aos="zoom-in-right"/>
-            <img src="/assets/panic.png" alt="" data-aos="zoom-in-right"/>
-            <img src="/assets/help.png" alt="" data-aos="zoom-in-right"/>
-            <img src="/assets/call.png" alt="" data-aos="zoom-in-right"/>
+            <img src="/assets/pharmacy.png" alt="" data-aos="zoom-in-right" />
+            <img src="/assets/panic.png" alt="" data-aos="zoom-in-right" />
+            <img src="/assets/help.png" alt="" data-aos="zoom-in-right" />
+            <img src="/assets/call.png" alt="" data-aos="zoom-in-right" />
           </div>
           <div className={styles.text}>
             <p>

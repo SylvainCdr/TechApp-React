@@ -14,8 +14,6 @@ import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-
-
 export default function Missions() {
   const [missions, setMissions] = useState([]);
   const [technicians, setTechnicians] = useState([]);
@@ -30,7 +28,10 @@ export default function Missions() {
 
   const fetchMissions = async () => {
     try {
-      const q = query(collection(db, "missions"), orderBy("interventionEndDate", "desc"));
+      const q = query(
+        collection(db, "missions"),
+        orderBy("interventionEndDate", "desc")
+      );
       const querySnapshot = await getDocs(q);
       const missionsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -152,12 +153,12 @@ export default function Missions() {
     const currentDate = new Date();
     const interventionStartDate = new Date(mission.interventionStartDate);
     const interventionEndDate = new Date(mission.interventionEndDate);
-  
+
     // Supprime l'heure pour ne comparer que les dates
     currentDate.setHours(0, 0, 0, 0);
     interventionStartDate.setHours(0, 0, 0, 0);
     interventionEndDate.setHours(0, 0, 0, 0);
-  
+
     if (currentDate > interventionEndDate) {
       return "passee";
     } else if (
@@ -169,13 +170,6 @@ export default function Missions() {
       return "aVenir";
     }
   };
-  
-
-
-
-
-
-
 
   // const isInterventionDatePassed = (mission) => {
   //   const currentDate = new Date();
@@ -187,12 +181,10 @@ export default function Missions() {
     AOS.init({ duration: 1300 });
   }, []);
 
-
-
   return (
     <div className={styles.missionsContainer}>
       <h1>Fiches Missions</h1>
-      <Link to="/missions/create" className={styles.createMission} >
+      <Link to="/missions/create" className={styles.createMission}>
         <i className="fa-solid fa-plus"></i> Créer une nouvelle fiche mission
       </Link>
 
@@ -218,38 +210,43 @@ export default function Missions() {
           <div
             className={styles.missionItem}
             key={mission.id}
-        data-aos="fade-up"
+            data-aos="fade-up"
           >
             <h2>
               <span className={styles.interventionDate}>
-               {new Date(mission.interventionStartDate).toLocaleDateString(
-                "fr-FR"
-              ) ===
-              new Date(mission.interventionEndDate).toLocaleDateString("fr-FR")
-                ? new Date(mission.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  )
-                : `${new Date(mission.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  )} - ${new Date(
-                    mission.interventionEndDate
-                  ).toLocaleDateString("fr-FR")}`}</span> -{" "}
-              {mission.site.siteName} / {mission.client.nomEntreprise}
+                {new Date(mission.interventionStartDate).toLocaleDateString(
+                  "fr-FR"
+                ) ===
+                new Date(mission.interventionEndDate).toLocaleDateString(
+                  "fr-FR"
+                )
+                  ? new Date(mission.interventionStartDate).toLocaleDateString(
+                      "fr-FR"
+                    )
+                  : `${new Date(
+                      mission.interventionStartDate
+                    ).toLocaleDateString("fr-FR")} - ${new Date(
+                      mission.interventionEndDate
+                    ).toLocaleDateString("fr-FR")}`}
+              </span>{" "}
+              - {mission.site.siteName} / {mission.client.nomEntreprise}
             </h2>
 
             {/* // badge avec a venir, aujourd'hui ou passée */}
-            <span className={styles[isInterventionDateWhen(mission)]} data-aos="fade-up">
-  {isInterventionDateWhen(mission) === "passee" && "Passée"}
-  {isInterventionDateWhen(mission) === "ceJour" && "Aujourd'hui"}
-  {isInterventionDateWhen(mission) === "aVenir" && "À venir"}
-</span>
-
-        
+            <span
+              className={styles[isInterventionDateWhen(mission)]}
+              data-aos="fade-up"
+            >
+              {isInterventionDateWhen(mission) === "passee" && "Passée"}
+              {isInterventionDateWhen(mission) === "ceJour" && "Aujourd'hui"}
+              {isInterventionDateWhen(mission) === "aVenir" && "À venir"}
+            </span>
 
             <br />
             <p>
               <i className="fa-solid fa-folder-plus"></i>Mission créée par :{" "}
-              {getUserEmail(mission.createdBy)} le {mission.createdAt.toDate().toLocaleDateString()}
+              {getUserEmail(mission.createdBy)} le{" "}
+              {mission.createdAt.toDate().toLocaleDateString()}
             </p>
 
             <div className={styles.section1}>
@@ -284,8 +281,8 @@ export default function Missions() {
                     {mission.site.siteName}
                   </li>
                   <li>
-                    <i className="fa-solid fa-location-dot"></i> Adresse
-                    : {mission.site.adresse}
+                    <i className="fa-solid fa-location-dot"></i> Adresse :{" "}
+                    {mission.site.adresse}
                   </li>
                   <li>
                     <i className="fa-regular fa-user"></i> Contact sur site :{" "}
@@ -304,10 +301,10 @@ export default function Missions() {
 
               <div className={styles.section1Right}>
                 <h3>Intervenant(s)</h3>
-                <div className={styles.technicians} >
+                <div className={styles.technicians}>
                   {mission.intervenants && mission.intervenants.length > 0 ? (
                     mission.intervenants.map((intervenantId, index) => (
-                      <div key={index} className={styles.technicianItem} >
+                      <div key={index} className={styles.technicianItem}>
                         <p>
                           {technicians.find((tech) => tech.id === intervenantId)
                             ?.name || "Nom inconnu"}
@@ -350,20 +347,17 @@ export default function Missions() {
               </div>
             </div>
 
-            <div className={styles.section3} >
+            <div className={styles.section3}>
               <Link
                 to={`/mission/${mission.id}`}
-                className={styles.viewMission} 
-              
-                
+                className={styles.viewMission}
               >
-                <i className="fa-solid fa-eye" ></i>
+                <i className="fa-solid fa-eye"></i>
               </Link>
 
               <Link
                 to={`/missions/edit/${mission.id}`}
                 className={styles.editMission}
-                
               >
                 <i className="fa-solid fa-pen-to-square"></i>
               </Link>
@@ -372,9 +366,8 @@ export default function Missions() {
                 <Link
                   className={styles.deleteMission}
                   onClick={() => deleteMission(mission.id)}
-                  
                 >
-                  <i className="fa-solid fa-trash" ></i>
+                  <i className="fa-solid fa-trash"></i>
                 </Link>
               )}
             </div>
