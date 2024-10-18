@@ -59,8 +59,6 @@ export default function InterventionReport() {
   useEffect(() => {
     fetchReport();
     fetchTechnicians();
-
-
   }, [reportId]);
 
   useEffect(() => {
@@ -103,24 +101,25 @@ export default function InterventionReport() {
 
       {report ? (
         <div className={styles.reportItem}>
-               <h2>               <span className={styles.interventionDate}>
-
-{new Date(report.interventionStartDate).toLocaleDateString(
-  "fr-FR"
-) ===
-new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
-  ? new Date(report.interventionStartDate).toLocaleDateString(
-      "fr-FR"
-    ) // Si les dates sont identiques
-  : `${new Date(report.interventionStartDate).toLocaleDateString(
-      "fr-FR"
-    )} / ${new Date(
-      report.interventionEndDate
-    ).toLocaleDateString("fr-FR")}`}{" "}
-</span>
-- {report.site.siteName} /{" "}
-{report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
-</h2>
+          <h2>
+            {" "}
+            <span className={styles.interventionDate}>
+              {new Date(report.interventionStartDate).toLocaleDateString(
+                "fr-FR"
+              ) ===
+              new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
+                ? new Date(report.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  ) // Si les dates sont identiques
+                : `${new Date(report.interventionStartDate).toLocaleDateString(
+                    "fr-FR"
+                  )} / ${new Date(
+                    report.interventionEndDate
+                  ).toLocaleDateString("fr-FR")}`}{" "}
+            </span>
+            - {report.site.siteName} /{" "}
+            {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
+          </h2>
           {!report.isSigned && (
             <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>
               Remplir / Modifier{" "}
@@ -141,14 +140,14 @@ new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
               <h4>Entreprise / Site</h4>
               <ul>
                 <li>
-                {report.client.logoEntreprise && (
-                      <img
-                        src={report.client.logoEntreprise}
-                        alt="logo entreprise"
-                        className={styles.logoEntreprise}
-                         data-aos="zoom-in"
-                      />
-                    )}
+                  {report.client.logoEntreprise && (
+                    <img
+                      src={report.client.logoEntreprise}
+                      alt="logo entreprise"
+                      className={styles.logoEntreprise}
+                      data-aos="zoom-in"
+                    />
+                  )}
                 </li>
                 <li>
                   <i className="fa-regular fa-building"></i> Client :{" "}

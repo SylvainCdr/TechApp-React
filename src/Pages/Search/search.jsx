@@ -113,7 +113,7 @@ export default function Search() {
               </td>
               <td className={styles.status}>
                 {report.actionsDone?.length ? (
-                  <span className={styles.done}>Complété</span>
+                  <span className={styles.done}>Complété <br /> <span className={styles.doneDate}> le {report.updatedAt.toDate().toLocaleDateString("fr-FR")} </span></span>
                 ) : (
                   <span className={styles.todo}>À compléter</span>
                 )}

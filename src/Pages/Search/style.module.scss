@@ -70,6 +70,12 @@
         -moz-border-radius: 4px;
         -ms-border-radius: 4px;
         -o-border-radius: 4px;
+        
+        .doneDate {
+          font-size: 0.8rem;
+          color: #555;
+          padding: 4px 5px;
+        }
       }
 
       .todo {
