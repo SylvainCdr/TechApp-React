@@ -244,15 +244,40 @@ const imgHeightSmall = 180; // Hauteur réduite des images
 
 for (let index = 0; index < report.actionsDone.length; index++) {
   const action = report.actionsDone[index];
-  const actionText = `Action ${index + 1} : ${action.description}`;
+  const actionText = `Action ${index + 1} :`;
+  const descriptionText = action.description;
 
-  // Affichage de la description de l'action au-dessus des photos
-  const wrappedText = doc.splitTextToSize(actionText, 190); // Utilise toute la largeur disponible
+  // Récupérer la largeur de la page et calculer 25% de cette largeur
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const rectWidth = pageWidth * 0.9; // 25% de la largeur de la page
+  
+  // Couleur de fond : bleu foncé (par exemple, #003366)
+  doc.setFillColor(0, 51, 102); // RGB du bleu foncé
+  
+  // Dessiner un rectangle derrière "Action *", avec 25% de la largeur de la page
+  doc.rect(10, yPosition, rectWidth, 6, 'F'); // Rectangle avec 25% de la largeur de la page et hauteur 6
+
+  // Couleur du texte "Action *" : blanc
+  doc.setTextColor(255, 255, 255); // Couleur blanche
+
+  // Afficher "Action *" en blanc sur fond bleu
   doc.setFontSize(12);
-  doc.text(wrappedText, 10, yPosition + 1); // Position de la description
+  doc.text(actionText, 11, yPosition + 5); // Position du texte légèrement ajustée
 
-  // Ajustez la position Y pour laisser de l'espace sous le texte avant les photos
-  yPosition += wrappedText.length * 6; // Ajuste la position Y en fonction du nombre de lignes de texte
+  // Remettre la couleur du texte à noir pour le reste de la description
+  doc.setTextColor(0, 0, 0); 
+
+  // Afficher la description sur une nouvelle ligne (juste en dessous de "Action *")
+  const wrappedDescription = doc.splitTextToSize(descriptionText, 190); // Utilise toute la largeur disponible
+  yPosition += 15; // Ajuste la position Y sous le titre "Action *"
+  doc.text(wrappedDescription, 10, yPosition);
+
+  // Ajustez la position Y en fonction de la hauteur du texte
+  yPosition += wrappedDescription.length * 6; // Ajuste la position Y en fonction du nombre de lignes de texte
+
+
+
+
 
   // Vérifiez si l'action a des photos associées
   if (action.photos && action.photos.length > 0) {
@@ -365,7 +390,7 @@ const hasRemarques =
   );
 
 if (hasRemarques) {
-  let yPositionRemark = 45; // Position initiale Y après le titre
+  let yPositionRemark = 50; // Position initiale Y après le titre
 
   doc.addPage(); // Ajoute la page 4
   doc.addImage(headerImg, "PNG", 0, 0, 220, 0);
@@ -387,13 +412,38 @@ if (hasRemarques) {
 
   for (let index = 0; index < report.remarques.length; index++) {
     const remarque = report.remarques[index];
-    const remarqueText = `Remarque ${index + 1} : ${remarque.remarque}`;
-
-    // Affichage de la remarque au-dessus des photos
-    const wrappedText = doc.splitTextToSize(remarqueText, 190); // Utilise toute la largeur pour la remarque
+    const remarqueText = `Remarque ${index + 1} :`;
+    const descriptionText = remarque.remarque;
+  
+    // Récupérer la largeur de la page et calculer 25% de cette largeur pour le rectangle
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const rectWidth = pageWidth * 0.9; // 25% de la largeur de la page
+  
+    // Couleur de fond : bleu foncé (par exemple, #003366)
+    doc.setFillColor(0, 51, 102); // RGB du bleu foncé
+    
+    // Dessiner un rectangle derrière "Remarque *", avec 25% de la largeur de la page
+    doc.rect(10, yPositionRemark, rectWidth, 6, 'F'); // Rectangle avec 25% de la largeur de la page et hauteur 6
+  
+    // Couleur du texte "Remarque *" : blanc
+    doc.setTextColor(255, 255, 255); // Couleur blanche
+  
+    // Afficher "Remarque *" en blanc sur fond bleu
     doc.setFontSize(12);
-    doc.text(wrappedText, 10, yPositionRemark + 10); // Position de la description au-dessus des photos
-    yPositionRemark += 30; // Incrémente la position Y après la remarque
+    doc.text(remarqueText, 11, yPositionRemark + 5); // Position du texte légèrement ajustée
+  
+    // Remettre la couleur du texte à noir pour le reste de la description
+    doc.setTextColor(0, 0, 0);
+  
+    // Afficher la description sur une nouvelle ligne (juste en dessous de "Remarque *")
+    const wrappedDescription = doc.splitTextToSize(descriptionText, 190); // Utilise toute la largeur disponible
+    yPositionRemark += 15; // Ajuste la position Y sous le titre "Remarque *"
+    doc.text(wrappedDescription, 10, yPositionRemark);
+  
+    // Ajustez la position Y en fonction de la hauteur du texte
+    yPositionRemark += wrappedDescription.length * 6; // Ajuste la position Y en fonction du nombre de lignes de texte
+  
+  
 
     // Vérifiez si la remarque a des photos associées
     if (remarque.photos && remarque.photos.length > 0) {
