@@ -231,15 +231,15 @@ doc.text(
 doc.setTextColor(0, 0, 0);
 
 doc.setFillColor(240, 240, 240); // Arrière-plan gris clair
-doc.rect(0, 30, 250, 15, "F"); // Rectangle rempli pour l'arrière-plan
+doc.rect(0, 26, 250, 10, "F"); // Rectangle rempli pour l'arrière-plan
 doc.setFontSize(18);
 doc.setTextColor(0, 0, 0); // Couleur du texte noire
-doc.text("Actions menées", 20, 40); // Ajuster la position du texte
+doc.text("Actions menées", 13, 34); // Ajuster la position du texte
 
-let yPosition = 50;
-const maxHeightPerPage = 300;
-const imgWidthSmall = 80; // Largeur réduite des images
-const imgHeightSmall = 160; // Hauteur réduite des images
+let yPosition = 37;
+const maxHeightPerPage = 275;
+// const imgWidthSmall = 80; // Largeur réduite des images
+// const imgHeightSmall = 160; // Hauteur réduite des images
 
 
 for (let index = 0; index < report.actionsDone.length; index++) {
@@ -269,8 +269,8 @@ for (let index = 0; index < report.actionsDone.length; index++) {
       const photo = action.photos[i];
       const img = await getDataUri(photo);
 
-      const maxWidth = 170;
-      const maxHeight = 170;
+      const maxWidth = 160;
+      const maxHeight = 160;
       let newWidth, newHeight;
 
       // Ajuste les dimensions de l'image en fonction de son ratio
@@ -299,11 +299,17 @@ for (let index = 0; index < report.actionsDone.length; index++) {
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(18);
         doc.setFillColor(240, 240, 240);
-        doc.rect(0, 30, 250, 15, "F");
-        doc.text("Actions menées (suite)", 20, 40);
+        doc.rect(0, 26, 250, 10, "F"); // Rectangle rempli pour l'arrière-plan
+        doc.text("Actions menées (suite)", 13, 34);
+
+//         doc.setFillColor(240, 240, 240); // Arrière-plan gris clair
+// doc.rect(0, 26, 250, 10, "F"); // Rectangle rempli pour l'arrière-plan
+// doc.setFontSize(18);
+// doc.setTextColor(0, 0, 0); // Couleur du texte noire
+// doc.text("Actions menées", 13, 34); // Ajuster la position du texte
 
         // Réinitialiser la position Y pour la nouvelle page
-        yPosition = 47;
+        yPosition = 37;
       }
 
       // Ajouter l'image
@@ -334,12 +340,14 @@ if (report.remarques && report.remarques.length > 0) {
   doc.setTextColor(0, 0, 0);
 
   doc.setFillColor(240, 240, 240); // Arrière-plan gris clair
-  doc.rect(0, 30, 250, 15, "F");
+  doc.rect(0, 26, 250, 10, "F");
   doc.setFontSize(18);
   doc.setTextColor(0, 0, 0);
-  doc.text("Remarques", 20, 40);
+  doc.text("Remarques", 13, 34);
 
-  let yPositionRemark = 50;
+
+
+  let yPositionRemark = 37;
 
   for (let index = 0; index < report.remarques.length; index++) {
     const remarque = report.remarques[index];
@@ -405,7 +413,7 @@ if (report.remarques && report.remarques.length > 0) {
     }
 
     // Espacement entre les remarques
-    yPositionRemark += 15;
+    yPositionRemark += 10;
   }
 
   // Ajouter le pied de page à la dernière page des remarques
