@@ -51,7 +51,7 @@ const generateReportPdf = async (report, technicians) => {
   const zoneWidth = pageWidth * 0.3; // 30% de la largeur de la page
   const zoneHeight = pageHeight * 0.15; // 15% de la hauteur de la page
   const zoneX = pageWidth * 0.62; // Décalage vers la droite (ajustez cette valeur pour affiner)
-  const zoneY = pageHeight * 0.87; // Décalage vers le bas (ajustez cette valeur pour affiner)
+  const zoneY = pageHeight * 0.86; // Décalage vers le bas (ajustez cette valeur pour affiner)
 
   doc.setTextColor(0, 0, 0); // Couleur noire pour le texte suivant
   doc.setFontSize(20);
@@ -67,32 +67,51 @@ const generateReportPdf = async (report, technicians) => {
     });
   }
 
-  const logoWidth = 40; // Largeur de l'image du logo
-  const logoHeight = 15; // Hauteur de l'image du logo
+  const logoWidth = 50; // Largeur de l'image du logo
+  const logoHeight = 30; // Hauteur de l'image du logo
 
-  async function addLogoOrCompanyName() {
+  const addLogoOrCompanyName = async () => {
     if (report.client?.logoEntreprise) {
       try {
         const img = await loadImage(report.client.logoEntreprise);
-        // Ajout de l'image au PDF
+  
+        // Récupération des dimensions originales de l'image
+        const originalWidth = img.width;
+        const originalHeight = img.height;
+        const aspectRatio = originalWidth / originalHeight;
+  
+        let displayWidth = logoWidth;
+        let displayHeight = logoHeight;
+  
+        // Ajustement de la largeur ou de la hauteur pour garder le ratio
+        if (originalWidth > originalHeight) {
+          displayHeight = logoWidth / aspectRatio;
+        } else {
+          displayWidth = logoHeight * aspectRatio;
+        }
+  
+        // Centrage du logo dans la zone définie
+        const xPosition = zoneX + (logoWidth - displayWidth) / 2;
+        const yPosition = zoneY + (logoHeight - displayHeight) / 2;
+  
+        // Ajout de l'image au PDF avec la taille ajustée
         doc.addImage(
           img,
           img.src.endsWith(".png") ? "PNG" : "JPEG",
-          zoneX,
-          zoneY,
-          logoWidth,
-          logoHeight
+          xPosition,
+          yPosition,
+          displayWidth,
+          displayHeight
         );
       } catch (error) {
         console.error("Erreur lors du chargement du logo : ", error);
-        // Afficher le nom de l'entreprise si le logo ne peut pas être chargé
         displayCompanyName();
       }
     } else {
-      // Si le logo n'est pas disponible, afficher le nom de l'entreprise
       displayCompanyName();
     }
-  }
+  };
+  
 
   function displayCompanyName() {
     doc.setTextColor(0, 0, 0);
