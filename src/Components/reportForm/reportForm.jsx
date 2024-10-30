@@ -96,10 +96,10 @@ export default function ReportForm({ initialData, onSubmit }) {
           new Promise((resolve) => {
             Resizer.imageFileResizer(
               file,
-              800, // largeur
-              800, // hauteur
+              1000, // largeur
+              1000, // hauteur
               "JPEG", // format
-              100, // qualité
+              90, // qualité
               0, // rotation
               (uri) => {
                 resolve(uri); // Renvoie le fichier Blob
@@ -134,10 +134,10 @@ export default function ReportForm({ initialData, onSubmit }) {
           new Promise((resolve) => {
             Resizer.imageFileResizer(
               file,
-              800, // largeur
-              800, // hauteur
+              1000, // largeur
+              1000, // hauteur
               "JPEG", // format
-              100, // qualité 100 pour ne pas perdre en qualité
+              90, // qualité 100 pour ne pas perdre en qualité
               0, // rotation
               (uri) => {
                 resolve(uri); // Renvoie le fichier Blob
