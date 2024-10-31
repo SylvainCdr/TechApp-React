@@ -254,9 +254,8 @@ const generateReportPdf = async (report, technicians) => {
   doc.text("Actions menées", 13, 22); // Ajuster la position du texte
 
   let yPosition = 27;
-  const maxHeightPerPage = 265;
-  // const imgWidthSmall = 80; // Largeur réduite des images
-  // const imgHeightSmall = 160; // Hauteur réduite des images
+  const maxHeightPerPage = 255;
+
 
   for (let index = 0; index < report.actionsDone.length; index++) {
     const action = report.actionsDone[index];
@@ -285,8 +284,8 @@ const generateReportPdf = async (report, technicians) => {
         const photo = action.photos[i];
         const img = await getDataUri(photo);
 
-        const maxWidth = 160;
-        const maxHeight = 160;
+        const maxWidth = 150;
+        const maxHeight = 130;
         let newWidth, newHeight;
 
         // Ajuste les dimensions de l'image en fonction de son ratio
@@ -324,7 +323,7 @@ const generateReportPdf = async (report, technicians) => {
         }
 
         // Ajouter l'image
-        doc.addImage(img, "JPEG", 10, yPosition, newWidth, newHeight);
+        doc.addImage(img, "JPEG", 20, yPosition, newWidth, newHeight);
         yPosition += newHeight + 5; // Espace après chaque image
       }
     } else {
@@ -353,12 +352,18 @@ const generateReportPdf = async (report, technicians) => {
     doc.setTextColor(0, 0, 0); // Couleur noire pour le texte suivant
 
     doc.setFillColor(240, 240, 240); // Arrière-plan gris clair
-    doc.rect(0, 26, 250, 10, "F");
-    doc.setFontSize(18);
+    doc.rect(0, 15, 250, 10, "F");
+    doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text("Remarques", 13, 34);
+    doc.text("Remarques", 13, 22);
 
-    let yPositionRemark = 37;
+    // doc.setTextColor(0, 0, 0); // Couleur noire pour le texte suivant
+    // doc.setFontSize(16);
+    // doc.setFillColor(240, 240, 240);
+    // doc.rect(0, 15, 250, 10, "F"); // Rectangle rempli pour l'arrière-plan
+    // doc.text("Actions menées (suite)", 13, 22);
+
+    let yPositionRemark = 27;
 
     for (let index = 0; index < report.remarques.length; index++) {
       const remarque = report.remarques[index];
@@ -386,8 +391,8 @@ const generateReportPdf = async (report, technicians) => {
           const photo = remarque.photos[i];
           const img = await getDataUri(photo);
 
-          const maxWidth = 170;
-          const maxHeight = 170;
+          const maxWidth = 150;
+          const maxHeight = 130;
           let newWidth, newHeight;
 
           // Ajustement des dimensions en fonction du ratio
@@ -422,7 +427,7 @@ const generateReportPdf = async (report, technicians) => {
           }
 
           // Affichage de l'image avec les dimensions ajustées
-          doc.addImage(img, "JPEG", 10, yPositionRemark, newWidth, newHeight);
+          doc.addImage(img, "JPEG", 20, yPositionRemark, newWidth, newHeight);
           yPositionRemark += newHeight + 10; // Espace après l'image
         }
       }
