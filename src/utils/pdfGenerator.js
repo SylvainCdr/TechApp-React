@@ -285,8 +285,8 @@ const generateReportPdf = async (report, technicians) => {
         const photo = action.photos[i];
         const img = await getDataUri(photo);
 
-        const maxWidth = 150;
-        const maxHeight = 150;
+        const maxWidth = 160;
+        const maxHeight = 160;
         let newWidth, newHeight;
 
         // Ajuste les dimensions de l'image en fonction de son ratio
