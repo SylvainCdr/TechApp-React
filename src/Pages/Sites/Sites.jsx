@@ -128,6 +128,7 @@ export default function Sites() {
   const handleEdit = (client) => {
     setFormData({
       nomEntreprise: client.nomEntreprise,
+      nomResponsableProjet: client.nomResponsableProjet,
       tel: client.tel,
       email: client.email,
       siteName: client.siteName,
@@ -202,11 +203,21 @@ export default function Sites() {
                 />
               </div>
               <div>
-                <label>Nom du client :</label>
+                <label>Nom de l'entreprise :</label>
                 <input
                   type="text"
                   name="nomEntreprise"
                   value={formData.nomEntreprise}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Nom du responsable projet :</label>
+                <input
+                  type="text"
+                  name="nomResponsableProjet"
+                  value={formData.nomResponsableProjet}
                   onChange={handleInputChange}
                   required
                 />
@@ -295,9 +306,10 @@ export default function Sites() {
             </div>
             <div className={styles.section2}>
               <p><i className="fa-regular fa-id-card"></i> Client: {client.nomEntreprise}</p>
+              <p> <i className="fa-solid fa-user"></i> Responsable projet: {client.nomResponsableProjet}</p>
               <p> <i className="fa-solid fa-phone"></i>Tel: {client.tel}</p>
               <p> <i className="fa-solid fa-at"></i>Email: {client.email}</p>
-              <p> <i className="fa-solid fa-location-dot"></i> Adresse : {client.siteAddress}</p>
+              <p> <i className="fa-solid fa-location-dot"></i> Adresse du site : {client.siteAddress}</p>
               <p> <i class="fa-solid fa-file"></i>
                 Plan de prévention :{" "}
                 {client.planPrevention ? "" : "Non transmis"}
