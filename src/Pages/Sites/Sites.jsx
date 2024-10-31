@@ -273,7 +273,7 @@ export default function Sites() {
                   required
                 />
               </div>
-              <button type="submit">Soumettre</button>
+              <button type="submit" className={styles.submitButton}>Soumettre</button>
             </form>
           </div>
         </div>
@@ -307,8 +307,8 @@ export default function Sites() {
             <div className={styles.section2}>
               <p><i className="fa-regular fa-id-card"></i> Client: {client.nomEntreprise}</p>
               <p> <i className="fa-solid fa-user"></i> Responsable projet: {client.nomResponsableProjet}</p>
-              <p> <i className="fa-solid fa-phone"></i>Tel: {client.tel}</p>
               <p> <i className="fa-solid fa-at"></i>Email: {client.email}</p>
+              <p> <i className="fa-solid fa-phone"></i>Tel: {client.tel}</p>
               <p> <i className="fa-solid fa-location-dot"></i> Adresse du site : {client.siteAddress}</p>
               <p> <i class="fa-solid fa-file"></i>
                 Plan de prévention :{" "}
