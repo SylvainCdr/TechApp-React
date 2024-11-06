@@ -70,6 +70,46 @@
       color: red;
       font-weight: 500;
     }
+
+    P {
+      color: rgb(1, 99, 16);
+      font-weight: 500;
+    }
+  }
+
+  .seePhotos {
+    display: flex;
+    flex-wrap: wrap;
+    // margin-bottom: 10px;
+
+    img {
+      width: auto;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: white;
+      color:black;
+      padding: 10px 15px;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius :50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      position: absolute;
+     margin-left : -3rem;
+
+
+      &:hover 
+    
+{
+        background-color: #c7c7c7;
+      }
+    }
   }
 
    

@@ -39,8 +39,9 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [signatureUrl, setSignatureUrl] = useState(""); // URL de la signature uploadée
   const [isSigned, setIsSigned] = useState(false); // Indique si le rapport a été signé
   const [isLoading, setIsLoading] = useState(false); // Indique si le formulaire est en cours de soumission
-  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+  // const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [interventionDuration, setInterventionDuration] = useState(0);
+
 
   useEffect(() => {
     if (initialData) {
@@ -99,7 +100,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               1000, // largeur
               1000, // hauteur
               "JPEG", // format
-              90, // qualité
+              95, // qualité
               0, // rotation
               (uri) => {
                 resolve(uri); // Renvoie le fichier Blob
@@ -137,7 +138,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               1000, // largeur
               1000, // hauteur
               "JPEG", // format
-              90, // qualité 100 pour ne pas perdre en qualité
+              95, // qualité 100 pour ne pas perdre en qualité
               0, // rotation
               (uri) => {
                 resolve(uri); // Renvoie le fichier Blob
@@ -251,6 +252,31 @@ export default function ReportForm({ initialData, onSubmit }) {
   const removeRemarqueField = (index) => {
     setRemarques(remarques.filter((_, i) => i !== index));
   };
+
+  // const removePhoto = (index) => {
+  //   const newActionsDone = [...actionsDone];
+  //   newActionsDone[0].photos = newActionsDone[0].photos.filter(
+  //     (_, i) => i !== index
+  //   );
+  //   setActionsDone(newActionsDone);
+  // };
+
+  const removeActionPhoto = (actionIndex, photoIndex) => {
+    const newActionsDone = [...actionsDone];
+    newActionsDone[actionIndex].photos = newActionsDone[actionIndex].photos.filter(
+      (_, i) => i !== photoIndex
+    );
+    setActionsDone(newActionsDone);
+  };
+
+  const removeRemarquePhoto = (remarqueIndex, photoIndex) => {
+    const newRemarques = [...remarques];
+    newRemarques[remarqueIndex].photos = newRemarques[remarqueIndex].photos.filter(
+      (_, i) => i !== photoIndex
+    );
+    setRemarques(newRemarques);
+  };
+
 
   return (
     <div className={styles.reportFormContainer}>
@@ -420,13 +446,45 @@ export default function ReportForm({ initialData, onSubmit }) {
               required
             />
 
-            <label>Ajouter des photos à l'action (portrait idéalement) :</label>
+            <label>Ajouter des photos à l'action :</label>
             <input
               type="file"
               multiple
               onChange={(e) => handleActionPhotoChange(index, e)}
               className={styles.uploadBtn}
             />
+
+            {/* // div pour afficher le nom des photos et avoir la possibilité de les supprimer
+           <div className={styles.seePhotos}>
+              {action.photos.map((photo, index) => (
+                <div key={index}>
+                  <img src={photo} alt
+                  ="action" />
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(index)}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>  */}
+
+            {/* Div pour afficher le nom des photos et avoir la possibilité de les supprimer */}
+<div className={styles.seePhotos}>
+  {action.photos.map((photo, photoIndex) => (
+    <div key={photoIndex}>
+      <img src={photo} alt="action" />
+      <button
+        type="button"
+        onClick={() => removeActionPhoto(index, photoIndex)} // Utilisation des deux index
+      >
+        X
+      </button>
+    </div>
+  ))}
+</div> 
+
             <button
               type="button"
               onClick={() => removeActionField(index)}
@@ -459,13 +517,28 @@ export default function ReportForm({ initialData, onSubmit }) {
               }}
             />
 
-            <label>Ajouter des photos à la remarque (portrait idéalement) :</label>
+            <label>Ajouter des photos à la remarque :</label>
             <input
               type="file"
               multiple
               onChange={(e) => handleRemarquePhotoChange(index, e)}
               className={styles.uploadBtn}
             />
+
+                   {/* Div pour afficher le nom des photos et avoir la possibilité de les supprimer */}
+<div className={styles.seePhotos}>
+  {remarque.photos.map((photo, photoIndex) => (
+    <div key={photoIndex}>
+      <img src={photo} alt="action" />
+      <button
+        type="button"
+        onClick={() => removeRemarquePhoto(index, photoIndex)} // Utilisation des deux index
+      >
+        X
+      </button>
+    </div>
+  ))}
+</div> 
             <button
               type="button"
               onClick={() => removeRemarqueField(index)}
@@ -522,7 +595,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         />
 
         <button className={styles.submitButton} type="submit">
-          Créer le rapport
+          Mettre à jour le rapport
         </button>
       </form>
     </div>
