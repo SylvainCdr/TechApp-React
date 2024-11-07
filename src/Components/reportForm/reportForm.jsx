@@ -446,7 +446,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               required
             />
 
-            <label>Ajouter des photos à l'action :</label>
+            <label>Ajouter des photos à l'action (format paysage recommandé):</label>
             <input
               type="file"
               multiple
@@ -517,7 +517,7 @@ export default function ReportForm({ initialData, onSubmit }) {
               }}
             />
 
-            <label>Ajouter des photos à la remarque :</label>
+            <label>Ajouter des photos à la remarque (format paysage recommandé):</label>
             <input
               type="file"
               multiple

@@ -136,8 +136,8 @@
       -o-border-radius: 8px;
 
       .section1 {
-        height: 14.5vh;
-        margin-bottom: 5rem;
+        // height: 16vh;
+        // margin-bottom: 5rem;
 
         h2 {
           text-align: center;
@@ -178,6 +178,7 @@
 
       p {
         margin-top: 0.7rem;
+        line-height: 1.5;
         a {
           color: #ffffff;
           text-decoration: none;
@@ -199,6 +200,7 @@
         display: flex;
         justify-content: space-around;
         margin-top: 1.5rem;
+      
 
         i {
           color: white;
