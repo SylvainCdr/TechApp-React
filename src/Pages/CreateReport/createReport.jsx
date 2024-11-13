@@ -35,7 +35,8 @@ export default function CreateReport() {
         allowOutsideClick: false,
       }).then(() => {
         setTimeout(() => {
-          window.location.href = "/reports"; // Rediriger l'utilisateur vers la liste des rapports après l'alerte
+          // Rediriger l'utilisateur vers le rapport créé
+          window.location.href = "/report/" + reportRef.id;
         }, 500); // 500 ms pour permettre à l'alerte de se fermer proprement
       });
     } catch (error) {

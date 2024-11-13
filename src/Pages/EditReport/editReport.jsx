@@ -67,7 +67,8 @@ export default function EditReport() {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
-        window.location.href = "/reports";
+        //rediriger l'utilisateur vers le rapport modifié
+        window.location.href = "/report/" + reportId;
       });
     } catch (error) {
       console.error("Erreur lors de la mise à jour du rapport :", error);

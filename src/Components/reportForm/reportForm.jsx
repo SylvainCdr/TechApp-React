@@ -15,7 +15,7 @@ export default function ReportForm({ initialData, onSubmit }) {
     logoEntreprise: "",
   });
   const [site, setSite] = useState({
-    siteName : "",
+    siteName: "",
     adresse: "",
     nomContact: "",
     fonctionContact: "",
@@ -41,7 +41,6 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [isLoading, setIsLoading] = useState(false); // Indique si le formulaire est en cours de soumission
   // const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [interventionDuration, setInterventionDuration] = useState(0);
-
 
   useEffect(() => {
     if (initialData) {
@@ -253,30 +252,21 @@ export default function ReportForm({ initialData, onSubmit }) {
     setRemarques(remarques.filter((_, i) => i !== index));
   };
 
-  // const removePhoto = (index) => {
-  //   const newActionsDone = [...actionsDone];
-  //   newActionsDone[0].photos = newActionsDone[0].photos.filter(
-  //     (_, i) => i !== index
-  //   );
-  //   setActionsDone(newActionsDone);
-  // };
-
   const removeActionPhoto = (actionIndex, photoIndex) => {
     const newActionsDone = [...actionsDone];
-    newActionsDone[actionIndex].photos = newActionsDone[actionIndex].photos.filter(
-      (_, i) => i !== photoIndex
-    );
+    newActionsDone[actionIndex].photos = newActionsDone[
+      actionIndex
+    ].photos.filter((_, i) => i !== photoIndex);
     setActionsDone(newActionsDone);
   };
 
   const removeRemarquePhoto = (remarqueIndex, photoIndex) => {
     const newRemarques = [...remarques];
-    newRemarques[remarqueIndex].photos = newRemarques[remarqueIndex].photos.filter(
-      (_, i) => i !== photoIndex
-    );
+    newRemarques[remarqueIndex].photos = newRemarques[
+      remarqueIndex
+    ].photos.filter((_, i) => i !== photoIndex);
     setRemarques(newRemarques);
   };
-
 
   return (
     <div className={styles.reportFormContainer}>
@@ -446,7 +436,9 @@ export default function ReportForm({ initialData, onSubmit }) {
               required
             />
 
-            <label>Ajouter des photos à l'action (format paysage recommandé):</label>
+            <label>
+              Ajouter des photos à l'action (format paysage recommandé):
+            </label>
             <input
               type="file"
               multiple
@@ -471,19 +463,19 @@ export default function ReportForm({ initialData, onSubmit }) {
             </div>  */}
 
             {/* Div pour afficher le nom des photos et avoir la possibilité de les supprimer */}
-<div className={styles.seePhotos}>
-  {action.photos.map((photo, photoIndex) => (
-    <div key={photoIndex}>
-      <img src={photo} alt="action" />
-      <button
-        type="button"
-        onClick={() => removeActionPhoto(index, photoIndex)} // Utilisation des deux index
-      >
-        X
-      </button>
-    </div>
-  ))}
-</div> 
+            <div className={styles.seePhotos}>
+              {action.photos.map((photo, photoIndex) => (
+                <div key={photoIndex}>
+                  <img src={photo} alt="action" />
+                  <button
+                    type="button"
+                    onClick={() => removeActionPhoto(index, photoIndex)} // Utilisation des deux index
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
 
             <button
               type="button"
@@ -517,7 +509,9 @@ export default function ReportForm({ initialData, onSubmit }) {
               }}
             />
 
-            <label>Ajouter des photos à la remarque (format paysage recommandé):</label>
+            <label>
+              Ajouter des photos à la remarque (format paysage recommandé):
+            </label>
             <input
               type="file"
               multiple
@@ -525,20 +519,20 @@ export default function ReportForm({ initialData, onSubmit }) {
               className={styles.uploadBtn}
             />
 
-                   {/* Div pour afficher le nom des photos et avoir la possibilité de les supprimer */}
-<div className={styles.seePhotos}>
-  {remarque.photos.map((photo, photoIndex) => (
-    <div key={photoIndex}>
-      <img src={photo} alt="action" />
-      <button
-        type="button"
-        onClick={() => removeRemarquePhoto(index, photoIndex)} // Utilisation des deux index
-      >
-        X
-      </button>
-    </div>
-  ))}
-</div> 
+            {/* Div pour afficher le nom des photos et avoir la possibilité de les supprimer */}
+            <div className={styles.seePhotos}>
+              {remarque.photos.map((photo, photoIndex) => (
+                <div key={photoIndex}>
+                  <img src={photo} alt="action" />
+                  <button
+                    type="button"
+                    onClick={() => removeRemarquePhoto(index, photoIndex)} // Utilisation des deux index
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
             <button
               type="button"
               onClick={() => removeRemarqueField(index)}
