@@ -38,6 +38,7 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [signataireNom, setSignataireNom] = useState(""); // Nom du signataire
   const [signatureUrl, setSignatureUrl] = useState(""); // URL de la signature uploadée
   const [isSigned, setIsSigned] = useState(false); // Indique si le rapport a été signé
+  const [isClosed, setIsClosed] = useState(false); // Indique si le rapport est clos
   const [isLoading, setIsLoading] = useState(false); // Indique si le formulaire est en cours de soumission
   // const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
   const [interventionDuration, setInterventionDuration] = useState(0);
@@ -64,6 +65,7 @@ export default function ReportForm({ initialData, onSubmit }) {
       setSignataireNom(initialData.signataireNom || "");
       setSignatureUrl(initialData.signatureUrl || "");
       setIsSigned(initialData.isSigned || false);
+      setIsClosed(initialData.isClosed || false);
       setInterventionDuration(initialData.interventionDuration || 0);
     }
   }, [initialData]);

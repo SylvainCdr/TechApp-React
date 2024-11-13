@@ -45,12 +45,17 @@
     }
   }
 
+  .reportStatus {
+    display: flex;
+    flex-direction : column;
+    float : right;
+ 
+
   .badgeGreen {
     color: #03c113;
     font-size: 2.2rem;
     text-transform: uppercase;
     font-weight: 700;
-    float: right;
   }
 
   .badgeRed {
@@ -58,8 +63,33 @@
     font-size: 2.2rem;
     text-transform: uppercase;
     font-weight: 700;
-    float: right;
   }
+
+  .closeBtn {
+    
+    background-color: #0259dc;
+    color: white;
+    padding: 5px 40px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    float: right;
+    text-decoration: none;
+    border : none;
+    font-size : 1rem;
+
+    &:hover {
+      background-color: #2f78ff;
+      scale: 1.02;
+    }
+
+}
+  }
+
   .editBtn {
     background-color: #039c38;
     color: white;
@@ -73,6 +103,10 @@
     cursor: pointer;
     float: right;
     text-decoration: none;
+    &:hover { 
+      background-color: #03c113;
+      scale: 1.02;
+    }
   }
 
   .reportItem {

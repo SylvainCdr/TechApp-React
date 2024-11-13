@@ -172,10 +172,10 @@ const Reports = () => {
 
             <span
               className={
-                report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
+                report.isClosed ? styles.badgeGreen : styles.badgeRed
               } data-aos="fade-up"
             >
-              {report.actionsDone?.length ? "Complété" : "À compléter"}
+              {report.isClosed ? "Clos" : "À Clôturer"}
             </span>
 
             <p>

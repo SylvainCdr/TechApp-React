@@ -5,6 +5,7 @@ import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import AOS from "aos";
 
+
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [reports, setReports] = useState([]);
@@ -114,12 +115,21 @@ export default function Search() {
                   .join(", ")}
               </td>
               <td className={styles.status}>
-                {report.actionsDone?.length ? (
-                  <span className={styles.done}>Complété <br /> <span className={styles.doneDate}> le {report.updatedAt.toDate().toLocaleDateString("fr-FR")} </span></span>
-                ) : (
-                  <span className={styles.todo}>À compléter</span>
-                )}
-              </td>
+  {report.isClosed ? (
+    <span className={styles.done}>
+      Clos le{" "}<br />
+      <span className={styles.doneDate}>
+       
+        {report.updatedAt
+          ? report.updatedAt.toDate().toLocaleDateString("fr-FR")
+          : "?"}
+      </span>
+    </span>
+  ) : (
+    <span className={styles.todo}>À Clôturer</span>
+  )}
+</td>
+
               <td className={styles.tableActions}>
                 <Link to={`/report/${report.id}`} className={styles.viewBtn}>
                   <i className="fa-solid fa-eye"></i>

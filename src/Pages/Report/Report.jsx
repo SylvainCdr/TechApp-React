@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { db } from "../../firebase/firebase";
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 import styles from "./style.module.scss";
 import generateReportPdf from "../../utils/pdfGenerator";
 import AOS from "aos";
+import { sendClosedReportNotification } from "../../utils/emailService";
 
 export default function InterventionReport() {
-  const { reportId } = useParams(); // Récupérer l'ID du rapport depuis l'URL
+  const { reportId } = useParams();
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [technicians, setTechnicians] = useState([]);
 
-  // Fonction pour récupérer un rapport d'intervention spécifique depuis Firestore
   const fetchReport = async () => {
     try {
       const docRef = doc(db, "interventionReports", reportId);
@@ -22,9 +22,7 @@ export default function InterventionReport() {
       if (docSnap.exists()) {
         setReport({ id: docSnap.id, ...docSnap.data() });
 
-        const techniciansSnapshot = await getDocs(
-          collection(db, "technicians")
-        );
+        const techniciansSnapshot = await getDocs(collection(db, "technicians"));
         const techniciansList = techniciansSnapshot.docs.map((doc) => ({
           id: doc.id,
           name: `${doc.data().firstName} ${doc.data().lastName}`,
@@ -42,36 +40,43 @@ export default function InterventionReport() {
     }
   };
 
-  // Fonction pour récupérer les techniciens depuis Firestore
-  const fetchTechnicians = async () => {
+  const closeReport = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "technicians"));
-      const techniciansList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        name: doc.data().firstName + " " + doc.data().lastName,
-        urlPhoto: doc.data().urlPhoto,
-      }));
-      setTechnicians(techniciansList);
+      const reportRef = doc(db, "interventionReports", reportId);
+      await updateDoc(reportRef, {
+        isClosed: true,
+        updatedAt: new Date(),
+      });
+
+      const { client: { nomEntreprise: clientName }, site: { siteName } } = report;
+      const reportUrl = `https://pixecuritytechapp.web.app/report/${reportId}`;
+
+      await sendClosedReportNotification({
+        from_name: "Tech-App",
+        reportId,
+        clientName,
+        siteName,
+        
+        
+      });
+
+      setReport((prevReport) => ({ ...prevReport, isClosed: true, updatedAt: new Date() }));
     } catch (error) {
-      console.error("Erreur lors de la récupération des techniciens : ", error);
+      console.error("Erreur lors de la clôture du rapport :", error);
+      setError("Erreur lors de la clôture du rapport");
     }
   };
+
   useEffect(() => {
     fetchReport();
-    fetchTechnicians();
   }, [reportId]);
 
   useEffect(() => {
     AOS.init({ duration: 1500 });
   }, []);
 
-  if (loading) {
-    return <p>Chargement en cours...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
+  if (loading) return <p>Chargement en cours...</p>;
+  if (error) return <p>{error}</p>;
 
   const getTechnicianPhotoURL = (id) => {
     const technician = technicians.find((tech) => tech.id === id);
@@ -86,14 +91,17 @@ export default function InterventionReport() {
     <div className={styles.reportContainer} id="report-content">
       <h1> Rapport d'intervention N° {report.id} </h1>
 
-      <span
-        className={
-          report.actionsDone?.length ? styles.badgeGreen : styles.badgeRed
-        }
-        data-aos="fade-down"
-      >
-        {report.actionsDone?.length ? "Complété" : "À compléter"}
-      </span>
+      <div className={styles.reportStatus}>
+        <span className={report.isClosed ? styles.badgeGreen : styles.badgeRed} data-aos="fade-down">
+          {report.isClosed ? "Clos" : "À Clôturer"}
+        </span>
+
+        {!report.isClosed && (
+          <button onClick={closeReport} className={styles.closeBtn}>
+            Clôturer le rapport
+          </button>
+        )}
+      </div>
 
       <button onClick={handleDownloadPdf} className={styles.downloadPdf}>
         <i className="fa-solid fa-file-pdf"></i> Télécharger{" "}
@@ -125,6 +133,11 @@ export default function InterventionReport() {
               Remplir / Modifier{" "}
             </Link>
           )}
+
+
+
+
+
           <p>
             {report.missionId ? (
               <Link to={`/mission/${report.missionId}`}>

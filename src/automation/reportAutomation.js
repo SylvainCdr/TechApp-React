@@ -1,6 +1,6 @@
 import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { sendEmail } from "../utils/emailService"; // Importation du service d'email
+import { sendEmailMission } from "../utils/emailService"; // Importation du service d'email
 
 // Fonction pour obtenir les informations du technicien par ID
 const getTechnicianInfoById = async (technicianId) => {
@@ -48,6 +48,7 @@ export const createInterventionReport = async (missionId, missionData) => {
       signataireNom: "",
       signatureUrl: "",
       isSigned: false,
+      isClosed: false,
     };
 
     // Ajout du rapport d'intervention à Firestore
@@ -79,7 +80,7 @@ export const createInterventionReport = async (missionId, missionData) => {
     // Envoi des emails
     validInfos.forEach(async (info) => {
       try {
-        await sendEmail({
+        await sendEmailMission({
           to: info.email,
           to_name: info.fullName, // Utiliser le nom complet du technicien
           missionId: missionId,
