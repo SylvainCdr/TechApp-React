@@ -63,9 +63,9 @@ export default function EditReport() {
 
       Swal.fire({
         icon: "success",
-        title: "Rapport mis à jour avec succès !",
-        showConfirmButton: false,
-        timer: 1500,
+        title: "Rapport mis à jour ! Pensez à le clôturer pour avertir Anaelle.",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
       }).then(() => {
         //rediriger l'utilisateur vers le rapport modifié
         window.location.href = "/report/" + reportId;
