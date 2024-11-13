@@ -128,10 +128,12 @@ export default function InterventionReport() {
             - {report.site.siteName} /{" "}
             {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
           </h2>
-          {!report.isSigned && (
+          {!report.isSigned ? (
             <Link to={`/reports/edit/${report.id}`} className={styles.editBtn}>
               Remplir / Modifier{" "}
             </Link>
+          ) : (
+            <p className={styles.editBtn}> Rapport signé (non modifiable) </p>
           )}
 
 
