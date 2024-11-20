@@ -254,7 +254,7 @@ const generateReportPdf = async (report, technicians) => {
   doc.text("Actions menées", 13, 22); // Ajuster la position du texte
 
   let yPosition = 27;
-  const maxHeightPerPage = 255;
+  const maxHeightPerPage = 240;
 
 
   for (let index = 0; index < report.actionsDone.length; index++) {
@@ -285,7 +285,7 @@ const generateReportPdf = async (report, technicians) => {
         const img = await getDataUri(photo);
 
         const maxWidth = 140;
-        const maxHeight = 100;
+        const maxHeight = 90;
         let newWidth, newHeight;
 
         // Ajuste les dimensions de l'image en fonction de son ratio
@@ -391,8 +391,8 @@ const generateReportPdf = async (report, technicians) => {
           const photo = remarque.photos[i];
           const img = await getDataUri(photo);
 
-          const maxWidth = 150;
-          const maxHeight = 130;
+          const maxWidth = 140;
+          const maxHeight = 90;
           let newWidth, newHeight;
 
           // Ajustement des dimensions en fonction du ratio
