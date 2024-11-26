@@ -19,6 +19,7 @@ const Reports = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const reportsPerPage = 10; // Nombre de rapports par page
   const [allReports, setAllReports] = useState([]);
+  const [currentTechnician, setCurrentTechnician] = useState(null);
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
@@ -27,29 +28,52 @@ const Reports = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Récupérer les rapports d'intervention
         const reportsQuery = query(
           collection(db, "interventionReports"),
-          orderBy("interventionStartDate", "desc") // Trie par interventionStartDate
+          orderBy("interventionStartDate", "desc")
         );
         const reportsSnapshot = await getDocs(reportsQuery);
         const reportsList = reportsSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-
-        // Initialisez both states reports et allReports avec les données récupérées
         setReports(reportsList);
         setAllReports(reportsList);
 
+        // Récupérer les techniciens
         const techniciansSnapshot = await getDocs(
           collection(db, "technicians")
         );
         const techniciansList = techniciansSnapshot.docs.map((doc) => ({
           id: doc.id,
+          email: doc.data().email, // On récupère l'email du technicien
           name: `${doc.data().firstName} ${doc.data().lastName}`,
           urlPhoto: doc.data().urlPhoto,
         }));
         setTechnicians(techniciansList);
+
+        // Identifier l'utilisateur connecté
+        const user = auth.currentUser;
+        if (user) {
+          // Si l'utilisateur a l'UID spécifique (Anaelle), sélectionner "Tous"
+          if (user.uid === "oXOlHndiQhTZlB7fdZcRhYEE7U83") {
+            setCurrentTechnician("all"); // Affiche "Tous"
+          } else {
+            // Sinon, filtrer les rapports pour le technicien connecté
+            const technician = techniciansList.find(
+              (tech) => tech.email === user.email
+            );
+            setCurrentTechnician(technician);
+
+            if (technician) {
+              const filteredReports = reportsList.filter((report) =>
+                report.intervenants.includes(technician.id)
+              );
+              setReports(filteredReports);
+            }
+          }
+        }
       } catch (error) {
         console.error("Erreur lors de la récupération des données : ", error);
         Swal.fire(
@@ -124,10 +148,7 @@ const Reports = () => {
     <div className={styles.reportsContainer}>
       <h1>Rapports d'intervention</h1>
 
-      <Link
-        to="/reports/create"
-        className={styles.createReport}
-      >
+      <Link to="/reports/create" className={styles.createReport}>
         <i className="fa-solid fa-plus"></i> Créer un nouveau rapport
         d'intervention
       </Link>
@@ -138,6 +159,7 @@ const Reports = () => {
           name="technician"
           id="technician"
           onChange={filterReportsByUser}
+          value={currentTechnician ? currentTechnician.id : "all"}
         >
           <option value="all">Tous</option>
           {technicians.map((technician) => (
@@ -151,29 +173,29 @@ const Reports = () => {
       <ul className={styles.reportsList}>
         {currentReports.map((report) => (
           <li key={report.id} className={styles.reportItem} data-aos="fade-up">
-            <h2>               <span className={styles.interventionDate}>
-
-              {new Date(report.interventionStartDate).toLocaleDateString(
-                "fr-FR"
-              ) ===
-              new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
-                ? new Date(report.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  ) // Si les dates sont identiques
-                : `${new Date(report.interventionStartDate).toLocaleDateString(
-                    "fr-FR"
-                  )} / ${new Date(
-                    report.interventionEndDate
-                  ).toLocaleDateString("fr-FR")}`}{" "}
-             </span>
+            <h2>
+              {" "}
+              <span className={styles.interventionDate}>
+                {new Date(report.interventionStartDate).toLocaleDateString(
+                  "fr-FR"
+                ) ===
+                new Date(report.interventionEndDate).toLocaleDateString("fr-FR")
+                  ? new Date(report.interventionStartDate).toLocaleDateString(
+                      "fr-FR"
+                    ) // Si les dates sont identiques
+                  : `${new Date(
+                      report.interventionStartDate
+                    ).toLocaleDateString("fr-FR")} / ${new Date(
+                      report.interventionEndDate
+                    ).toLocaleDateString("fr-FR")}`}{" "}
+              </span>
               - {report.site.siteName} /{" "}
               {report.client?.nomEntreprise || "Nom de l'entreprise manquant"}
             </h2>
 
             <span
-              className={
-                report.isClosed ? styles.badgeGreen : styles.badgeRed
-              } data-aos="fade-up"
+              className={report.isClosed ? styles.badgeGreen : styles.badgeRed}
+              data-aos="fade-up"
             >
               {report.isClosed ? "Clos" : "À Clôturer"}
             </span>
@@ -251,7 +273,7 @@ const Reports = () => {
                         <img
                           src={getTechnicianPhotoURL(intervenantId)}
                           alt="technicien"
-                         data-aos="zoom-in"
+                          data-aos="zoom-in"
                         />
                       </div>
                     ))
@@ -313,18 +335,15 @@ const Reports = () => {
               </div>
             </div>
 
-            <div className={styles.section3} >
+            <div className={styles.section3}>
               <Link to={`/report/${report.id}`} className={styles.viewButton}>
                 <i className="fa-solid fa-eye"></i>
               </Link>
 
               {report.isSigned && ( // badge signé
                 <span className={styles.badgeSigned}>
-                  <i
-                    className="fa-solid fa-circle-check"
-                    
-                  ></i>{" "}
-                  Signé par le client
+                  <i className="fa-solid fa-circle-check"></i> Signé par le
+                  client
                 </span>
               )}
 
@@ -335,10 +354,7 @@ const Reports = () => {
                     to={`/reports/edit/${report.id}`}
                     className={styles.editButton}
                   >
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      
-                    ></i>
+                    <i className="fa-solid fa-pen-to-square"></i>
                   </Link>
 
                   {authorizedUserIds.includes(auth.currentUser.uid) && (
@@ -346,7 +362,7 @@ const Reports = () => {
                       className={styles.deleteButton}
                       onClick={() => deleteReport(report.id)}
                     >
-                      <i className="fa-solid fa-trash" ></i>
+                      <i className="fa-solid fa-trash"></i>
                     </Link>
                   )}
                 </>

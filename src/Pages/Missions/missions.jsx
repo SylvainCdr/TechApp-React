@@ -21,6 +21,7 @@ export default function Missions() {
   const [currentPage, setCurrentPage] = useState(1);
   const missionsPerPage = 10; // Nombre de missions par page
   const [allMissions, setAllMissions] = useState([]);
+  const [selectedTechnician, setSelectedTechnician] = useState("all");
 
   const authorizedUserIds = process.env.REACT_APP_AUTHORIZED_USER_IDS
     ? process.env.REACT_APP_AUTHORIZED_USER_IDS.split(",")
@@ -37,22 +38,9 @@ export default function Missions() {
         id: doc.id,
         ...doc.data(),
       }));
-      setMissions(missionsList);
-      setAllMissions(missionsList); // Stocker toutes les missions non filtrées
+      setAllMissions(missionsList);
     } catch (error) {
       console.error("Erreur lors de la récupération des missions : ", error);
-    }
-  };
-
-  const filterMissionsByUser = (e) => {
-    const selectedTechnician = e.target.value;
-    if (selectedTechnician === "all") {
-      setMissions(allMissions); // Rétablir toutes les missions non filtrées
-    } else {
-      const filteredMissions = allMissions.filter((mission) =>
-        mission.intervenants.includes(selectedTechnician)
-      );
-      setMissions(filteredMissions);
     }
   };
 
@@ -63,6 +51,7 @@ export default function Missions() {
       const techniciansList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().firstName + " " + doc.data().lastName,
+        email: doc.data().email,
         urlPhoto: doc.data().urlPhoto,
       }));
       setTechnicians(techniciansList);
@@ -72,6 +61,7 @@ export default function Missions() {
   };
 
   // Fonction pour récupérer les utilisateurs depuis Firestore
+
   const fetchUsers = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "users"));
@@ -88,11 +78,57 @@ export default function Missions() {
     }
   };
 
+  const initializeTechnicianFilter = () => {
+    if (!auth.currentUser) return;
+
+    const currentUserUid = auth.currentUser.uid;
+
+    // Cas spécial pour l'utilisateur avec l'UID spécifique (Anaelle)
+    if (currentUserUid === "oXOlHndiQhTZlB7fdZcRhYEE7U83") {
+      setSelectedTechnician("all");
+      setMissions(allMissions); // Affiche toutes les missions
+      return;
+    }
+
+    // Trouver l'utilisateur connecté
+    const user = users.find((user) => user.uid === currentUserUid);
+
+    if (user) {
+      const technician = technicians.find((tech) => tech.email === user.email);
+
+      if (technician) {
+        setSelectedTechnician(technician.id);
+        const filteredMissions = allMissions.filter((mission) =>
+          mission.intervenants.includes(technician.id)
+        );
+        setMissions(filteredMissions);
+      }
+    }
+  };
+
+  const filterMissionsByUser = (e) => {
+    const selectedTechnician = e.target.value;
+    setSelectedTechnician(selectedTechnician);
+
+    if (selectedTechnician === "all") {
+      setMissions(allMissions);
+    } else {
+      const filteredMissions = allMissions.filter((mission) =>
+        mission.intervenants.includes(selectedTechnician)
+      );
+      setMissions(filteredMissions);
+    }
+  };
+
   useEffect(() => {
     fetchMissions();
     fetchTechnicians();
     fetchUsers(); // Récupération des utilisateurs
   }, []);
+
+  useEffect(() => {
+    initializeTechnicianFilter();
+  }, [users, technicians, allMissions]);
 
   // Fonction pour obtenir l'email du créateur de la mission à partir du uid
   const getUserEmail = (uid) => {
@@ -171,12 +207,6 @@ export default function Missions() {
     }
   };
 
-  // const isInterventionDatePassed = (mission) => {
-  //   const currentDate = new Date();
-  //   const interventionEndDate = new Date(mission.interventionEndDate);
-  //   return currentDate > interventionEndDate;
-  // };
-
   useEffect(() => {
     AOS.init({ duration: 1300 });
   }, []);
@@ -195,6 +225,7 @@ export default function Missions() {
           name="technician"
           id="technician"
           onChange={filterMissionsByUser}
+          value={selectedTechnician}
         >
           <option value="all">Tous</option>
           {technicians.map((technician) => (
