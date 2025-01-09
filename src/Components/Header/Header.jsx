@@ -52,7 +52,7 @@ function Header() {
       <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
       <NavLink to="/" onClick={handleLinkClick}>
   <img
-    src="https://files.pixecurity.com/wp-content/uploads/sites/2/2024/10/pix-techapp.png"
+    src="assets/pix-techapp3.png"
     alt="ACCUEIL"
     className={styles.logo}
     loading="lazy"
