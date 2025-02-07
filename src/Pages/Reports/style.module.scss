@@ -372,19 +372,16 @@
               justify-content: space-around;
 
               .technicianItem {
-                width: 50%;
+                width: 100%;
                 padding-top: 0.1rem;
 
                 img {
                   margin-top: 0.3rem;
-                  width: 80px;
-                  height: 80px;
+                  max-height : 100px;
+                  max-width: 150px;
+               
                   object-fit: cover;
-                  border-radius: 50%;
-                  -webkit-border-radius: 50%;
-                  -moz-border-radius: 50%;
-                  -ms-border-radius: 50%;
-                  -o-border-radius: 50%;
+                  
                 }
               }
             }

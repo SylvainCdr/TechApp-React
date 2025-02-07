@@ -337,12 +337,22 @@
           width: 100%;
 
           .technicians {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin-top : 0rem;
+
             .technicianItem {
               width: 100%;
+              padding-top: 0.1rem;
 
               img {
-                width: 80px;
-                height: 80px;
+                margin-top: 0.3rem;
+                max-height : 100px;
+                max-width: 150px;
+             
+                object-fit: cover;
+                
               }
             }
           }
