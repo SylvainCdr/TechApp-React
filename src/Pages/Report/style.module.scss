@@ -187,19 +187,30 @@
           width: 100%;
           display: flex;
           justify-content: space-around;
-          margin-top : 0rem;
+          gap : 0.5rem;
+          margin-top : 0.5rem;
+
 
           .technicianItem {
-            width: 100%;
-            padding-top: 0.1rem;
-
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            
             img {
-              margin-top: 0.3rem;
-              max-height : 100px;
-              max-width: 150px;
            
+              margin-top: .3rem;
+              width: 100%;
+              height: 170px;
               object-fit: cover;
-              
+              border-radius: 10px;
+              -webkit-border-radius: 10px;
+              -moz-border-radius: 10px;
+              -ms-border-radius: 10px;
+              -o-border-radius: 10px;
             }
           }
         }
@@ -294,11 +305,11 @@
     }
 
     .badgeGreen {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
 
     .badgeRed {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
 
     .reportItem {
@@ -326,12 +337,24 @@
 
         .section1Right {
           width: 100%;
+
           .technicians {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin-top : 0rem;
+
             .technicianItem {
+              width: 100%;
+              padding-top: 0.1rem;
+
               img {
-                width: 80px;
-                height: 80px;
-                margin-bottom: 1rem;
+                margin-top: 0.3rem;
+                max-height : 100px;
+                max-width: 150px;
+             
+                object-fit: cover;
+                
               }
             }
           }
