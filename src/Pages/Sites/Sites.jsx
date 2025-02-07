@@ -46,7 +46,9 @@ export default function Sites() {
         id: doc.id,
         ...doc.data(),
       }));
-      clientsList.sort((a, b) => a.nomEntreprise.localeCompare(b.nomEntreprise));
+      clientsList.sort((a, b) =>
+        a.nomEntreprise.localeCompare(b.nomEntreprise)
+      );
       setClients(clientsList);
     } catch (error) {
       console.error("Erreur lors de la récupération des clients : ", error);
@@ -80,7 +82,10 @@ export default function Sites() {
       }
 
       if (planPrevention) {
-        const planPreventionRef = ref(storage, `plansPrevention/${planPrevention.name}`);
+        const planPreventionRef = ref(
+          storage,
+          `plansPrevention/${planPrevention.name}`
+        );
         await uploadBytes(planPreventionRef, planPrevention);
         planPreventionURL = await getDownloadURL(planPreventionRef);
       }
@@ -103,8 +108,15 @@ export default function Sites() {
       resetForm();
       fetchClients();
     } catch (error) {
-      console.error("Erreur lors de l'ajout ou de la mise à jour du client : ", error);
-      Swal.fire("Erreur", "Une erreur est survenue lors de la soumission du formulaire.", "error");
+      console.error(
+        "Erreur lors de l'ajout ou de la mise à jour du client : ",
+        error
+      );
+      Swal.fire(
+        "Erreur",
+        "Une erreur est survenue lors de la soumission du formulaire.",
+        "error"
+      );
     }
   };
 
@@ -177,7 +189,11 @@ export default function Sites() {
         fetchClients();
       } catch (error) {
         console.error("Erreur lors de la suppression du client : ", error);
-        Swal.fire("Erreur", "Une erreur est survenue lors de la suppression.", "error");
+        Swal.fire(
+          "Erreur",
+          "Une erreur est survenue lors de la suppression.",
+          "error"
+        );
       }
     }
   };
@@ -273,78 +289,83 @@ export default function Sites() {
                   required
                 />
               </div>
-              <button type="submit" className={styles.submitButton}>Soumettre</button>
+              <button type="submit" className={styles.submitButton}>
+                Soumettre
+              </button>
             </form>
           </div>
         </div>
       )}
 
-
       <h1>Gestion des Sites</h1>
-      <button
-        onClick={() => setShowForm(true)}
-        className={styles.addButton}
-      >
+      <button onClick={() => setShowForm(true)} className={styles.addButton}>
         Ajouter un Site
       </button>
 
       <div className={styles.clientsList}>
-        {clients.map((client) => (
-          <div key={client.id} className={styles.clientItem} data-aos="fade-up"
-         >
-            <div className={styles.section1}>
-              <h2>{client.siteName}</h2>
-              <div className={styles.logoContainer}>
-                {client.logoEntreprise && (
-                  <img
-                    src={client.logoEntreprise}
-                    alt={`Logo de ${client.nomEntreprise}`}
-                data-aos="zoom-out"
-                  />
-                )}
-              </div>
-            </div>
-            <div className={styles.section2}>
-              <p><i className="fa-regular fa-id-card"></i> Client: {client.nomEntreprise}</p>
-              <p> <i className="fa-solid fa-user"></i> Responsable projet: {client.nomResponsableProjet}</p>
-              <p> <i className="fa-solid fa-at"></i>Email: {client.email}</p>
-              <p> <i className="fa-solid fa-phone"></i>Tel: {client.tel}</p>
-              <p> <i className="fa-solid fa-location-dot"></i> Adresse du site : {client.siteAddress}</p>
-              <p> <i class="fa-solid fa-file"></i>
-                Plan de prévention :{" "}
-                {client.planPrevention ? "" : "Non transmis"}
-                {client.planPrevention && (
-                  <a
-                    href={client.planPrevention}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {" "}
-                    Consulter{" "}
-                  </a>
-                )}
-                <p> <i class="fa-solid fa-user-tie"></i>Commercial(e) : {client.commercial}</p>
-              </p>
-            </div>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Entreprise</th>
+              <th>Site</th>
+              <th>Responsable projet</th>
+              <th>Téléphone</th>
+              <th>Email</th>
+              <th>Adresse du site</th>
+              <th>Plan de prévention</th>
+              <th>Commercial(e)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clients.map((client) => (
+              <tr key={client.id}>
+                <td>
+                  <img src={client.logoEntreprise} alt="logo entreprise" />
+                </td>
+                <td>
+                  {" "}
+                  <strong>{client.siteName}</strong>
+                </td>
 
-            <div className={styles.buttons}>
-              <button
-                onClick={() => handleEdit(client)}
-                className={styles.editButton}
-              >
-                Modifier
-              </button>
-              {authorizedUserIds.includes(auth.currentUser.uid) && (
-              <button
-                onClick={() => handleDelete(client)}
-                className={styles.deleteButton}
-              >
-                Supprimer
-              </button>
-              )}
-            </div>
-          </div>
-        ))}
+                <td>{client.nomResponsableProjet}</td>
+                <td>{client.tel}</td>
+                <td>{client.email}</td>
+                <td>{client.siteAddress}</td>
+                <td>
+                  {client.planPrevention ? (
+                    <a
+                      href={client.planPrevention}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Consulter
+                    </a>
+                  ) : (
+                    "Non transmis"
+                  )}
+                </td>
+                <td>{client.commercial}</td>
+                <td>
+                  <button
+                    onClick={() => handleEdit(client)}
+                    className={styles.editButton}
+                  >
+                    Modifier
+                  </button>
+                  {authorizedUserIds.includes(auth.currentUser.uid) && (
+                    <button
+                      onClick={() => handleDelete(client)}
+                      className={styles.deleteButton}
+                    >
+                      Supprimer
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
