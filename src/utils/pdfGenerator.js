@@ -201,6 +201,10 @@ const generateReportPdf = async (report, technicians) => {
         : "Aucun",
     },
     { key: "Risques identifiés", value: report.risques ? "Oui" : "Non" },
+    {
+      key: "Durée de l'intervention",
+      value: report.interventionDuration ? `${report.interventionDuration} Heure(s)` : "",
+    },
   ];
 
   let interventionStartY = startY + 60;

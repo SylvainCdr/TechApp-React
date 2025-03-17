@@ -8,7 +8,7 @@ Cette application web est développée pour faciliter le travail des techniciens
 - [Screenshots](#screenshots)
 
 ## Fonctionnalités
-
+ 
 L'application permet à l'entreprise de :
 - Gérer les profils techniciens.
 - Créer et gérer des fiches missions pour les chantiers/interventions.
@@ -21,7 +21,7 @@ L'application permet à l'entreprise de :
 ## Technologies utilisées
 
 L'application utilise les technologies suivantes :
-- **Frontend** : React, SCSS
+- **Frontend** : Javascript, React, HTML, SCSS
 - **Base de données et stockage** : Firebase Firestore, Firebase Storage
 - **Authentification** : Google OAuth (pour les utilisateurs Outlook)
 - **Déploiement** : Google Hosting 
