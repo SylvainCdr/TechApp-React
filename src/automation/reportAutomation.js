@@ -45,6 +45,7 @@ export const createInterventionReport = async (missionId, missionData) => {
       createdAt: new Date(),
       interventionStartDate: missionData.interventionStartDate,
       interventionEndDate: missionData.interventionEndDate,
+      devis: missionData.devis,
       signataireNom: "",
       signatureUrl: "",
       isSigned: false,
@@ -75,7 +76,6 @@ export const createInterventionReport = async (missionId, missionData) => {
 
     // Filtrer les infos null ou undefined
     const validInfos = intervenantsInfos.filter((info) => info !== null);
-    
 
     // Envoi des emails
     validInfos.forEach(async (info) => {

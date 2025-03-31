@@ -3,7 +3,7 @@ import { db, storage } from "../../firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import styles from "./style.module.scss";
-import { createIncidentReport } from "../../automation/incidentAutomation";
+// import { createIncidentReport } from "../../automation/incidentAutomation";
 import Signature from "../../utils/signature/signature";
 import Resizer from "react-image-file-resizer";
 
@@ -35,6 +35,7 @@ export default function ReportForm({ initialData, onSubmit }) {
   const [dateEndIntervention, setDateEndIntervention] = useState(
     new Date().toISOString().substring(0, 10)
   );
+  const [devis, setDevis] = useState(""); // Devis
   const [signataireNom, setSignataireNom] = useState(""); // Nom du signataire
   const [signatureUrl, setSignatureUrl] = useState(""); // URL de la signature uploadée
   const [isSigned, setIsSigned] = useState(false); // Indique si le rapport a été signé
@@ -62,6 +63,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         initialData.interventionEndDate?.substring(0, 10) ||
           new Date().toISOString().substring(0, 10)
       );
+      setDevis(initialData.devis || "");
       setSignataireNom(initialData.signataireNom || "");
       setSignatureUrl(initialData.signatureUrl || "");
       setIsSigned(initialData.isSigned || false);
@@ -220,6 +222,7 @@ export default function ReportForm({ initialData, onSubmit }) {
         updatedAt: new Date(),
         interventionStartDate: dateStartIntervention,
         interventionEndDate: dateEndIntervention,
+        devis,
         signataireNom,
         signatureUrl,
         isSigned,

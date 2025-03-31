@@ -270,10 +270,8 @@ export default function MissionForm() {
                   email: selectedClientSite.email,
                   tel: selectedClientSite.tel,
                   logoEntreprise: selectedClientSite.logoEntreprise || "",
-                 
                 });
                 setSite({
-                  
                   siteName: selectedClientSite.siteName,
                   adresse: selectedClientSite.siteAddress,
                   nomContact: selectedClientSite.nomContact || "",
