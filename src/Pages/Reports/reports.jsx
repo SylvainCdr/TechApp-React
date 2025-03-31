@@ -230,6 +230,10 @@ const Reports = () => {
                     {report.client.nomEntreprise}
                   </li>
                   <li>
+                  <i className="fa-regular fa-folder"></i>Affaire :{" "}
+                  {report?.devis || "Non spécifié"}
+                </li>
+                  <li>
                     <i className="fa-solid fa-phone"></i> Téléphone :{" "}
                     {report.client.tel}
                   </li>
