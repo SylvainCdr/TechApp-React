@@ -424,10 +424,10 @@ const generateReportPdf = async (report, technicians) => {
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(18);
             doc.setFillColor(240, 240, 240);
-            doc.rect(0, 30, 250, 15, "F");
-            doc.text("Remarques (suite)", 20, 40);
+            doc.rect(0, 15, 250, 10, "F");
+            doc.text("Remarques (suite)", 17, 20);
 
-            yPositionRemark = 50;
+            yPositionRemark = 30;
           }
 
           // Affichage de l'image avec les dimensions ajustées
