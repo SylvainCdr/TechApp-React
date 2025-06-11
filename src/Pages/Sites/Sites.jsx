@@ -76,7 +76,8 @@ export default function Sites() {
       let planPreventionURL = formData.planPrevention;
 
       if (logo) {
-        const logoRef = ref(storage, `clients/${logo.name}`);
+        const uniqueName = `${Date.now()}_${logo.name}`;
+        const logoRef = ref(storage, `clients/${uniqueName}`);
         await uploadBytes(logoRef, logo);
         logoURL = await getDownloadURL(logoRef);
       }
@@ -307,6 +308,7 @@ export default function Sites() {
           <thead>
             <tr>
               <th>Entreprise</th>
+              {/* <th>Entreprise</th> */}
               <th>Site</th>
               <th>Responsable projet</th>
               <th>Téléphone</th>
@@ -321,8 +323,17 @@ export default function Sites() {
             {clients.map((client) => (
               <tr key={client.id}>
                 <td>
-                  <img src={client.logoEntreprise} alt="logo entreprise" />
+                {client.logoEntreprise ? (
+                  <img
+                    src={client.logoEntreprise}
+                    alt="logo entreprise"
+                    loading="lazy"
+                  />
+                ) : (
+                  client.nomEntreprise
+                )}
                 </td>
+              
                 <td>
                   {" "}
                   <strong>{client.siteName}</strong>

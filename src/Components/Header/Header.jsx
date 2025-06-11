@@ -5,11 +5,9 @@ import Logout from "../logout/logout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 
-
 function Header() {
   const [user, setUser] = useState(null); // État pour suivre si un utilisateur est connecté
   const [menuOpen, setMenuOpen] = useState(false); // État pour contrôler le menu burger
-
 
   // Surveille l'état de connexion de l'utilisateur
   useEffect(() => {
@@ -41,7 +39,7 @@ function Header() {
     };
 
     document.addEventListener("click", handleOutsideClick);
-    
+
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
@@ -50,15 +48,14 @@ function Header() {
   return (
     <div className={styles.headerContainer}>
       <nav className={`${styles.nav} ${menuOpen ? styles.active : ""}`}>
-      <NavLink to="/" onClick={handleLinkClick}>
-  <img
-    src="assets/pix-techapp3.png"
-    alt="ACCUEIL"
-    className={styles.logo}
-    loading="lazy"
-    
-  />
-</NavLink>
+        <NavLink to="/" onClick={handleLinkClick}>
+          <img
+            src="assets/pix-techapp3.png"
+            alt="ACCUEIL"
+            className={styles.logo}
+            loading="lazy"
+          />
+        </NavLink>
         <ul className={styles.navUl}>
           <li className={styles.navLi}>
             <NavLink
@@ -93,7 +90,7 @@ function Header() {
               onClick={handleLinkClick}
               className={({ isActive }) => (isActive ? styles.activeLink : "")}
             >
-              Sites / Clients
+              Sites
             </NavLink>
           </li>
           <li className={styles.navLi}>
@@ -118,7 +115,9 @@ function Header() {
           {/* Affiche le bouton de déconnexion et l'icône toggle-on uniquement si un utilisateur est connecté */}
           {user ? (
             <>
-              <li><Logout /></li>
+              <li>
+                <Logout />
+              </li>
             </>
           ) : (
             <li className={styles.toggleOff}>
@@ -127,7 +126,9 @@ function Header() {
           )}
         </ul>
         <div
-          className={`${styles.header__burgerMenu} ${menuOpen ? styles.active : ""}`}
+          className={`${styles.header__burgerMenu} ${
+            menuOpen ? styles.active : ""
+          }`}
           onClick={burgerToggle}
         />
       </nav>
